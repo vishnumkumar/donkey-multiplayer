@@ -2,21 +2,30 @@
 
 Status: **PENDING OWNER APPROVAL**. Check and sign every blocking point before Phase 2 coding.
 
-- [ ] D01 — Deal policy: uniform CSPRNG shuffle/13 each **(recommended)** or intentional suit-distribution policy?
-- [ ] D02 — Ace of Spades holder may lead any card **(recommended)** or must lead Ace of Spades?
-- [ ] D03 — HIT winner: highest leading-suit card **(recommended pending competitor observation)** or highest value across all suits?
-- [ ] D04 — Determine finishers only after all hit/discard round movements **(recommended)**.
-- [ ] D05 — Simultaneous finishers: podium order clockwise **(proposed)** or rank ties?
-- [ ] D06 — All players zero cards: draw/no Donkey **(recommended)** or another resolution?
-- [ ] D07 — Winner of a trick exits: next active clockwise starts **(recommended)**.
-- [ ] D08 — Last player holding cards becomes Donkey immediately after a full round is settled **(recommended)**.
-- [ ] D09 — Online timeout grace, auto-play policy, and reconnection/reclaim policy approved.
-- [ ] D10 — All bot-controlled seats are labeled; bot policy sees no opponent private hands.
-- [ ] D11 — MVP 4 seats only; no 2/3-player compatibility until separately specified.
-- [ ] D12 — Offline virtual coins stay separate from online server wallet.
-- [ ] D13 — 2.5D rendering accepted as 3D-style table/card direction.
-- [ ] D14 — No wagering/cash prizes; ad and purchases compliance approach accepted.
-- [ ] D15 — Security/privacy/QA gates and rollout scope accepted.
+### Blocking Gameplay Decisions
+
+- [ ] D01 (R-002) — Shuffle policy: uniform CSPRNG, no suit skewing **(recommended)** or intentional suit-distribution policy? **[OPEN]**
+- [ ] D02 (R-003) — A♠ holder may lead any card **(recommended)** or must lead A♠? **[OPEN]**
+- [ ] D03 (R-008) — HIT winner: highest leading-suit card only **(recommended, pending competitor observation)** or highest rank across all suits? **[OPEN]**
+- [ ] D04 (R-009) — Finisher timing: after round resolution **(recommended)** or immediate on last card played?
+- [ ] D05 (R-010) — Simultaneous finishers: clockwise podium order **(proposed)** or tied ranks? **[OPEN]**
+- [ ] D06 (R-013) — All players empty simultaneously: draw / no Donkey **(recommended)** or replay? **[OPEN]**
+- [ ] D07 — Timeout/disconnect policy: 20s deadline, 15s grace, bot takeover, reclaim at round boundary **(proposed)** or alternative timers?
+- [ ] D08 — Bot fairness: bots see only own hand + played cards **(recommended)** or allow hidden-hand access for difficulty?
+- [ ] R-017 — Watchdog: void after 200 rounds or 30 minutes **(proposed)** or alternative threshold? **[OPEN]**
+
+### Non-Blocking but Important Decisions
+
+- [ ] D09 — MVP 4 players only; no 2/3-player variant until separately specified.
+- [ ] D10 — Online bots: disclosed, queue fallback only; all bot-controlled seats labeled.
+- [ ] D11 — 2.5D rendering accepted as visual direction (see ADR-0001).
+- [ ] D12 — Dart SignalR client compatibility spike in Phase 4; WebSocket fallback ready (see ADR-0002).
+- [ ] D13 — Offline virtual coins stay separate from online server wallet.
+- [ ] D14 — India-first launch; no wagering/cash prizes; legal review before international.
+
+### Cross-References
+
+All decision IDs (D01–D14) map to rule IDs (R-xxx) and ambiguity IDs (HPA-xxx) in `docs/12-risks-and-decisions.md` § ID Cross-Reference table.
 
 **Approval fields**
 

@@ -212,8 +212,11 @@ The following issues were identified during the Phase 1 senior architect review 
 
 The original idempotency table in `06-api-and-realtime-contracts.md` §7 covered only exact-duplicate retries. The following gaps were identified and addressed:
 
-- **Payload mismatch:** When a reused `actionId` arrives with a different card, the server returns the original acknowledgement and logs an anomaly. The second payload is never applied.
-- **State advanced:** When a duplicate `actionId` arrives after the match state has advanced past that turn, the server returns the original acknowledgement with the `stateVersion` at which it was applied.
+- **Authentication-first:** The server authenticates the caller and resolves the player's seat before any `actionId` lookup. Unauthenticated requests never receive idempotency data.
+- **Ownership binding:** Each stored action is bound to `(match_id, action_id, seat_index)`. Lookups are scoped to the authenticated seat — cross-player `actionId` collisions never leak another player's action data.
+- **Exact duplicate:** Same `actionId`, same card, same seat → return original outcome.
+- **Payload mismatch:** Same `actionId`, different card, same seat → reject with `ACTION_ID_CONFLICT`. The response contains only the error code — never the original card or outcome (prevents information leakage to a compromised client).
+- **State advanced:** Duplicate arrives after match state advanced → return original ack with the `stateVersion` at which it was applied.
 - **Implementation constraint:** The `(match_id, action_id)` unique check occurs before any state mutation.
 
 ### 9.3 Timeout / Disconnect / Bot Precedence (Task 4)
@@ -249,6 +252,14 @@ Three ID schemes (D-IDs, R-IDs, HPA-IDs) were used independently across document
 Identified duplicate PRD files:
 - `DONKEY_GAME_PRODUCT_TECHNICAL_SPEC_V1_DRAFT.md` — authoritative
 - `DONKEY_GAME_PRODUCT_TECHNICAL_SPEC_V1_DRAFT-4.md` — duplicate; should be archived
+
+### 9.8 Final Consistency Pass
+
+| # | Finding | Files Affected | Resolution |
+|---|---|---|---|
+| F-08 | `RULE_FREEZE_APPROVAL_CHECKLIST.md` decision IDs did not match `12-risks-and-decisions.md` (D07–D15 were misnumbered and described different items) | `RULE_FREEZE_APPROVAL_CHECKLIST.md` | Rewritten to align with D01–D14 + R-017; grouped into blocking and non-blocking sections; added cross-reference note |
+| F-09 | PlayCard idempotency §7.1 returned original ack on payload mismatch, leaking which card was actually played; no authentication gate before lookup; no seat-scoping of stored actions | `06-api-and-realtime-contracts.md`, `08-security-privacy-and-compliance.md`, `10-qa-test-matrix-and-acceptance.md` | Authenticate before lookup; bind actions to seat; payload mismatch returns `ACTION_ID_CONFLICT` without data; cross-player collisions rejected |
+| F-10 | R-017 watchdog specified only round count (200) in docs 03/04 but "200 rounds or 30 minutes" in review report — inconsistent | `03-canonical-ruleset-v1-draft.md`, `04-game-state-machine.md`, `10-qa-test-matrix-and-acceptance.md` | Both conditions (round limit + wall-clock duration) now specified consistently across all documents |
 
 ---
 
@@ -298,7 +309,7 @@ Phase 2 (deterministic engine implementation) is blocked until:
 ### `PHASE 1 REVIEWED — AWAITING OWNER RULE APPROVAL`
 
 - 17 documentation files created and reviewed in `docs/`
-- Architect review completed: 7 findings corrected, 0 remaining document contradictions
+- Architect review completed: 10 findings corrected, 0 remaining document contradictions
 - No Dart, C#, SQL, YAML, JSON, Docker, CI, or implementation files created
 - No packages installed, no scaffolding generated, no builds run
 - 6 OPEN decisions require explicit owner approval before Phase 2

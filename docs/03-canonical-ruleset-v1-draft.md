@@ -271,7 +271,7 @@ The match ends when exactly **one active player remains with cards** after a rou
 
 ### Recommended
 
-If a match exceeds a configurable round limit (proposed: **200 rounds**), the match is **voided**:
+If a match exceeds a configurable round limit (proposed: **200 rounds**) or a configurable wall-clock duration (proposed: **30 minutes** from match start), the match is **voided**:
 
 - No Donkey is assigned.
 - No competitive outcome is recorded.
@@ -633,8 +633,8 @@ flowchart TD
     CHECK_TERMINAL -->|0 Active Players| DRAW[Draw — No Donkey — OPEN R-013]
     CHECK_TERMINAL -->|≥2 Active| NEXT_LEADER[Determine Next Leader]
     
-    NEXT_LEADER --> WATCHDOG{Round Limit Exceeded? — OPEN R-017}
-    WATCHDOG -->|Yes| VOID[Match Voided]
+    NEXT_LEADER --> WATCHDOG{Round or Time Limit Exceeded? — OPEN R-017}
+    WATCHDOG -->|Yes| VOID[Match Voided — No Donkey]
     WATCHDOG -->|No| ROUND_START
 ```
 

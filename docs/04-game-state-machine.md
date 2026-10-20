@@ -82,7 +82,7 @@ stateDiagram-v2
 A match reaches `COMPLETED` when any of:
 - **Single Donkey:** After round resolution, exactly one active player holds cards. That player is the Donkey (R-012).
 - **All Empty (OPEN R-013):** After round resolution, zero active players hold cards. Proposed: draw/no-Donkey.
-- **Watchdog (OPEN R-017):** Round count exceeds configurable threshold. Proposed: void/cancel, never assign arbitrary Donkey.
+- **Watchdog (OPEN R-017):** Round count exceeds configurable threshold (proposed: 200 rounds) or match wall-clock duration exceeds configurable limit (proposed: 30 minutes). Proposed: void/cancel, never assign arbitrary Donkey.
 
 A match reaches `VOIDED` when:
 - Unrecoverable state corruption detected (checksum mismatch, impossible card distribution).
@@ -206,8 +206,8 @@ FUNCTION ResolveTurn(command: PlayCard):
     ELSE IF activePlayers.count == 0:
         SET match.state = COMPLETED (DRAW, no Donkey) // R-013 OPEN
         COMMIT terminal result
-    ELSE IF roundCount > WATCHDOG_THRESHOLD:
-        SET match.state = VOIDED // R-017 OPEN
+    ELSE IF roundCount > WATCHDOG_ROUND_LIMIT OR elapsed > WATCHDOG_TIME_LIMIT:
+        SET match.state = VOIDED // R-017 OPEN — proposed: 200 rounds or 30 min
     ELSE:
         // Determine next leader
         IF winner is still active:
