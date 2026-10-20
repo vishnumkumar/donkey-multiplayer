@@ -96,7 +96,7 @@ Each fixture specifies:
 |---|---|---|
 | No-hit basic | 5+ | Simple rounds, various winning ranks |
 | Hit basic | 5+ | Single hit, leading-suit winner takes all |
-| Off-suit high rank hit | 3+ | Verify off-suit A cannot beat leading-suit J (per approved R-008) |
+| Off-suit high rank hit | 3+ | Verify hit winner determination matches approved R-008 resolution [OPEN — fixture assertions depend on owner decision] |
 | Follow-suit enforcement | 5+ | Legal/illegal move validation |
 | Finisher after resolution | 3+ | Player empties hand; verify exit timing (R-009) |
 | Simultaneous finishers | 3+ | Multiple players empty in same round (R-010) |

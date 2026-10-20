@@ -58,7 +58,9 @@ Ace is always high. There is no low-Ace variant.
 
 **[OPEN — R-002]**
 
-**Recommended:** Uniform random permutation (Fisher-Yates) using a cryptographically secure random number generator (CSPRNG). The server generates the shuffle for online matches; the local Dart engine generates the shuffle for offline matches.
+**Recommended:** Uniform random permutation (Fisher-Yates) using a cryptographically secure random number generator (CSPRNG) for production play. The server generates the shuffle for online matches; the local Dart engine generates the shuffle for offline matches.
+
+**Test/simulation distinction:** Production shuffles use CSPRNG (not seedable for replay). Test fixtures and simulation harnesses use a seeded deterministic PRNG with a recorded seed for reproducibility. See [07-offline-online-parity-strategy.md](07-offline-online-parity-strategy.md) §6 for platform RNG handling.
 
 **Alternative:** The competitor reference mentions intentional non-uniform suit distribution. Since the algorithm is not published, implementing an unknown manipulation is not recommended. If the owner decides to add suit balancing, a separate specification of the algorithm is required before implementation.
 
@@ -275,8 +277,9 @@ If a match exceeds a configurable round limit (proposed: **200 rounds**), the ma
 - No competitive outcome is recorded.
 - No rewards or penalties are granted.
 - A diagnostic log with the match seed and event journal is preserved for analysis.
+- The match transitions to the `VOIDED` terminal state (see [04-game-state-machine.md](04-game-state-machine.md) §1.1).
 
-The watchdog must **never** assign an arbitrary Donkey or fabricate a winner.
+The watchdog must **never** assign an arbitrary Donkey or fabricate a winner. A voided match records no competitive outcome, no rewards, and no penalties for any player.
 
 ### Alternative
 
@@ -372,6 +375,8 @@ The following must hold at every point in the match lifecycle:
 ## 18. Reference Test Fixtures
 
 These fixtures define expected behavior for golden tests. Both Dart and C# engines must produce identical results.
+
+**52-card conservation invariant (INV-1):** Every full-game fixture must account for all 52 distinct cards across player hands, current trick, and discard pile at every state checkpoint. Fixture validation tooling must assert this invariant before the fixture is accepted into the suite.
 
 ### Fixture 1: No-Hit Round
 

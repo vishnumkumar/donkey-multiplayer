@@ -253,6 +253,8 @@ Fixtures are authored manually for specific scenarios and generated programmatic
 2. **Generated:** A fixture generator creates random valid deals and runs random legal bot moves through one engine, recording the full action sequence and state at each step. The other engine must reproduce the same states.
 3. **Simulation sweep:** 100,000 generated fixtures run in CI to catch divergence.
 
+**Note on simulation RNG:** Generated fixtures and simulation sweeps use a seeded deterministic PRNG (e.g., a Mersenne Twister or xoshiro256 with a recorded seed), not the platform CSPRNG. This ensures reproducibility — any failing simulation can be exactly replayed from its seed. Production shuffles use CSPRNG and are never part of parity comparisons.
+
 ---
 
 ## 5. Cross-Language Test Execution

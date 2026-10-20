@@ -106,7 +106,7 @@ These invariants must hold **at every state transition** and are tested via prop
 |---|---|
 | Minimum simulated matches | 100,000 |
 | Bot policy | Random legal moves (uniform selection from legal set) |
-| Shuffle | Seeded CSPRNG; seed recorded for each match for reproducibility |
+| Shuffle | Seeded deterministic PRNG (not CSPRNG); seed recorded per match for reproducibility. Production uses CSPRNG — see doc 03 §2. |
 | Timeout simulation | 5% of turns simulated as timeout → auto-play |
 | Disconnect simulation | 2% of turns simulated as disconnect → bot takeover for remaining round |
 | Invariant checks | All INV-001 through INV-010 at every state transition |
@@ -398,7 +398,7 @@ Shared JSON fixtures consumed by both Dart and C# test harnesses:
 | Approved API contract | Architect + owner | [PENDING] |
 | Documented schema and migration plan | Architect | [PENDING] |
 | Approved visual direction | Owner + designer | [PENDING] |
-| Stable CI targets defined | Engineering | [PENDING] |
+| CI pipeline targets documented (CI creation is a Phase 2 setup task) | Engineering | [DOCUMENTED] |
 
 ### 12.2 Exit Criteria (Ship MVP)
 

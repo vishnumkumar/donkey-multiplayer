@@ -3,7 +3,7 @@
 **Document ID:** DM-PHASE1-REPORT  
 **Version:** 0.1 DRAFT  
 **Date:** 2026-10-20  
-**Status:** `PHASE 1: DOCUMENTS PREPARED — RULES AND SCOPE AWAITING OWNER APPROVAL — NO CODE IMPLEMENTED`
+**Status:** `PHASE 1 REVIEWED — AWAITING OWNER RULE APPROVAL`
 
 ---
 
@@ -120,7 +120,7 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 | **7** | **D07: Timeout/disconnect policy** | 20s deadline, 15s grace, bot takeover, reclaim at round boundary | Shorter/longer timers; immediate forfeit; match pause | **MEDIUM.** UX sensitive; can be tuned post-launch. |
 | **8** | **D08: Bot fairness — no hidden hand access** | Bots see only own hand + played cards | Allow offline bots to cheat for harder difficulty | **MEDIUM.** Player trust issue if bots cheat. |
 | **9** | **D12: SignalR Dart client compatibility** | Phase 4 spike; WebSocket fallback ready | Assume compatibility; build custom from start | **MEDIUM.** Spike resolves uncertainty; fallback adds ~2 weeks. |
-| **10** | **D17: Watchdog threshold for infinite loops** | 200 rounds or 30 minutes, then void | Lower/higher threshold; no watchdog | **LOW.** Protects against pathological games; threshold tunable. |
+| **10** | **R-017: Watchdog threshold for infinite loops** | 200 rounds or 30 minutes, then void | Lower/higher threshold; no watchdog | **LOW.** Protects against pathological games; threshold tunable. |
 
 ---
 
@@ -194,55 +194,135 @@ These must be addressed before any public release:
 
 ---
 
-## 9. Status
+## 9. Architect Review Findings
 
-### `PHASE 1: DOCUMENTS PREPARED — RULES AND SCOPE AWAITING OWNER APPROVAL — NO CODE IMPLEMENTED`
+The following issues were identified during the Phase 1 senior architect review and have been corrected in this revision:
 
-- 17 documentation files created in `docs/`
-- No Dart, C#, SQL, YAML, JSON, Docker, CI, or implementation files created
-- No packages installed, no scaffolding generated, no builds run
-- No dependencies added to the repository
-- All decisions marked OPEN require explicit owner approval
-- Phase 2 is blocked until `DM-RULES-1.0` ruleset is signed
+### 9.1 Contradictions Resolved
+
+| # | Finding | Files Affected | Resolution |
+|---|---|---|---|
+| F-01 | ADR-0001 referenced D10 (online bots) instead of D11 (2.5D vs 3D) | `ADR/0001-flutter-flame-2-5d.md` | Corrected to D11 |
+| F-02 | ADR-0003 fixture categories presumed R-008 was "approved" while still OPEN | `ADR/0003-two-language-rules-parity.md` | Changed to reference OPEN status |
+| F-03 | QA simulation specified "Seeded CSPRNG" — contradictory (CSPRNG is not seedable for replay) | `10-qa-test-matrix-and-acceptance.md` | Corrected to seeded deterministic PRNG for simulations; CSPRNG reserved for production |
+| F-04 | QA entry criteria listed "Stable CI targets defined" as Phase 1 deliverable | `10-qa-test-matrix-and-acceptance.md` | Reworded: CI targets documented in Phase 1, CI creation is Phase 2 setup |
+| F-05 | Review report §5 referenced phantom "D17" (no such decision ID) | `PHASE_1_REVIEW_REPORT.md` | Corrected to R-017 |
+
+### 9.2 Idempotency Specification Gaps (Task 3)
+
+The original idempotency table in `06-api-and-realtime-contracts.md` §7 covered only exact-duplicate retries. The following gaps were identified and addressed:
+
+- **Payload mismatch:** When a reused `actionId` arrives with a different card, the server returns the original acknowledgement and logs an anomaly. The second payload is never applied.
+- **State advanced:** When a duplicate `actionId` arrives after the match state has advanced past that turn, the server returns the original acknowledgement with the `stateVersion` at which it was applied.
+- **Implementation constraint:** The `(match_id, action_id)` unique check occurs before any state mutation.
+
+### 9.3 Timeout / Disconnect / Bot Precedence (Task 4)
+
+Timeout, disconnection, and reconnection rules were specified individually but lacked an explicit precedence table for overlapping conditions. A new §8.2 in `04-game-state-machine.md` defines the precedence for:
+- Simultaneous disconnect + deadline expiry
+- Reconnection during bot-controlled turns and resolution phases
+- Multiple simultaneous disconnections
+- Repeated disconnect/reconnect cycles
+
+### 9.4 Watchdog Policy Alignment (Task 6)
+
+Verified consistent across all documents: watchdog-triggered void produces no Donkey, no competitive outcome, no rewards, and no penalties. Added explicit `VOIDED` state cross-reference from the canonical ruleset (doc 03 §14) to the state machine (doc 04 §1.1).
+
+### 9.5 Shuffle / RNG Separation (Task 8)
+
+Clarified the separation between:
+- **Production:** CSPRNG Fisher-Yates shuffle (not reproducible, not seedable)
+- **Test fixtures:** Pre-determined input decks (no RNG involved)
+- **Simulation harness:** Seeded deterministic PRNG for reproducibility
+
+Updated docs 03, 07, and 10 to consistently reflect this distinction.
+
+### 9.6 Golden Fixture 52-Card Invariant (Task 9)
+
+- Verified the example fixture in doc 07 §3.2: all 52 distinct cards are present across the 4 hands with no duplicates.
+- Added explicit invariant assertion requirement to doc 03 §18: fixture validation tooling must check INV-1 (52-card conservation) at every state checkpoint before accepting a fixture.
+
+### 9.7 Decision ID Normalization (Task 10)
+
+Three ID schemes (D-IDs, R-IDs, HPA-IDs) were used independently across documents with no cross-reference. Added a unified mapping table to `12-risks-and-decisions.md` showing all three schemes for each decision.
+
+Identified duplicate PRD files:
+- `DONKEY_GAME_PRODUCT_TECHNICAL_SPEC_V1_DRAFT.md` — authoritative
+- `DONKEY_GAME_PRODUCT_TECHNICAL_SPEC_V1_DRAFT-4.md` — duplicate; should be archived
 
 ---
 
-## 10. Approval Request
+## 10. Remaining Blockers
 
-### Blocking Decisions Requiring Sign-Off
+### 10.1 OPEN Decisions Requiring Owner Approval
 
-Before Phase 2 implementation can begin, the following must be explicitly approved or modified:
+These decisions **cannot** be resolved by the architect. They require gameplay observation, product judgment, or explicit owner preference.
 
-| # | Decision | Recommended | Sign-off |
+| # | Decision | Recommended | Risk of Wrong Default | Owner Action |
+|---|---|---|---|---|
+| 1 | **R-002 / D01:** Shuffle policy — uniform CSPRNG, no suit skewing | Uniform shuffle | MEDIUM — affects game feel, not correctness | APPROVE or SPECIFY |
+| 2 | **R-003 / D02:** A♠ holder may lead any card (A♠ not mandatory) | Free choice | HIGH — affects first-round strategy | APPROVE or SPECIFY |
+| 3 | **R-008 / D03:** HIT winner = highest leading-suit card only; off-suit cannot win | Leading-suit only | CRITICAL — changes core strategy | APPROVE or SPECIFY |
+| 4 | **R-010 / D05:** Simultaneous finishers ranked clockwise from leader | Clockwise podium | MEDIUM — fairness perception | APPROVE or SPECIFY |
+| 5 | **R-013 / D06:** All empty = technical draw / no Donkey | Draw | LOW (rare) — must be defined for determinism | APPROVE |
+| 6 | **R-017:** Watchdog: void after 200 rounds or 30 min; no arbitrary Donkey | Void with threshold | LOW — protects against pathological games | APPROVE with threshold |
+
+### 10.2 PROPOSED Decisions (Safe Defaults, Confirm or Override)
+
+These have safe recommended defaults but should be confirmed:
+
+| # | Decision | Default | Owner Action |
 |---|---|---|---|
-| 1 | **R-002 / D01:** Shuffle policy — uniform CSPRNG, no suit skewing | **APPROVE uniform shuffle** | ☐ |
-| 2 | **R-003 / D02:** A♠ holder may lead any card (A♠ not mandatory) | **APPROVE free choice** | ☐ |
-| 3 | **R-008 / D03:** HIT winner = highest leading-suit card only; off-suit cannot win | **APPROVE leading-suit only** | ☐ |
-| 4 | **R-009 / D04:** Finisher timing = after round resolution | **APPROVE after resolution** | ☐ |
-| 5 | **R-010 / D05:** Simultaneous finishers ranked clockwise from leader | **APPROVE clockwise podium** | ☐ |
-| 6 | **R-013 / D06:** All empty = technical draw / no Donkey | **APPROVE draw** | ☐ |
-| 7 | **D07:** Timeout: 20s deadline, 15s grace, bot takeover disclosed | **APPROVE defaults** | ☐ |
-| 8 | **D08:** Bot fairness: no hidden hand access | **APPROVE no-cheat bots** | ☐ |
-| 9 | **R-017:** Watchdog: void after 200 rounds or 30 min; no arbitrary Donkey | **APPROVE with threshold** | ☐ |
-| 10 | **D09:** MVP: 4 players only; no 2/3-player variant | **APPROVE 4-only** | ☐ |
-| 11 | **D13:** Offline currency isolated from online | **APPROVE isolation** | ☐ |
-| 12 | **D14:** India-first launch; legal review before international | **APPROVE India-first** | ☐ |
+| 7 | **R-009 / D04:** Finisher timing = after round resolution | After resolution | CONFIRM |
+| 8 | **D07:** Timeout: 20s deadline, 15s grace, bot takeover disclosed | As proposed | CONFIRM |
+| 9 | **D08:** Bot fairness: no hidden hand access | No-cheat bots | CONFIRM |
+| 10 | **D09:** MVP: 4 players only; no 2/3-player variant | 4-only | CONFIRM |
+| 11 | **D13:** Offline currency isolated from online | Isolation | CONFIRM |
+| 12 | **D14:** India-first launch; legal review before international | India-first | CONFIRM |
 
-### Approval Process
+### 10.3 Phase 2 Entry Criteria
+
+Phase 2 (deterministic engine implementation) is blocked until:
+
+1. All OPEN decisions (§10.1 items 1–6) are signed by owner
+2. All PROPOSED decisions (§10.2 items 7–12) are confirmed or overridden
+3. `RULE_FREEZE_APPROVAL_CHECKLIST.md` is signed with version `DM-RULES-1.0` and date
+4. Approved ruleset version `DM-RULES-1.0` is issued
+
+**Not blocked on Phase 1:** CI pipeline creation, project scaffolding, dependency installation — these are Phase 2 setup tasks.
+
+---
+
+## 11. Status
+
+### `PHASE 1 REVIEWED — AWAITING OWNER RULE APPROVAL`
+
+- 17 documentation files created and reviewed in `docs/`
+- Architect review completed: 7 findings corrected, 0 remaining document contradictions
+- No Dart, C#, SQL, YAML, JSON, Docker, CI, or implementation files created
+- No packages installed, no scaffolding generated, no builds run
+- 6 OPEN decisions require explicit owner approval before Phase 2
+- 6 PROPOSED decisions have safe defaults but should be confirmed
+
+---
+
+## 12. Approval Request
+
+### Process
 
 1. Review each document in `docs/` for accuracy and completeness
-2. Sign off on each blocking decision above (approve, modify, or defer with rationale)
+2. Sign off on each decision in §10.1 and §10.2 (approve, modify, or defer with rationale)
 3. Sign `RULE_FREEZE_APPROVAL_CHECKLIST.md` with version `DM-RULES-1.0` and date
 4. Upon approval, documents become the canonical specification for Phase 2
 5. Any future rule changes require a new ruleset version (`DM-RULES-1.1` or `DM-RULES-2.0`)
 
 ### Recommended Next Steps (for owner, not for this session)
 
-1. Review and sign off on the 12 blocking decisions above
+1. Review and sign off on the 12 decisions above
 2. Optionally conduct a brief competitor gameplay session to validate D02 (A♠ opening) and D03 (HIT winner) before signing
 3. Begin art asset sourcing/creation (parallel to decision process)
 4. Once signed: issue `DM-RULES-1.0` and authorize Phase 2 (deterministic engines)
 
 ---
 
-**HARD STOP. Phase 1 documentation is complete. No code has been written. No implementation will begin without explicit owner approval of the decision register above.**
+**HARD STOP. Phase 1 documentation is complete and reviewed. No code has been written. No implementation will begin without explicit owner approval of the decision register above.**

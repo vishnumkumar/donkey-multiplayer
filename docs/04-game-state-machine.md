@@ -517,6 +517,19 @@ sequenceDiagram
 | Consecutive timeouts before penalty | 3 | After 3 consecutive timeouts from same connected player, consider abandon warning. |
 | Abandon threshold | Configurable | If a player times out every turn for N turns, match may be voided or opponent compensated (OPEN). |
 
+### 8.2 Precedence Rules for Overlapping Conditions
+
+When timeout, disconnection, and reconnection events overlap, the following precedence applies:
+
+| Condition | Resolution | Rationale |
+|---|---|---|
+| **Disconnect + turn deadline expires simultaneously** | Disconnect grace timer takes priority if grace period has NOT expired. If grace already expired (seat is BOT_CONTROLLED), the bot auto-play fires immediately on deadline expiry. | The grace period is shorter than the turn deadline, so if the player just disconnected, they still have time to reconnect and play. |
+| **Reconnect during BOT_CONTROLLED turn** | Player enters `RECLAIM_PENDING`. The bot completes the current turn's auto-play. Player regains control at the next round boundary. | Mid-turn handoff would create race conditions; round boundary is a clean synchronization point. |
+| **Reconnect during RESOLVING_ROUND** | Player enters `RECLAIM_PENDING`. Resolution completes. Player regains control at the next `WAITING_FOR_PLAY` for their seat. | Resolution is atomic and must not be interrupted. |
+| **Disconnect grace expires during RESOLVING_ROUND** | Seat transitions to `BOT_CONTROLLED` but no bot action is needed during resolution (resolution is automatic). Bot will act at the seat's next turn. | Resolution does not require player input; bot takeover matters only for action phases. |
+| **Multiple players disconnect simultaneously** | Each seat's grace timer runs independently. Bot takeover for each seat is independent. Match continues as long as at least one human or bot can act. | No global match pause; each seat is an orthogonal state machine. |
+| **Player reconnects, then disconnects again before round boundary** | Grace timer restarts from the new disconnection. Previous `RECLAIM_PENDING` is cancelled; seat remains `BOT_CONTROLLED` if grace expires again. | Each disconnection event resets the grace window. |
+
 ---
 
 ## 9. Worker Failover Flow

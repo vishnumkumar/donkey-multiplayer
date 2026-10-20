@@ -15,6 +15,39 @@ Covers all items from the PRD draft decision register (D01–D12), plus addition
 
 ---
 
+## ID Cross-Reference
+
+Three ID schemes are used across Phase 1 documents. This table maps between them:
+
+| Decision (D-ID) | Rule (R-ID) | Ambiguity (HPA-ID) | Short Description | Status |
+|---|---|---|---|---|
+| D01 | R-002 | HPA-1 | Shuffle distribution policy | [OPEN] |
+| D02 | R-003 | HPA-2 | A♠ opening constraint | [OPEN] |
+| D03 | R-008 | HPA-3 | HIT winner — leading suit only or cross-suit | [OPEN] |
+| D04 | R-009 | HPA-4 | Finisher timing — after resolution or immediate | [PROPOSED] |
+| D05 | R-010 | HPA-5 | Simultaneous finisher ranking | [OPEN] |
+| D06 | R-013 | HPA-6 | All players empty simultaneously | [OPEN] |
+| D07 | — | HPA-7 | Timeout / disconnect / bot takeover policy | [PROPOSED] |
+| D08 | — | HPA-8 | Bot fairness — no hidden hand access | [PROPOSED] |
+| D09 | — | HPA-9 | Room start: 4 players only at MVP | [PROPOSED] |
+| D10 | — | HPA-10 | Online bots: disclosed, queue fallback only | [PROPOSED] |
+| D11 | — | HPA-11 | 2.5D rendering (see ADR-0001) | [PROPOSED] |
+| D12 | — | HPA-12 | Dart SignalR client spike (see ADR-0002) | [PROPOSED] |
+| D13 | — | — | Offline currency isolation | [PROPOSED] |
+| D14 | — | — | India-first regional compliance | [PROPOSED] |
+| — | R-017 | — | Watchdog threshold for pathological matches | [OPEN] |
+
+**Note on IDs:** D-IDs are used in decision workflows and the approval checklist. R-IDs are used in the canonical ruleset (doc 03). HPA-IDs are used in the rules evidence table (doc 02). All three refer to the same underlying decisions.
+
+### Repository Source Files
+
+The repository root contains two copies of the original PRD:
+
+- `DONKEY_GAME_PRODUCT_TECHNICAL_SPEC_V1_DRAFT.md` — **Authoritative copy.** This is the original product/technical spec draft used as input to Phase 1 documentation.
+- `DONKEY_GAME_PRODUCT_TECHNICAL_SPEC_V1_DRAFT-4.md` — **Duplicate.** Content-identical to the above. Appears to be a versioned copy. Should be removed or archived to avoid confusion. The `docs/` files supersede both copies as the canonical Phase 1 specification.
+
+---
+
 ## 1. Decision Register
 
 ### BLOCKING GAMEPLAY DECISIONS

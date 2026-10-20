@@ -846,6 +846,20 @@ Rate limit responses include `Retry-After` header (REST) or `RATE_LIMITED` error
 | Hub `VoteRematch` | Player+match unique constraint | Returns existing vote. |
 | Reward grants | `grant_idempotency_key` unique | No duplicate grant. |
 
+### 7.1 PlayCard Idempotency — Detailed Behavior
+
+The `actionId` field on `PlayCard` commands provides at-least-once delivery safety. The server enforces a `UNIQUE(match_id, action_id)` constraint on the event journal.
+
+| Scenario | Server Behavior |
+|---|---|
+| **Exact duplicate** — same `actionId`, same `cardId`, same `seatIndex` | Return the original `ActionAcknowledged`. No state change. |
+| **Payload mismatch** — same `actionId`, **different** `cardId` or `seatIndex` | Return the original `ActionAcknowledged` (for the card that was actually played). Log an anomaly event with both payloads for fraud analysis. **Never** apply the second payload. |
+| **State advanced** — same `actionId`, but match `stateVersion` has advanced past the turn where this action was originally applied | Return the original `ActionAcknowledged` with the `stateVersion` at which it was applied. The client should treat this as a successful prior play and resync to current state. |
+| **Unknown `actionId`**, stale `expectedStateVersion` | Reject with `VERSION_MISMATCH`. Client must resync and resubmit with a new `actionId` and correct `expectedStateVersion`. |
+| **Unknown `actionId`**, expired turn deadline | Reject with `DEADLINE_PASSED`. An auto-play may have already been committed for this turn. |
+
+**Implementation note:** The `(match_id, action_id)` unique constraint is checked *before* any state mutation. If the `actionId` already exists in the event journal, the server returns the stored outcome without touching match state, regardless of whether the payload matches.
+
 ---
 
 ## 8. Versioning and Breaking Changes
