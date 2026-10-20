@@ -102,7 +102,7 @@ gantt
 | Property | Detail |
 |---|---|
 | **Objective** | Implement identical rules engines in C# (server) and Dart (offline) with exhaustive test coverage. |
-| **Deliverables** | C# rules library; Dart rules library; shared JSON fixture suite; 100K simulation harness; cross-language parity CI |
+| **Deliverables** | C# rules library; Dart rules library; shared JSON fixture suite; 100K simulation harness; CI pipeline setup (lint, test, build gates — see doc 10 §12.1); cross-language parity CI |
 | **Dependencies** | Phase 1 completed: approved `DM-RULES-1.0` |
 | **Acceptance** | All golden fixtures pass in both languages; 100K simulation: zero invariant violations; all state invariants (INV-001 through INV-010) verified |
 | **Duration estimate** | 2–3 weeks (solo dev); 1–2 weeks (2 devs parallel) |
