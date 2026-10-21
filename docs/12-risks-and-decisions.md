@@ -21,7 +21,7 @@ Three ID schemes are used across Phase 1 documents. This table maps between them
 
 | Decision (D-ID) | Rule (R-ID) | Ambiguity (HPA-ID) | Short Description | Status |
 |---|---|---|---|---|
-| D01 | R-002 | HPA-1 | Shuffle distribution policy | [OPEN] |
+| D01 | R-002 | HPA-1 | Shuffle distribution policy | **[OWNER APPROVED 2026-10-21]** |
 | D02 | R-003 | HPA-2 | A♠ opening constraint | [OPEN] |
 | D03 | R-008 | HPA-3 | HIT winner — leading suit only or cross-suit | **[OWNER APPROVED 2026-10-21]** |
 | D04 | R-009 | HPA-4 | Finisher timing — after resolution or immediate | **[OWNER APPROVED 2026-10-21]** |
@@ -57,7 +57,7 @@ These must be signed before `DM-RULES-1.0` is issued.
 
 | ID | Question | Recommended Default | Alternatives | Risk of Guessing Wrong | Evidence Needed | Owner Action |
 |---|---|---|---|---|---|---|
-| **D01** | **Shuffle distribution policy** — uniform CSPRNG 52-card shuffle and 13 each, or intentional suit-distribution skewing? | Uniform shuffle; no forced imbalance | (a) Replicate competitor's undisclosed suit-skewing algorithm; (b) Implement a disclosed balancing heuristic (e.g., guarantee each player gets ≥2 of each suit) | If we skip skewing and the competitor's version depends on it for gameplay feel, our game may feel different. If we invent skewing without understanding the target, we introduce untested bias and potential fairness complaints. | Competitor gameplay observation or explicit product decision to differentiate. | **APPROVE or SPECIFY alternative.** Maps to R-002. |
+| **D01** | **Shuffle distribution policy** — uniform CSPRNG 52-card shuffle and 13 each, or intentional suit-distribution skewing? | **APPROVED:** Uniform CSPRNG Fisher-Yates shuffle; 13 cards each; no suit-distribution skewing | ~~(a) Replicate competitor's undisclosed suit-skewing algorithm; (b) Implement a disclosed balancing heuristic (e.g., guarantee each player gets ≥2 of each suit)~~ | Resolved. Owner approved uniform shuffle for our original game. | Owner decision (2026-10-21). This is a product choice, not competitor verification. Competitor's distribution algorithm is proprietary and unpublished. | **OWNER APPROVED 2026-10-21.** Maps to R-002. |
 | **D02** | **Must A♠ be the opening card?** The holder of A♠ starts — but must they lead A♠ specifically, or any card? | Holder starts with any card; A♠ not mandatory | (a) A♠ must be the first card played; (b) A♠ holder chooses but A♠ is highlighted as suggested | If mandatory A♠ is the real rule and we skip it, first-round strategy differs. If we force A♠ and the real rule is free choice, we constrain player strategy unnecessarily. | Competitor gameplay observation or product decision. | **APPROVE or SPECIFY.** Maps to R-003. |
 | **D03** | **HIT winner determination** — in a round with a hit, does the highest leading-suit card win, or the highest card across all suits? | **APPROVED:** Highest leading-suit card wins; off-suit cards (including higher ranks like A♥) cannot win the trick | ~~(a) Highest rank regardless of suit wins; (b) Off-suit cards ranked separately with a secondary comparison~~ | Resolved. Owner approved leading-suit-only rule for our original game. | Owner decision (2026-10-21). This is a product choice, not independent competitor verification. Published rules say "largest card" without specifying cross-suit. | **OWNER APPROVED 2026-10-21.** Maps to R-008. |
 | **D04** | **Finisher timing** — does a player exit immediately on playing their last card, or after the round's collection/discard resolves? | **APPROVED:** After resolution; a hit collection may return cards to the player | ~~(a) Immediate exit on last card played (before resolution)~~ | Resolved. Owner approved after-resolution finisher timing. | Owner decision (2026-10-21). | **OWNER APPROVED 2026-10-21.** Maps to R-009. |
@@ -127,7 +127,7 @@ These must be signed before `DM-RULES-1.0` is issued.
 Some decisions are interlinked and must be resolved together:
 
 ```
-D01 (shuffle) ──── independent, but affects gameplay feel perception
+D01 (shuffle) ──── independent; OWNER APPROVED 2026-10-21 (uniform CSPRNG)
 D02 (A♠ opening) ── independent
 D03 (HIT winner) ── CRITICAL; affects D04, D05, D06 resolution logic
      │
@@ -164,7 +164,7 @@ D14 (regional compliance) ── independent; legal review parallel to developme
 
 Phase 2 (deterministic engine implementation) **cannot begin** until:
 
-1. D01 (shuffle policy) is approved → determines shuffle algorithm
+1. ~~D01 (shuffle policy) is approved → determines shuffle algorithm~~ **OWNER APPROVED 2026-10-21**
 2. D02 (A♠ opening) is approved → determines first-turn logic
 3. ~~D03 (HIT winner) is approved → determines round resolution~~ **OWNER APPROVED 2026-10-21**
 4. ~~D04 (finisher timing) is approved → determines exit logic~~ **OWNER APPROVED 2026-10-21**

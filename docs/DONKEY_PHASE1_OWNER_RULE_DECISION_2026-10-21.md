@@ -1,9 +1,33 @@
 # Owner Rule Decision Record — 2026-10-21
 
-**Document ID:** DM-OWNER-DECISION-2026-10-21-R008-R009-R010  
+**Document ID:** DM-OWNER-DECISION-2026-10-21-R002-R008-R009-R010  
 **Date:** 2026-10-21  
 **Author:** Product Owner  
-**Status:** PARTIALLY APPROVED (R-008, R-009, R-010) — Phase 2 **NOT AUTHORIZED**
+**Status:** PARTIALLY APPROVED (R-002, R-008, R-009, R-010) — Phase 2 **NOT AUTHORIZED**
+
+---
+
+## Decision: R-002 / D01 — Shuffle Distribution Policy
+
+**OWNER APPROVED 2026-10-21.**
+
+The deck is shuffled using a **uniform random permutation (Fisher-Yates algorithm)** with a cryptographically secure random number generator (CSPRNG) for production play. Each of the 4 players receives exactly 13 cards. **No suit-distribution skewing or balancing heuristic is applied.** The shuffle is fair, simple, testable, and original.
+
+### Golden Scenario
+
+A standard 52-card deck is shuffled uniformly at random. Each of the 4! × C(52,13) × C(39,13) × C(26,13) possible deals is equally likely. A player may receive anywhere from 0 to 13 cards of a single suit — this is a natural outcome of uniform randomness, not a defect.
+
+### Distinction from Competitor Behavior
+
+The competitor's published description states that deals "intentionally avoid equal suit distribution." The competitor's distribution algorithm is **proprietary and unpublished**. This approval is the product owner's choice for our original game — we do not replicate or approximate the competitor's unknown algorithm.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D01 | OWNER APPROVED |
+| Canonical Ruleset | R-002 | OWNER APPROVED |
+| Rules Evidence | HPA-1 | OWNER APPROVED (source ambiguity remains for competitor) |
 
 ---
 
@@ -112,11 +136,11 @@ A qualifying finisher is a player whose hand remains empty after full round reso
 
 | Item | Decision | Status |
 |---|---|---|
+| **R-002 / D01** | Uniform CSPRNG Fisher-Yates shuffle; no suit-distribution skewing | **OWNER APPROVED — 2026-10-21** |
 | **R-008 / D03** | HIT round won by highest card of the leading suit | **OWNER APPROVED — 2026-10-21** |
 | **R-009 / D04** | Finisher identified only after round settlement, including HIT collection | **OWNER APPROVED — 2026-10-21** |
 | **R-010 / D05** | Simultaneous finishers ranked clockwise from leader; distinct consecutive positions; no ties | **OWNER APPROVED — 2026-10-21** |
 | **WIN-001** | First qualifying finisher takes first place; last remaining player is Donkey | **OWNER CONFIRMED — 2026-10-21** |
-| R-002 / D01 | Shuffle / deal distribution | **OPEN** |
 | R-003 / D02 | A♠ holder opening-card constraint | **OPEN** |
 | R-013 / D06 | All players empty at once | **OPEN** |
 | R-017 | Match watchdog threshold / void policy | **OPEN** |
@@ -133,8 +157,8 @@ A qualifying finisher is a player whose hand remains empty after full round reso
 
 ## Documentation and Implementation Guardrails
 
-1. Mark only **R-008, R-009, and R-010** as owner-approved, and WIN-001 as owner-confirmed. Do not silently mark any other OPEN or PROPOSED decision as approved.
-2. Update the canonical draft ruleset, rules evidence, test matrix, risk/decision register, Phase 1 report and owner checklist to reflect these three approvals consistently. Preserve rule version as **DRAFT** until all blocking decisions are signed.
+1. Mark only **R-002, R-008, R-009, and R-010** as owner-approved, and WIN-001 as owner-confirmed. Do not silently mark any other OPEN or PROPOSED decision as approved.
+2. Update the canonical draft ruleset, rules evidence, test matrix, risk/decision register, Phase 1 report and owner checklist to reflect these four approvals consistently. Preserve rule version as **DRAFT** until all blocking decisions are signed.
 3. Treat R-013 (all-empty) as a separate **OPEN** decision. R-010 does not resolve the all-empty outcome.
 4. No application code, tests, migrations, assets or CI workflows are authorized yet. Phase 2 remains blocked until the complete rules freeze and explicit owner authorization.
 
@@ -142,7 +166,7 @@ A qualifying finisher is a player whose hand remains empty after full round reso
 
 ## Cross-References
 
-- `docs/03-canonical-ruleset-v1-draft.md` §8 Hit Round Resolution, §9 Finisher Timing, §10 Simultaneous Finisher Ranking (updated)
+- `docs/03-canonical-ruleset-v1-draft.md` §2 Shuffle and Deal, §8 Hit Round Resolution, §9 Finisher Timing, §10 Simultaneous Finisher Ranking (updated)
 - `docs/02-verified-rules-and-open-questions.md` HPA-3, HPA-4, HPA-5 (updated)
 - `docs/12-risks-and-decisions.md` D03, D04, D05 rows (updated)
 - `docs/04-game-state-machine.md` §1.3 WIN-001, §6.1 finisher determination (updated)
