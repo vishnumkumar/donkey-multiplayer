@@ -1,7 +1,7 @@
 # 04 — Game State Machine
 
 **Document ID:** DM-SM-004
-**Version:** 0.1 DRAFT — not approved
+**Version:** 1.0-RC
 **Date:** 2026-10-20
 **Status:** Phase 1 specification only. No implementation code.
 
@@ -84,7 +84,7 @@ stateDiagram-v2
 A match reaches `COMPLETED` when any of:
 - **Single Donkey:** After round resolution, exactly one active player holds cards. That player is the Donkey (R-012).
 - **All Empty (R-013 APPROVED 2026-10-21):** After round resolution, zero active players hold cards. All qualifying finishers are ranked by R-010 clockwise order from the round leader; the last-ranked finisher is Donkey.
-- **Watchdog (R-017 APPROVED 2026-10-21):** Round count exceeds 200 rounds or match wall-clock duration exceeds 30 minutes. Match is voided; never assign arbitrary Donkey.
+- **Watchdog (R-017 APPROVED 2026-10-21):** After round resolution, if round count ≥ 200 or wall-clock duration ≥ 30 minutes and no natural termination occurred, match is voided. Natural termination takes precedence. Never assign arbitrary Donkey.
 
 A match reaches `VOIDED` when:
 - Unrecoverable state corruption detected (checksum mismatch, impossible card distribution).
@@ -212,8 +212,8 @@ FUNCTION ResolveTurn(command: PlayCard):
         MARK last-ranked finisher as DONKEY
         SET match.state = COMPLETED
         COMMIT terminal result
-    ELSE IF roundCount > WATCHDOG_ROUND_LIMIT OR elapsed > WATCHDOG_TIME_LIMIT:
-        SET match.state = VOIDED // R-017 APPROVED — 200 rounds or 30 min
+    ELSE IF roundCount >= WATCHDOG_ROUND_LIMIT OR elapsed >= WATCHDOG_TIME_LIMIT:
+        SET match.state = VOIDED // R-017 APPROVED — ≥200 rounds or ≥30 min
     ELSE:
         // Determine next leader
         IF winner is still active:

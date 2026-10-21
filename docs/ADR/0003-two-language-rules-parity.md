@@ -1,6 +1,6 @@
 # ADR-0003: Two-Language Rules Engine Parity (Dart + C#)
 
-**Status:** PROPOSED  
+**Status:** ACCEPTED  
 **Date:** 2026-10-20  
 **Decision Makers:** Product Owner / Technical Lead  
 **Relates to:** R-016, `07-offline-online-parity-strategy.md`, `10-qa-test-matrix-and-acceptance.md`

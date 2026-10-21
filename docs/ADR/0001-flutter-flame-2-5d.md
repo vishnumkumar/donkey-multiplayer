@@ -1,6 +1,6 @@
 # ADR-0001: Flutter + Flame 2.5D Rendering for Card Table
 
-**Status:** PROPOSED  
+**Status:** ACCEPTED  
 **Date:** 2026-10-20  
 **Decision Makers:** Product Owner / Technical Lead  
 **Relates to:** D11 (2.5D vs 3D), `09-visual-ux-art-direction.md`, `05-architecture-and-data-model.md`

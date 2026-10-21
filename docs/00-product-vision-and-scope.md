@@ -1,9 +1,9 @@
 # 00 — Product Vision and Scope
 
 **Document ID:** DM-DOC-00  
-**Version:** 0.1 DRAFT  
-**Date:** 2026-10-20  
-**Status:** Awaiting owner approval — do not implement
+**Version:** 1.0-RC  
+**Date:** 2026-10-21  
+**Status:** Phase 1 complete — all rules approved; awaiting final ruleset freeze authorization
 
 ---
 

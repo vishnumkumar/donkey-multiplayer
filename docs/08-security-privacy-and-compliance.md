@@ -1,8 +1,8 @@
 # 08 — Security, Privacy and Compliance
 
 **Document ID:** DM-SEC-008  
-**Version:** 0.1 DRAFT  
-**Status:** Phase 1 — awaiting owner approval  
+**Version:** 1.0-RC  
+**Status:** Phase 1 complete — all rules approved; awaiting final ruleset freeze authorization  
 **Cross-references:** [05-architecture-and-data-model](05-architecture-and-data-model.md), [06-api-and-realtime-contracts](06-api-and-realtime-contracts.md), [10-qa-test-matrix-and-acceptance](10-qa-test-matrix-and-acceptance.md), [12-risks-and-decisions](12-risks-and-decisions.md)
 
 ---
@@ -88,7 +88,7 @@ The most critical game-integrity requirement: no player may learn another player
 | **REST `GET /matches/{id}/snapshot`** | Same filtering as SignalR resync: own hand only. Requires auth + match membership. | Authenticated request with valid and invalid player IDs; assert filtering. |
 | **REST `GET /matches/{id}/history`** | Post-completion only; contains deal and all events. During active match: 403 or filtered view. | Request during active match; assert no hand data. |
 | **Error responses** | Validation errors (e.g., illegal move) must not include the reason derived from another player's hand. Message: "Card not in your hand" or "Must follow suit" — never "Player X holds Y." | Trigger every validation error; inspect response bodies. |
-| **Server logs** | Structured log fields: `matchId`, `seatIndex`, `actionType`, `cardId` (the played card), `stateVersion`. **Never**: hand arrays, snapshot contents, opponent card IDs, shuffle seed (until completion). | Grep all log output during a full match; assert no hand content patterns. |
+| **Server logs** | Structured log fields: `matchId`, `seatIndex`, `actionType`, `cardId` (the played card), `stateVersion`. **Never**: hand arrays, snapshot contents, opponent card IDs, deck order or dealt hand assignments. | Grep all log output during a full match; assert no hand content patterns. |
 | **Crash reports** | Exception handlers strip match state before sending to crash reporter. Breadcrumbs include match phase and seat, not card data. | Trigger a crash in match context; inspect uploaded report. |
 | **Telemetry events** | Analytics events: `match_started`, `round_resolved`, `match_completed` with aggregate stats (round count, hit count). No card-level data. | Inspect telemetry payload schema; assert no card arrays. |
 
@@ -157,8 +157,8 @@ sequenceDiagram
 |---|---|
 | Source | OS CSPRNG: `System.Security.Cryptography.RandomNumberGenerator` (.NET) |
 | Algorithm | Fisher-Yates (Knuth) unbiased shuffle |
-| Seed | Never stored, transmitted, or logged before match completion |
-| Post-match | Seed may be stored in sealed match record for audit/replay; never in client-facing API |
+| Seed | CSPRNG has no reproducible seed. No seed is stored, transmitted, or logged. |
+| Post-match audit | Dealt hand assignments (which cards each seat received) are stored in the sealed match record. The event journal provides a complete action trail. No seed or deck-order reconstruction is needed. Never in client-facing API. |
 | Distribution test | Chi-squared test over 1M shuffles: each card position within expected variance; each suit distribution per hand within expected variance |
 | Offline (Dart) | `dart:math` `Random.secure()` for local shuffles; same Fisher-Yates algorithm |
 | Deterministic fixtures | Test fixtures use pre-defined decks (not RNG); RNG tested separately |
@@ -166,7 +166,7 @@ sequenceDiagram
 ### 4.2 What Could Go Wrong
 
 - Using `Random()` (non-cryptographic) for online shuffles → predictable sequences.
-- Sending shuffle seed to client for "verification" → reveals all hands.
+- Sending deck order or dealt hands to client for "verification" → reveals all hands.
 - Logging the deal for debugging → exposes all hands in logs.
 
 **Control:** Code review checklist item; static analysis rule to flag non-CSPRNG usage in shuffle paths; integration test that the shuffle endpoint does not include seed in response.
@@ -239,7 +239,7 @@ Every `PlayCard` goes through this validation sequence. Failure at any step retu
 |---|---|---|
 | Player hand contents (card arrays) | Hidden-hand integrity | `handSize: 11` |
 | Full match snapshot | Contains all hands | `matchId`, `stateVersion`, `phase` |
-| Shuffle seed or deal order | Reveals all hands | `shuffleAlgorithm: "fisher-yates-csprng"` |
+| Deal order or dealt hand assignments | Reveals all hands | `shuffleAlgorithm: "fisher-yates-csprng"` (no seed exists for CSPRNG shuffles) |
 | Refresh tokens | Credential theft | `tokenHash` prefix (first 8 chars of hash) |
 | Access token JWTs | Credential theft | `sub` claim (player UUID) only |
 | Room codes | Code discovery | `roomId` (UUID) |
@@ -442,7 +442,7 @@ Similar to Apple but uses Google's Data Safety form. Key declarations:
 | SEC-06b | Send same `actionId` from different player's seat | Server rejects with `ACTION_ID_CONFLICT`; does not reveal original player's action |
 | SEC-07 | Send `PlayCard` after deadline | Server rejects with `DEADLINE_PASSED` |
 | SEC-08 | Attempt to join room with wrong code 6 times from same IP in 10 min | 6th attempt returns 429 |
-| SEC-09 | Grep all server logs during a complete match | Zero occurrences of hand arrays, shuffle seeds, or refresh tokens |
+| SEC-09 | Grep all server logs during a complete match | Zero occurrences of hand arrays, dealt hand assignments, deck order, or refresh tokens |
 | SEC-10 | Trigger crash during match; inspect crash report | Zero card data in crash payload |
 | SEC-11 | Run 1M shuffles; chi-squared test on card position distribution | Distribution within expected variance (p > 0.01) |
 | SEC-12 | Attempt refresh with revoked token | Server rejects with 401; no new tokens issued |

@@ -1,9 +1,9 @@
 # 06 — API and Real-Time Contracts
 
 **Document ID:** DM-API-006
-**Version:** 0.1 DRAFT — not approved
-**Date:** 2026-10-20
-**Status:** Phase 1 specification only. No implementation code.
+**Version:** 1.0-RC
+**Date:** 2026-10-21
+**Status:** Phase 1 complete — all rules approved; awaiting final ruleset freeze authorization
 
 ## Purpose
 
@@ -820,7 +820,7 @@ Rate limit responses include `Retry-After` header (REST) or `RATE_LIMITED` error
 | Connection state | Yes | Yes (broadcast) | N/A |
 | Finish position | Yes | Yes (broadcast) | Yes |
 | Match result | Yes | Yes | Yes |
-| Shuffle seed | NEVER | NEVER | Optional (replay feature, future) |
+| Deck order / dealt hands | NEVER | NEVER | Optional (replay feature, future) |
 
 ### 6.2 Testing Requirements
 

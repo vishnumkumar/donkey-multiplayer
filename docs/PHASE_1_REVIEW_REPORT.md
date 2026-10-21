@@ -1,9 +1,9 @@
 # Phase 1 Review Report
 
 **Document ID:** DM-PHASE1-REPORT  
-**Version:** 0.1 DRAFT  
-**Date:** 2026-10-20  
-**Status:** `PHASE 1 REVIEWED — AWAITING OWNER RULE APPROVAL`
+**Version:** 1.0 RELEASE CANDIDATE  
+**Date:** 2026-10-21  
+**Status:** `PHASE 1 REVIEWED — ALL RULES APPROVED; AWAITING FINAL RULESET FREEZE AUTHORIZATION`
 
 ---
 
@@ -88,7 +88,6 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 
 - **CONFIRMED:** 5 rules (R-001, R-005, R-006, R-012, plus R-007 partial)
 - **PROPOSED:** 6 rules (R-004, R-007, R-011, R-014, R-015, R-016)
-- **OWNER APPROVED:** 6 rules (R-002, R-003, R-008, R-009, R-010, R-013 — 2026-10-21)
 - **OWNER APPROVED:** 7 rules (R-002, R-003, R-008, R-009, R-010, R-013, R-017 — 2026-10-21)
 
 ---
@@ -264,11 +263,11 @@ Identified duplicate PRD files:
 
 ---
 
-## 10. Remaining Blockers
+## 10. Decisions Register (All Resolved)
 
-### 10.1 OPEN Decisions Requiring Owner Approval
+### 10.1 OPEN Decisions — Owner Approved
 
-These decisions **cannot** be resolved by the architect. They require gameplay observation, product judgment, or explicit owner preference.
+All decisions in this section have been approved by the product owner (2026-10-21). No open items remain.
 
 | # | Decision | Recommended | Risk of Wrong Default | Owner Action |
 |---|---|---|---|---|
@@ -279,9 +278,9 @@ These decisions **cannot** be resolved by the architect. They require gameplay o
 | ~~5~~ | **R-013 / D06:** All empty → rank by R-010 clockwise; last = Donkey | ~~Draw~~ | ~~LOW~~ Resolved | **OWNER APPROVED 2026-10-21** |
 | ~~6~~ | **R-017:** Watchdog: void after 200 rounds or 30 min; no arbitrary Donkey | Void with threshold | ~~LOW~~ Resolved | **OWNER APPROVED 2026-10-21** |
 
-### 10.2 PROPOSED Decisions (Safe Defaults, Confirm or Override)
+### 10.2 PROPOSED Decisions — Owner Confirmed
 
-These have safe recommended defaults but should be confirmed:
+All decisions in this section have been confirmed by the product owner (2026-10-21). No proposed items remain.
 
 | # | Decision | Default | Owner Action |
 |---|---|---|---|
@@ -297,12 +296,12 @@ These have safe recommended defaults but should be confirmed:
 
 ### 10.3 Phase 2 Entry Criteria
 
-Phase 2 (deterministic engine implementation) is blocked until:
+Phase 2 (deterministic engine implementation) requires:
 
-1. All OPEN decisions (§10.1 items 1–6) are signed by owner
-2. All PROPOSED decisions (§10.2 items 7–12) are confirmed or overridden
-3. `RULE_FREEZE_APPROVAL_CHECKLIST.md` is signed with version `DM-RULES-1.0` and date
-4. Approved ruleset version `DM-RULES-1.0` is issued
+1. ~~All OPEN decisions (§10.1 items 1–6) signed by owner~~ — **DONE** (all 7 OWNER APPROVED 2026-10-21)
+2. ~~All PROPOSED decisions (§10.2 items 7–15) confirmed or overridden~~ — **DONE** (all 8 OWNER CONFIRMED + WIN-001 CONFIRMED 2026-10-21)
+3. `RULE_FREEZE_APPROVAL_CHECKLIST.md` signed with version `DM-RULES-1.0` and date — **READY FOR FINAL OWNER SIGN-OFF**
+4. Approved ruleset version `DM-RULES-1.0` issued — **READY FOR FINAL OWNER SIGN-OFF**
 
 **Not blocked on Phase 1:** CI pipeline creation, project scaffolding, dependency installation — these are Phase 2 setup tasks.
 
@@ -317,7 +316,8 @@ Phase 2 (deterministic engine implementation) is blocked until:
 - No Dart, C#, SQL, YAML, JSON, Docker, CI, or implementation files created
 - No packages installed, no scaffolding generated, no builds run
 - **7 OWNER APPROVED:** D01/R-002 (shuffle: uniform CSPRNG), D02/R-003 (A♠ opening: free choice), D03/R-008 (HIT winner: leading-suit highest), D04/R-009 (finisher timing: after resolution), D05/R-010 (simultaneous finisher ranking: clockwise), D06/R-013 (all-empty: clockwise ranking, last = Donkey), R-017 (watchdog: 200 rounds or 30 min) — 2026-10-21
-- **8 OWNER CONFIRMED:** WIN-001 (game objective), D07 (timeout: 20s/15s, bot takeover), D08 (bot fairness: no hidden hands), D09 (4-player MVP), D10 (online bots disclosed), D11 (2.5D rendering), D12 (SignalR spike Phase 4), D13 (offline currency isolation), D14 (India-first + legal review) — 2026-10-21
+- **WIN-001 CONFIRMED:** Game objective — first qualifying finisher (per R-009) = winner; last with cards = Donkey — 2026-10-21
+- **8 OWNER CONFIRMED:** D07 (timeout: 20s/15s, bot takeover), D08 (bot fairness: no hidden hands), D09 (4-player MVP), D10 (online bots disclosed), D11 (2.5D rendering), D12 (SignalR spike Phase 4), D13 (offline currency isolation), D14 (India-first + legal review) — 2026-10-21
 - **0 OPEN decisions** remain — all blocking and proposed decisions are resolved
 - Rule freeze (`DM-RULES-1.0`) and Phase 2 authorization may proceed at the product owner's discretion
 - See `docs/REMAINING_DECISIONS_WORKSHEET.md` for full resolved-items reference
@@ -331,18 +331,17 @@ Phase 2 (deterministic engine implementation) is blocked until:
 
 ### Process
 
-1. Review each document in `docs/` for accuracy and completeness
-2. Sign off on each decision in §10.1 and §10.2 (approve, modify, or defer with rationale)
-3. Sign `RULE_FREEZE_APPROVAL_CHECKLIST.md` with version `DM-RULES-1.0` and date
+1. ~~Review each document in `docs/` for accuracy and completeness~~ — **DONE** (consistency audit complete)
+2. ~~Sign off on each decision in §10.1 and §10.2 (approve, modify, or defer with rationale)~~ — **DONE** (7 OWNER APPROVED + 8 OWNER CONFIRMED + WIN-001 CONFIRMED — 2026-10-21)
+3. Sign `RULE_FREEZE_APPROVAL_CHECKLIST.md` with version `DM-RULES-1.0` and date — **READY FOR FINAL OWNER SIGN-OFF**
 4. Upon approval, documents become the canonical specification for Phase 2
 5. Any future rule changes require a new ruleset version (`DM-RULES-1.1` or `DM-RULES-2.0`)
 
 ### Recommended Next Steps (for owner, not for this session)
 
-1. Review and sign off on the 12 decisions above
-2. Optionally conduct a brief competitor gameplay session to validate D02 (A♠ opening) and D03 (HIT winner) before signing
-3. Begin art asset sourcing/creation (parallel to decision process)
-4. Once signed: issue `DM-RULES-1.0` and authorize Phase 2 (deterministic engines)
+1. ~~Review and sign off on the 15 decisions above~~ — **DONE** (2026-10-21)
+2. Issue formal ruleset freeze `DM-RULES-1.0` and authorize Phase 2 (deterministic engines)
+3. Begin art asset sourcing/creation (parallel to Phase 2)
 
 ---
 

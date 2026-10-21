@@ -1,15 +1,15 @@
 # 03 — Canonical Ruleset v1 Draft
 
-**Document ID:** DM-RULES-1.0-DRAFT  
-**Version:** 0.1 DRAFT — **NOT APPROVED FOR IMPLEMENTATION**  
-**Date:** 2026-10-20  
-**Status:** Awaiting owner sign-off on all OPEN items before this becomes DM-RULES-1.0
+**Document ID:** DM-RULES-1.0-RC  
+**Version:** 1.0-RC — RELEASE CANDIDATE — READY FOR FINAL OWNER SIGN-OFF  
+**Date:** 2026-10-21  
+**Status:** All rules approved (7 OWNER APPROVED + 8 OWNER CONFIRMED + WIN-001 CONFIRMED). Awaiting final owner sign-off to issue DM-RULES-1.0.
 
 ---
 
 ## Purpose
 
-Define a complete, deterministic, implementable ruleset for the Donkey card game. Every legal move, resolution, edge case, and terminal condition is specified with enough precision to write a state machine and golden test fixtures. OPEN items present recommended options and alternatives — they are **not** resolved.
+Define a complete, deterministic, implementable ruleset for the Donkey card game. Every legal move, resolution, edge case, and terminal condition is specified with enough precision to write a state machine and golden test fixtures. All previously OPEN items have been resolved by owner approval.
 
 ## Scope
 
@@ -17,18 +17,17 @@ Covers the full game lifecycle from deck composition through terminal result. Do
 
 ---
 
-## BLOCKING OPEN DECISIONS
+## RESOLVED DECISIONS (all approved 2026-10-21)
 
-**Do not implement until these are resolved by owner approval.**
-
-| ID | Decision | Recommended | Alternative(s) | See |
-|---|---|---|---|---|
-| R-002 | Shuffle policy | Uniform CSPRNG | ~~Suit-balanced heuristic; rejection sampling~~ | §2 — **OWNER APPROVED 2026-10-21** |
-| R-003 | A♠ opening constraint | Any card | ~~Must play A♠~~ | §4 — **OWNER APPROVED 2026-10-21** |
-| R-008 | Hit winner comparison | Leading-suit highest only | ~~Cross-suit highest rank~~ | §8 — **OWNER APPROVED 2026-10-21** |
-| R-010 | Simultaneous finisher ranking | Clockwise deterministic | ~~Tied ranks~~ | §10 — **OWNER APPROVED 2026-10-21** |
-| R-013 | All players empty | ~~Draw / no Donkey~~ | ~~Replay; last-hit-recipient is Donkey~~ | §12 — **OWNER APPROVED 2026-10-21** |
-| R-017 | Watchdog threshold | Void after 200 rounds or 30 min | ~~No watchdog~~ | §14 — **OWNER APPROVED 2026-10-21** |
+| ID | Decision | Approved Resolution | See |
+|---|---|---|---|
+| R-002 | Shuffle policy | Uniform CSPRNG (Fisher-Yates) | §2 — **OWNER APPROVED** |
+| R-003 | A♠ opening constraint | Free choice (any card) | §4 — **OWNER APPROVED** |
+| R-008 | Hit winner comparison | Leading-suit highest only | §8 — **OWNER APPROVED** |
+| R-009 | Finisher timing | After full round resolution including HIT collection | §9–§10 — **OWNER APPROVED** |
+| R-010 | Simultaneous finisher ranking | Clockwise from leader; distinct consecutive positions | §10 — **OWNER APPROVED** |
+| R-013 | All players empty | Last-ranked finisher (clockwise from leader) = Donkey; no draw | §12 — **OWNER APPROVED** |
+| R-017 | Watchdog threshold | Void after 200 rounds or 30 min | §14 — **OWNER APPROVED** |
 
 ---
 
@@ -79,10 +78,11 @@ Uniform random permutation (Fisher-Yates) using a cryptographically secure rando
 - Deal order: cards distributed one at a time in clockwise seat order (or equivalently, 13-card blocks — result is identical given uniform shuffle).
 - After dealing, every card is in exactly one player's hand. No cards in discard or trick area.
 
-### 2.3 Shuffle Seed Security
+### 2.3 Shuffle Security and Audit
 
-- **Online:** Server generates shuffle; seed is secret until match completion. Neither the seed nor the full deck order is sent to any client before or during the match.
-- **Offline:** Local engine generates shuffle; seed may be stored for replay/debugging.
+- **Online (production):** Server generates the shuffle using OS CSPRNG. There is no reproducible seed — the CSPRNG output is not seedable or replayable. Neither the deck order nor any entropy input is sent to any client before or during the match. For post-match audit, the server records the **dealt hand assignments** (which cards each seat received) in the sealed match record. The event journal captures every action and state transition. Together, these provide a complete, verifiable audit trail without requiring a seed.
+- **Offline:** Local engine generates the shuffle using platform CSPRNG (`Random.secure()` in Dart). No seed is stored for production play. For debugging, offline matches record dealt hand assignments in local storage.
+- **Test/simulation only:** Test fixtures use pre-determined deck orders (no RNG). Simulation harnesses use a seeded deterministic PRNG with a recorded seed for reproducibility. See §2.1 and [07-offline-online-parity-strategy.md](07-offline-online-parity-strategy.md) §6.
 
 ---
 
@@ -113,7 +113,7 @@ The A♠ holder **must** play A♠ as the first card. This would be the only for
 
 ## 5. Turn Order
 
-**[PROPOSED]**
+**[CONFIRMED]**
 
 - Within a round, players act in **clockwise seat order** starting from the leader.
 - **Finished players are skipped.** A player who has exited (zero cards, confirmed finisher) never acts.
@@ -149,7 +149,7 @@ ELSE:
 
 ## 7. No-Hit Round Resolution
 
-**[PROPOSED]** (standard interpretation of confirmed source)
+**[CONFIRMED]**
 
 When all active players in the round have played and **no** play was flagged as a hit:
 
@@ -242,7 +242,7 @@ All simultaneously finishing players share the same finishing position (e.g., tw
 
 ## 11. Leader Replacement After Finisher Exit
 
-**[PROPOSED — R-011]**
+**[CONFIRMED — R-011]**
 
 If the round winner (who would normally lead next) has zero cards after resolution and becomes a finisher:
 
@@ -279,7 +279,7 @@ This rule produces a deterministic Donkey in every game that reaches completion,
 
 ## 13. Terminal Condition — Donkey Declaration
 
-**[CONFIRMED objective; PROPOSED trigger — R-012]**
+**[CONFIRMED — R-012 + WIN-001]**
 
 ### WIN-001: Game Objective — CONFIRMED PRODUCT OBJECTIVE (2026-10-21)
 
@@ -310,15 +310,19 @@ The match ends when exactly **one active player remains with cards** after a rou
 
 **[OWNER APPROVED 2026-10-21 — R-017]**
 
-If a match exceeds **200 rounds** or **30 minutes** wall-clock duration from match start, whichever comes first, the match is **voided**:
+The watchdog is evaluated **after each round resolution** and **after finisher/terminal evaluation**, but **before the next round begins**. If a match has completed naturally (single Donkey or all-empty per R-013), the natural result takes precedence and the watchdog does not fire.
+
+If the completed round count is **≥ 200** or wall-clock duration from match start is **≥ 30 minutes**, and the match has not already terminated naturally, the match is **voided**:
 
 - No Donkey is assigned.
 - No competitive outcome is recorded.
 - No rewards or penalties are granted.
-- A diagnostic log with the match seed and event journal is preserved for analysis.
+- A diagnostic log with the dealt hand assignments and event journal is preserved for analysis.
 - The match transitions to the `VOIDED` terminal state (see [04-game-state-machine.md](04-game-state-machine.md) §1.1).
 
 The watchdog must **never** assign an arbitrary Donkey or fabricate a winner. A voided match records no competitive outcome, no rewards, and no penalties for any player. The threshold is tunable post-launch.
+
+**Precedence:** Natural termination (R-012 single Donkey, R-013 all-empty) always takes priority over watchdog. If round 200 produces a natural result, that result stands and the watchdog does not void the match.
 
 > **Owner note (2026-10-21):** Approved with recommended defaults — 200 rounds or 30 minutes. ~~Alternative: no watchdog.~~ Protects against infinite loops; threshold is tunable.
 
@@ -326,7 +330,7 @@ The watchdog must **never** assign an arbitrary Donkey or fabricate a winner. A 
 
 ## 15. Timeout and Inactivity
 
-**[PROPOSED]**
+**[OWNER CONFIRMED — D07 — 2026-10-21]**
 
 | Parameter | Proposed Value | Notes |
 |---|---|---|
@@ -360,7 +364,7 @@ If a player's seat remains bot-controlled for the remainder of the match, the ma
 
 ## 16. Bot Behavior
 
-**[PROPOSED]**
+**[OWNER CONFIRMED — D08 — 2026-10-21]**
 
 ### 16.1 Information Constraint
 
@@ -374,7 +378,7 @@ Bots operate with the **same information** available to a human player in the sa
 
 Bots may **not** access:
 - Opponent hand contents
-- Deck order or shuffle seed
+- Deck order or dealt hand assignments of other seats
 - Other bots' decision functions
 
 ### 16.2 Difficulty Levels
@@ -437,7 +441,7 @@ Resolution:
   Discard +4
 ```
 
-### Fixture 2: Hit Round (Recommended Option A — leading suit wins)
+### Fixture 2: Hit Round (R-008 APPROVED — leading suit wins)
 
 ```
 Setup:
@@ -521,7 +525,7 @@ Resolution (R-008 + R-009 APPROVED):
   Post-resolution finisher evaluation (R-009):
     S3 hand size: 0 → S3 is a FINISHER (played off-suit HIT; another player collected)
     S0 hand size: decreased by 1 → still active (if > 0)
-    S1 hand size: increased by 3 → still active (HIT winner collected cards, NOT a finisher)
+    S1 hand size: net +3 (played 1, received all 4 trick cards) → still active (HIT winner collected cards, NOT a finisher)
     S2 hand size: decreased by 1 → still active (if > 0)
 
   Owner golden scenario 3: player plays last card as off-suit HIT,
@@ -548,7 +552,7 @@ Resolution (R-008 + R-009 APPROVED):
   Cards → S1's hand (S1 receives all 4 cards)
 
   Post-resolution finisher evaluation (R-009):
-    S1 hand size: 3 (played 1, received 4) → NOT a finisher
+    S1 hand size: 4 (started 1, played 1 → 0, received all 4 trick cards → 4) → NOT a finisher
     S1 played their last card but then received HIT collection → still active.
 
   Owner golden scenario 1: player plays last card, wins the HIT,
@@ -675,7 +679,7 @@ Resolution (R-008 + R-009):
   Cards → S1's hand
 
   Post-resolution finisher evaluation (R-009):
-    S1 hand size: 3 (played 1, received 4) → NOT a finisher
+    S1 hand size: 4 (started 1, played 1 → 0, received all 4 trick cards → 4) → NOT a finisher
     S3 hand size: 0 (played off-suit HIT; another player collected) → FINISHER
 
   R-010 does not apply: only one qualifying finisher in this round.
@@ -904,6 +908,132 @@ Final result:
   4th (Donkey): S3
 ```
 
+### Fixture 10a: HIT Returns Cards to Empty Player (R-009 + R-014)
+
+```
+Setup:
+  Active players: [S0, S1, S2, S3]
+  Leader: S0
+  S2's hand: [10♣] (last card)
+
+Plays:
+  S0: 8♣ (leads clubs)
+  S1: 3♣ (follows suit)
+  S2: 10♣ (follows suit — last card)
+  S3: 5♥ (no clubs → HIT)
+
+Resolution (R-008):
+  Hit: true
+  Winner: S2 (10♣, rank 10 — highest club)
+  Cards → S2's hand (S2 receives all 4 cards)
+
+  Post-resolution finisher evaluation (R-009):
+    S2 hand size: 4 (started 1, played 1 → 0, received all 4 trick cards → 4) → NOT a finisher
+    S2 played their last card but won HIT collection → cards restored
+    S2 continues as active player with 4 cards
+
+Key: HIT collection restores a player's hand even when they played
+their last card. The player does not exit and is not a finisher (R-014).
+52-card conservation: total cards across all hands + trick(0) + discard
+remains constant. ✓
+```
+
+### Fixture 11: Watchdog — Match Voided at Boundary (R-017 APPROVED)
+
+```
+Setup:
+  Match in progress. No natural termination after round resolution.
+  Active players: [S1, S3] (S0 finished 1st, S2 finished 2nd)
+  Completed round count: 200
+  Wall-clock elapsed: 22 minutes (under time limit)
+
+Watchdog evaluation (after round 200 resolution, before round 201):
+  roundCount >= 200? YES (200 >= 200)
+  Natural termination this round? NO (2 active players remain)
+
+Resolution (R-017 APPROVED):
+  Match outcome: VOIDED
+  Donkey assigned: NONE
+  Competitive result recorded: NONE
+  Rewards/penalties: NONE
+  Terminal state: VOIDED
+  Diagnostic log: event journal + dealt hands preserved for analysis
+
+Key: Watchdog fires at exactly 200 completed rounds (>=, not >).
+No arbitrary Donkey. Threshold is tunable post-launch.
+```
+
+### Fixture 11a: Watchdog — Round 199, Game Continues
+
+```
+Setup:
+  Match in progress. No natural termination after round resolution.
+  Active players: [S1, S3]
+  Completed round count: 199
+  Wall-clock elapsed: 28 minutes
+
+Watchdog evaluation (after round 199 resolution):
+  roundCount >= 200? NO (199 < 200)
+  wallClockElapsed >= 30 min? NO (28 < 30)
+
+Result: Game continues to round 200.
+```
+
+### Fixture 11b: Watchdog — Natural Termination at Round 200 Takes Precedence
+
+```
+Setup:
+  Active players: [S1, S3] (S0 finished 1st, S2 finished 2nd)
+  Completed round count: 199 (this is round 200)
+  S1's hand: [K♥] (last card)
+  S3's hand: [4♥, 7♦]
+  Leader: S1
+
+Plays:
+  S1: K♥ (leads hearts, last card)
+  S3: 4♥ (follows suit)
+
+Resolution:
+  Hit: false
+  Winner: S1 (K♥)
+  Cards → discard
+
+  Post-resolution finisher evaluation:
+    S1 hand: 0 → FINISHER (3rd place)
+    S3 hand: [7♦] → still active
+    Active players: 1 → Terminal: S3 is DONKEY
+
+  Completed round count is now 200.
+  Natural termination occurred → watchdog does NOT fire.
+
+Result: COMPLETED (not VOIDED)
+  1st: S0, 2nd: S2, 3rd: S1, 4th (Donkey): S3
+
+Key: Natural termination takes precedence over watchdog.
+The match completed naturally in round 200, so the result stands.
+```
+
+### Fixture 11c: Watchdog — Time Limit Exceeded
+
+```
+Setup:
+  Match in progress. No natural termination after round resolution.
+  Active players: [S1, S3]
+  Completed round count: 85 (under round limit)
+  Wall-clock elapsed: 30 minutes
+
+Watchdog evaluation (after round 85 resolution):
+  roundCount >= 200? NO (85 < 200)
+  wallClockElapsed >= 30 min? YES (30 >= 30)
+  Natural termination? NO
+
+Resolution (R-017 APPROVED):
+  Match outcome: VOIDED
+
+Key: Time limit is independent of round count. Whichever
+threshold is reached first triggers the watchdog.
+```
+
 ---
 
 ## 19. Game Flow Summary (Mermaid)
@@ -944,13 +1074,13 @@ flowchart TD
 
 ## Acceptance Criteria for This Document
 
-- [ ] Every rule is classified as CONFIRMED, PROPOSED, or OPEN
-- [ ] All OPEN items present recommended option plus at least one alternative
-- [ ] No ambiguity is silently resolved
-- [ ] Test fixtures cover all major resolution paths
+- [x] Every rule is classified as CONFIRMED or OWNER APPROVED — no OPEN items remain
+- [x] All previously OPEN items resolved by owner approval (2026-10-21)
+- [x] No ambiguity is silently resolved
+- [x] Test fixtures cover all major resolution paths (10 fixture groups, 15+ scenarios)
 - [x] Fixtures include the critical R-008 off-suit comparison case (owner approved 2026-10-21; Option A locked)
-- [ ] State invariants are complete and testable
-- [ ] Document is sufficient for two independent engineers to implement identical state machines
+- [x] State invariants are complete and testable (INV-1 through INV-10)
+- [x] Document is sufficient for two independent engineers to implement identical state machines
 
 ---
 
@@ -963,6 +1093,6 @@ flowchart TD
 | [07-offline-online-parity-strategy.md](07-offline-online-parity-strategy.md) | Cross-language parity using these fixtures |
 | [10-qa-test-matrix-and-acceptance.md](10-qa-test-matrix-and-acceptance.md) | Full test matrix derived from these rules |
 | [12-risks-and-decisions.md](12-risks-and-decisions.md) | Decision register for OPEN items |
-| [DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md](DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md) | Formal owner decision record for R-002, R-003, R-008, R-009, R-010, R-013 and WIN-001 |
+| [DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md](DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md) | Formal owner decision record for R-002, R-003, R-008, R-009, R-010, R-013, R-017 and WIN-001 |
 | [REMAINING_DECISIONS_WORKSHEET.md](REMAINING_DECISIONS_WORKSHEET.md) | Per-item sign-off worksheet for all pending decisions |
 | `RULE_FREEZE_APPROVAL_CHECKLIST.md` | Owner sign-off checklist |
