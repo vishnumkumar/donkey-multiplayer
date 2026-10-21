@@ -850,15 +850,24 @@ Rate limit responses include `Retry-After` header (REST) or `RATE_LIMITED` error
 
 The `actionId` field on `PlayCard` commands provides at-least-once delivery safety. The server enforces a `UNIQUE(match_id, action_id)` constraint on the event journal.
 
+**Authentication-first rule:** The server authenticates the caller and resolves the player's seat **before** any `actionId` lookup. An unauthenticated or unauthorized request is rejected immediately — no idempotency data is consulted or returned.
+
+**Ownership binding:** Each stored action is bound to the `(match_id, action_id, seat_index)` of the authenticated player who originally submitted it. An `actionId` lookup only matches if the requesting player owns the stored action. If a different player submits the same `actionId`, the server treats it as a new unknown action (it will fail `UNIQUE` constraint on insert) — never as a match against the original player's record.
+
 | Scenario | Server Behavior |
 |---|---|
-| **Exact duplicate** — same `actionId`, same `cardId`, same `seatIndex` | Return the original `ActionAcknowledged`. No state change. |
-| **Payload mismatch** — same `actionId`, **different** `cardId` or `seatIndex` | Return the original `ActionAcknowledged` (for the card that was actually played). Log an anomaly event with both payloads for fraud analysis. **Never** apply the second payload. |
-| **State advanced** — same `actionId`, but match `stateVersion` has advanced past the turn where this action was originally applied | Return the original `ActionAcknowledged` with the `stateVersion` at which it was applied. The client should treat this as a successful prior play and resync to current state. |
+| **Exact duplicate** — same `actionId`, same `cardId`, same authenticated `seatIndex` | Return the original `ActionAcknowledged`. No state change. |
+| **Payload mismatch** — same `actionId`, **different** `cardId`, same authenticated `seatIndex` | Reject with `ACTION_ID_CONFLICT`. Log an anomaly event with both payloads for fraud analysis. **Never** apply the second payload. **Never** return the original action's card or outcome (doing so would confirm which card was actually played, which may leak strategic information to a compromised client). |
+| **State advanced** — same `actionId`, same authenticated `seatIndex`, but match `stateVersion` has advanced past the turn where this action was originally applied | Return the original `ActionAcknowledged` with the `stateVersion` at which it was applied. The client should treat this as a successful prior play and resync to current state. |
 | **Unknown `actionId`**, stale `expectedStateVersion` | Reject with `VERSION_MISMATCH`. Client must resync and resubmit with a new `actionId` and correct `expectedStateVersion`. |
 | **Unknown `actionId`**, expired turn deadline | Reject with `DEADLINE_PASSED`. An auto-play may have already been committed for this turn. |
+| **Cross-player `actionId` collision** — `actionId` exists but belongs to a different seat | Treated as unknown (the lookup is scoped to the authenticated seat). Insert will fail the `UNIQUE(match_id, action_id)` constraint; return `ACTION_ID_CONFLICT`. |
 
-**Implementation note:** The `(match_id, action_id)` unique constraint is checked *before* any state mutation. If the `actionId` already exists in the event journal, the server returns the stored outcome without touching match state, regardless of whether the payload matches.
+**Implementation notes:**
+- Authentication and seat resolution occur **before** any `actionId` lookup. No idempotency response is ever returned to an unauthenticated caller.
+- The `(match_id, action_id)` unique constraint is checked *before* any state mutation.
+- Idempotency lookups are scoped to the authenticated player's seat. The server never returns another player's stored action data, even if `actionId` values collide across seats.
+- On `ACTION_ID_CONFLICT`, the response contains the error code only — no card, seat, or outcome data from the original action.
 
 ---
 

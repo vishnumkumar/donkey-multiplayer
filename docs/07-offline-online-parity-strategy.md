@@ -231,7 +231,7 @@ If the Dart and C# engines produce different hashes for the same fixture step, t
 | `no-hit` | All players follow suit; cards go to discard. | 10 |
 | `hit-basic` | Single hit; leading-suit winner collects. | 10 |
 | `hit-multiple` | Multiple players play off-suit. | 5 |
-| `hit-offsuit-ace` | Off-suit Ace does NOT win (critical R-008 test). | 5 |
+| `hit-offsuit-ace` | Off-suit Ace does NOT win (R-008 — OWNER APPROVED 2026-10-21). | 5 |
 | `finisher-basic` | Player empties hand after no-hit round. | 5 |
 | `finisher-hit-collection` | Player plays last card but hit winner collects (R-009). | 5 |
 | `finisher-simultaneous` | Multiple players empty in same round (R-010). | 5 |

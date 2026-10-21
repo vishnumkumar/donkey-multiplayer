@@ -73,7 +73,7 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 | R-005 | Must follow lead suit if held; else any card = HIT | **CONFIRMED** | Developer: "follow suit"; "if you don't have...play another suit, that's called HIT" |
 | R-006 | Rank order: A(14) > K > Q > J > 10 > ... > 2 | **CONFIRMED** | Developer description lists rank order. |
 | R-007 | No hit → highest leading-suit card wins; cards to discard | **PROPOSED** | Developer: "largest card of the round leads next and round cards leave hands" — interpreted as discard. |
-| R-008 | Hit → highest leading-suit card takes all cards; off-suit cannot win | **OPEN** | Developer says "largest card" without specifying cross-suit comparison. Critical ambiguity. |
+| R-008 | Hit → highest leading-suit card takes all cards; off-suit cannot win | **OWNER APPROVED 2026-10-21** | Owner decision: leading-suit highest wins. Product choice, not competitor verification. |
 | R-009 | Finisher status determined after round resolution, not immediately on play | **PROPOSED** | Not explicitly stated by developer; proposed for correctness (hit can return cards). |
 | R-010 | Simultaneous finishers ranked clockwise from round leader | **OPEN** | No official rule for simultaneous finish. Alternative: tied ranks. |
 | R-011 | If round winner exits, next leader is first active seat clockwise | **PROPOSED** | Not explicitly addressed by developer; standard trick-taking convention. |
@@ -88,7 +88,8 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 
 - **CONFIRMED:** 5 rules (R-001, R-005, R-006, R-012, plus R-007 partial)
 - **PROPOSED:** 8 rules (R-002, R-004, R-007, R-009, R-011, R-014, R-015, R-016)
-- **OPEN (blocking):** 4 rules (R-003, R-008, R-010, R-013) + R-017 threshold
+- **OWNER APPROVED:** 1 rule (R-008 — 2026-10-21)
+- **OPEN (blocking):** 3 rules (R-003, R-010, R-013) + R-017 threshold
 
 ---
 
@@ -111,7 +112,7 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 
 | Rank | Decision | Recommendation | Alternatives | Risk of Guessing |
 |---|---|---|---|---|
-| **1** | **D03: HIT winner — leading suit only or cross-suit?** | Leading suit only (off-suit cannot win) | Cross-suit highest rank wins | **CRITICAL.** Changes core strategy. Getting this wrong means the game plays fundamentally differently. |
+| **1** | **D03: HIT winner — leading suit only or cross-suit?** | Leading suit only (off-suit cannot win) | ~~Cross-suit highest rank wins~~ | **OWNER APPROVED 2026-10-21.** Product owner's choice for our original game. |
 | **2** | **D02: Must A♠ be the opening card?** | No, holder may lead any card | A♠ must be first card played | **HIGH.** Affects first-round strategy for every game. |
 | **3** | **D01: Shuffle distribution policy** | Uniform CSPRNG, no suit skewing | Implement disclosed balancing heuristic | **MEDIUM.** Affects game feel but not correctness. Can be patched post-launch. |
 | **4** | **D05: Simultaneous finisher ranking** | Clockwise from round leader | Tied ranks | **MEDIUM.** Affects competitive fairness perception. |
@@ -212,8 +213,11 @@ The following issues were identified during the Phase 1 senior architect review 
 
 The original idempotency table in `06-api-and-realtime-contracts.md` §7 covered only exact-duplicate retries. The following gaps were identified and addressed:
 
-- **Payload mismatch:** When a reused `actionId` arrives with a different card, the server returns the original acknowledgement and logs an anomaly. The second payload is never applied.
-- **State advanced:** When a duplicate `actionId` arrives after the match state has advanced past that turn, the server returns the original acknowledgement with the `stateVersion` at which it was applied.
+- **Authentication-first:** The server authenticates the caller and resolves the player's seat before any `actionId` lookup. Unauthenticated requests never receive idempotency data.
+- **Ownership binding:** Each stored action is bound to `(match_id, action_id, seat_index)`. Lookups are scoped to the authenticated seat — cross-player `actionId` collisions never leak another player's action data.
+- **Exact duplicate:** Same `actionId`, same card, same seat → return original outcome.
+- **Payload mismatch:** Same `actionId`, different card, same seat → reject with `ACTION_ID_CONFLICT`. The response contains only the error code — never the original card or outcome (prevents information leakage to a compromised client).
+- **State advanced:** Duplicate arrives after match state advanced → return original ack with the `stateVersion` at which it was applied.
 - **Implementation constraint:** The `(match_id, action_id)` unique check occurs before any state mutation.
 
 ### 9.3 Timeout / Disconnect / Bot Precedence (Task 4)
@@ -250,6 +254,14 @@ Identified duplicate PRD files:
 - `DONKEY_GAME_PRODUCT_TECHNICAL_SPEC_V1_DRAFT.md` — authoritative
 - `DONKEY_GAME_PRODUCT_TECHNICAL_SPEC_V1_DRAFT-4.md` — duplicate; should be archived
 
+### 9.8 Final Consistency Pass
+
+| # | Finding | Files Affected | Resolution |
+|---|---|---|---|
+| F-08 | `RULE_FREEZE_APPROVAL_CHECKLIST.md` decision IDs did not match `12-risks-and-decisions.md` (D07–D15 were misnumbered and described different items) | `RULE_FREEZE_APPROVAL_CHECKLIST.md` | Rewritten to align with D01–D14 + R-017; grouped into blocking and non-blocking sections; added cross-reference note |
+| F-09 | PlayCard idempotency §7.1 returned original ack on payload mismatch, leaking which card was actually played; no authentication gate before lookup; no seat-scoping of stored actions | `06-api-and-realtime-contracts.md`, `08-security-privacy-and-compliance.md`, `10-qa-test-matrix-and-acceptance.md` | Authenticate before lookup; bind actions to seat; payload mismatch returns `ACTION_ID_CONFLICT` without data; cross-player collisions rejected |
+| F-10 | R-017 watchdog specified only round count (200) in docs 03/04 but "200 rounds or 30 minutes" in review report — inconsistent | `03-canonical-ruleset-v1-draft.md`, `04-game-state-machine.md`, `10-qa-test-matrix-and-acceptance.md` | Both conditions (round limit + wall-clock duration) now specified consistently across all documents |
+
 ---
 
 ## 10. Remaining Blockers
@@ -262,7 +274,7 @@ These decisions **cannot** be resolved by the architect. They require gameplay o
 |---|---|---|---|---|
 | 1 | **R-002 / D01:** Shuffle policy — uniform CSPRNG, no suit skewing | Uniform shuffle | MEDIUM — affects game feel, not correctness | APPROVE or SPECIFY |
 | 2 | **R-003 / D02:** A♠ holder may lead any card (A♠ not mandatory) | Free choice | HIGH — affects first-round strategy | APPROVE or SPECIFY |
-| 3 | **R-008 / D03:** HIT winner = highest leading-suit card only; off-suit cannot win | Leading-suit only | CRITICAL — changes core strategy | APPROVE or SPECIFY |
+| ~~3~~ | **R-008 / D03:** HIT winner = highest leading-suit card only; off-suit cannot win | Leading-suit only | ~~CRITICAL~~ Resolved | **OWNER APPROVED 2026-10-21** |
 | 4 | **R-010 / D05:** Simultaneous finishers ranked clockwise from leader | Clockwise podium | MEDIUM — fairness perception | APPROVE or SPECIFY |
 | 5 | **R-013 / D06:** All empty = technical draw / no Donkey | Draw | LOW (rare) — must be defined for determinism | APPROVE |
 | 6 | **R-017:** Watchdog: void after 200 rounds or 30 min; no arbitrary Donkey | Void with threshold | LOW — protects against pathological games | APPROVE with threshold |
@@ -298,10 +310,11 @@ Phase 2 (deterministic engine implementation) is blocked until:
 ### `PHASE 1 REVIEWED — AWAITING OWNER RULE APPROVAL`
 
 - 17 documentation files created and reviewed in `docs/`
-- Architect review completed: 7 findings corrected, 0 remaining document contradictions
+- Architect review completed: 10 findings corrected, 0 remaining document contradictions
 - No Dart, C#, SQL, YAML, JSON, Docker, CI, or implementation files created
 - No packages installed, no scaffolding generated, no builds run
-- 6 OPEN decisions require explicit owner approval before Phase 2
+- 5 OPEN decisions require explicit owner approval before Phase 2 (D03/R-008 approved 2026-10-21)
+- 1 confirmed product objective: WIN-001 (first to empty = winner; last with cards = Donkey)
 - 6 PROPOSED decisions have safe defaults but should be confirmed
 
 ---

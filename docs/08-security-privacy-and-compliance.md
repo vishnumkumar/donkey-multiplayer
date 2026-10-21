@@ -24,7 +24,7 @@ Covers the Flutter client, ASP.NET Core backend, SignalR transport, PostgreSQL p
 | ID | Threat | Severity | Likelihood | Technical Controls |
 |---|---|---|---|---|
 | T-01 | Client fabricates card, rank, or outcome | **Critical** | High | Server-authoritative state machine; `PlayCard` validated against current hand, legal moves, active state, turn order; result never derived from client payload. |
-| T-02 | Replay / duplicate / reorder actions | **Critical** | High | UUID `actionId` with unique DB constraint; `expectedStateVersion` monotonic check; duplicate `actionId` returns previously committed ack without state change. |
+| T-02 | Replay / duplicate / reorder actions | **Critical** | High | UUID `actionId` with `UNIQUE(match_id, action_id)` DB constraint; `expectedStateVersion` monotonic check; authenticate caller and resolve seat **before** any `actionId` lookup; exact duplicate (same payload, same seat) returns previously committed ack; reused `actionId` with different payload returns `ACTION_ID_CONFLICT` without revealing original action data; lookups scoped to authenticated seat — cross-player collisions never leak data. |
 | T-03 | Hidden-hand exposure via payload | **Critical** | Medium | Seat-filtered DTOs on all channels (see §2); adversarial test suite for every endpoint, socket event, and log output. |
 | T-04 | Hidden-hand exposure via logs/crashes | **High** | Medium | Structured logging never includes card arrays, hand contents, or match snapshots; crash reporters strip match state before upload (see §7). |
 | T-05 | RNG manipulation / predictable shuffle | **Critical** | Low | OS CSPRNG (`RandomNumberGenerator` in .NET); seed never stored or transmitted before match completion; Fisher-Yates unbiased shuffle; statistical distribution test. |
@@ -187,15 +187,16 @@ Every `PlayCard` goes through this validation sequence. Failure at any step retu
 6. **Card ownership** — `cardId` exists in this player's current hand.
 7. **Legal move** — Card follows suit rules: if player holds any card of lead suit, the played card must be of lead suit.
 8. **State version** — `expectedStateVersion` matches current version (detects stale state).
-9. **Idempotency** — `actionId` checked: if already committed, return previous ack; if new, proceed.
+9. **Idempotency** — `actionId` checked against authenticated seat's records: if already committed with identical payload, return previous ack; if same `actionId` with different payload, reject with `ACTION_ID_CONFLICT`; if new, proceed.
 10. **Atomic commit** — Remove card from hand, add to trick, advance version, persist event, broadcast.
 
 ### 5.2 Specific Anti-Cheat Scenarios
 
 | Scenario | Expected Behavior |
 |---|---|
-| Replay same `actionId` | Return original ack; no state change |
-| Different card with same `actionId` | Return original ack (first card wins); log anomaly |
+| Replay same `actionId` (exact duplicate, same seat) | Return original ack; no state change |
+| Different card with same `actionId` (same seat) | Reject with `ACTION_ID_CONFLICT`; log anomaly; never reveal original action data |
+| Same `actionId` from different player | Treated as new action (lookup scoped to seat); insert fails unique constraint; return `ACTION_ID_CONFLICT` |
 | Stale `expectedStateVersion` | Reject with `VERSION_MISMATCH`; client must resync |
 | Card not in hand | Reject with `CARD_NOT_IN_HAND`; no state change |
 | Out of turn | Reject with `NOT_YOUR_TURN`; no state change |
@@ -436,7 +437,9 @@ Similar to Apple but uses Google's Data Safety form. Key declarations:
 | SEC-03 | Send `PlayCard` with a card not in hand | Server rejects with `CARD_NOT_IN_HAND`; no state change |
 | SEC-04 | Send `PlayCard` when it's not your turn | Server rejects with `NOT_YOUR_TURN`; no state change |
 | SEC-05 | Send `PlayCard` with stale `expectedStateVersion` | Server rejects with `VERSION_MISMATCH` |
-| SEC-06 | Send duplicate `actionId` | Server returns original ack; no double play |
+| SEC-06 | Send exact duplicate `actionId` (same card, same seat) | Server returns original ack; no double play |
+| SEC-06a | Send same `actionId` with different card (same seat) | Server rejects with `ACTION_ID_CONFLICT`; does not reveal original card |
+| SEC-06b | Send same `actionId` from different player's seat | Server rejects with `ACTION_ID_CONFLICT`; does not reveal original player's action |
 | SEC-07 | Send `PlayCard` after deadline | Server rejects with `DEADLINE_PASSED` |
 | SEC-08 | Attempt to join room with wrong code 6 times from same IP in 10 min | 6th attempt returns 429 |
 | SEC-09 | Grep all server logs during a complete match | Zero occurrences of hand arrays, shuffle seeds, or refresh tokens |

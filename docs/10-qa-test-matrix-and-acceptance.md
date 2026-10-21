@@ -38,7 +38,7 @@ Covers rules engine tests, cross-language parity, client integration, network re
 |---|---|---|---|---|---|
 | RR-001 | Lead: 8♣, Follow: 10♣, Q♣, 2♣ | No | Seat playing Q♣ (highest ♣) | Discard pile | R-007 |
 | RR-002 | Lead: 8♣, Follow: J♣, 10♣, 2♥ | Yes | Seat playing J♣ (highest ♣) | Winner's hand | R-008 |
-| RR-003 | Lead: 8♣, Follow: J♣, 10♣, A♥ | Yes | Seat playing J♣ (highest ♣, not A♥) | Winner's hand | R-008 [OPEN] |
+| RR-003 | Lead: 8♣, Follow: J♣, 10♣, A♥ | Yes | Seat playing J♣ (highest ♣, not A♥) | Winner's hand | R-008 [OWNER APPROVED 2026-10-21] |
 | RR-004 | Lead: A♣, Follow: 2♣, 3♣, 4♣ | No | Seat playing A♣ (highest ♣) | Discard pile | R-006, R-007 |
 | RR-005 | Lead: 2♣, Follow: 3♣, 5♥, 4♣ | Yes | Seat playing 4♣ (highest ♣) | Winner's hand | R-008 |
 | RR-006 | Lead: K♠, Follow: A♠, 3♥, 7♠ | Yes | Seat playing A♠ (highest ♠) | Winner's hand | R-006, R-008 |
@@ -74,7 +74,7 @@ Covers rules engine tests, cross-language parity, client integration, network re
 | EC-001 | First round: A♠ holder leads any card (not A♠) | Accepted if R-003 approved as "any card" | R-003 [OPEN] |
 | EC-002 | First round: A♠ holder forced to play A♠ | Accepted if R-003 approved as "must play A♠" | R-003 [OPEN] |
 | EC-003 | Hit round: leading-suit winner exits after resolution | Next leader is clockwise from exited winner | R-011 |
-| EC-004 | Match reaches 200 rounds | Watchdog triggers if threshold exceeded; match voided, no Donkey awarded | R-017 [OPEN] |
+| EC-004 | Match reaches 200 rounds or 30 minutes elapsed | Watchdog triggers on either condition; match voided, no Donkey awarded | R-017 [OPEN] |
 | EC-005 | Player has 1 card; it's off-suit to lead | Player plays it (HIT); hand empty; collect goes to lead-suit winner; player finishes | R-009, R-010 |
 
 ---
@@ -252,7 +252,9 @@ Shared JSON fixtures consumed by both Dart and C# test harnesses:
 | HUB-002 | `PlayCard` | Card not in hand | `ActionRejected` with `CARD_NOT_IN_HAND` |
 | HUB-003 | `PlayCard` | Not player's turn | `ActionRejected` with `NOT_YOUR_TURN` |
 | HUB-004 | `PlayCard` | Stale `expectedStateVersion` | `ActionRejected` with `VERSION_MISMATCH` |
-| HUB-005 | `PlayCard` | Duplicate `actionId` | Original `ActionAcknowledged` returned |
+| HUB-005 | `PlayCard` | Exact duplicate `actionId` (same card, same seat) | Original `ActionAcknowledged` returned |
+| HUB-005a | `PlayCard` | Same `actionId`, different card (same seat) | `ACTION_ID_CONFLICT`; original card not revealed |
+| HUB-005b | `PlayCard` | Same `actionId` from different player | `ACTION_ID_CONFLICT`; original player's data not revealed |
 | HUB-006 | `PlayCard` | After deadline | `ActionRejected` with `DEADLINE_PASSED` |
 | HUB-007 | `PlayCard` | Must follow suit; plays off-suit | `ActionRejected` with `MUST_FOLLOW_SUIT` |
 | HUB-008 | `JoinMatch` | Valid match + auth | `SeatAssigned` + current snapshot |
@@ -336,7 +338,8 @@ Shared JSON fixtures consumed by both Dart and C# test harnesses:
 | SEC-011 | Rate limit | Exceed room join limit | 429; subsequent attempts blocked |
 | SEC-012 | Rate limit | Exceed auth endpoint limit | 429 |
 | SEC-013 | Idempotency | Duplicate reward grant | Balance unchanged (idempotent) |
-| SEC-014 | Idempotency | Duplicate `actionId` with different card | Original ack returned; anomaly logged |
+| SEC-014 | Idempotency | Duplicate `actionId` with different card (same seat) | `ACTION_ID_CONFLICT` returned; original card not revealed; anomaly logged |
+| SEC-014a | Idempotency | Same `actionId` from different player's seat | `ACTION_ID_CONFLICT` returned; original player's action data not leaked |
 | SEC-015 | RNG | 1M shuffle statistical distribution test | Chi-squared within expected variance |
 | SEC-016 | Injection | SQL injection attempts in room code input | Parameterized queries; no injection |
 | SEC-017 | Injection | XSS in player display name | Sanitized/escaped in all outputs |
