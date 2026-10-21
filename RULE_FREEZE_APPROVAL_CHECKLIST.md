@@ -9,23 +9,23 @@ Status: **PENDING OWNER APPROVAL**. Check and sign every blocking point before P
 - [x] D03 (R-008) — HIT winner: highest leading-suit card only. **[OWNER APPROVED 2026-10-21]** — product owner's choice for our original game, not independent competitor verification.
 - [x] D04 (R-009) — Finisher timing: after round resolution. **[OWNER APPROVED 2026-10-21]** — finisher identified only after full round settlement including HIT collection.
 - [x] D05 (R-010) — Simultaneous finishers: distinct clockwise positions from round leader. **[OWNER APPROVED 2026-10-21]** — no tied ranks; deterministic ordering.
-- [ ] D06 (R-013) — All players empty simultaneously: draw / no Donkey **(recommended)** or replay? **[OPEN]**
-- [ ] D07 — Timeout/disconnect policy: 20s deadline, 15s grace, bot takeover, reclaim at round boundary **(proposed)** or alternative timers?
-- [ ] D08 — Bot fairness: bots see only own hand + played cards **(recommended)** or allow hidden-hand access for difficulty?
-- [ ] R-017 — Watchdog: void after 200 rounds or 30 minutes **(proposed)** or alternative threshold? **[OPEN]**
+- [x] D06 (R-013) — All players empty simultaneously: rank by R-010 clockwise order; last-ranked finisher is Donkey. **[OWNER APPROVED 2026-10-21]** — no draw; deterministic ranking consistent with R-010.
+- [x] D07 — Timeout/disconnect policy: 20s deadline, 15s grace, bot takeover, reclaim at round boundary. **[OWNER CONFIRMED 2026-10-21]** — recommended defaults accepted.
+- [x] D08 — Bot fairness: bots see only own hand + played cards. **[OWNER CONFIRMED 2026-10-21]** — recommended default accepted; no hidden-hand access.
+- [x] R-017 — Watchdog: void after 200 rounds or 30 minutes, whichever comes first; never assign arbitrary Donkey. **[OWNER APPROVED 2026-10-21]**
 
 ### Confirmed Product Objectives
 
-- [x] **WIN-001** — First qualifying finisher (empty hand after round settlement per R-009) takes first place = game winner. Last player with cards = Donkey. **[CONFIRMED 2026-10-21]** — "Successfully" now defined by R-009 (APPROVED). Simultaneous finisher ranking now resolved by R-010/D05 (OWNER APPROVED 2026-10-21). All-empty draw (R-013/D06) remains OPEN — not automatically approved.
+- [x] **WIN-001** — First qualifying finisher (empty hand after round settlement per R-009) takes first place = game winner. Last player with cards = Donkey. **[CONFIRMED 2026-10-21]** — "Successfully" now defined by R-009 (APPROVED). Simultaneous finisher ranking now resolved by R-010/D05 (OWNER APPROVED 2026-10-21). All-empty resolved by R-013/D06 (OWNER APPROVED 2026-10-21).
 
 ### Non-Blocking but Important Decisions
 
-- [ ] D09 — MVP 4 players only; no 2/3-player variant until separately specified.
-- [ ] D10 — Online bots: disclosed, queue fallback only; all bot-controlled seats labeled.
-- [ ] D11 — 2.5D rendering accepted as visual direction (see ADR-0001).
-- [ ] D12 — Dart SignalR client compatibility spike in Phase 4; WebSocket fallback ready (see ADR-0002).
-- [ ] D13 — Offline virtual coins stay separate from online server wallet.
-- [ ] D14 — India-first launch; no wagering/cash prizes; legal review before international.
+- [x] D09 — MVP 4 players only; no 2/3-player variant until separately specified. **[OWNER CONFIRMED 2026-10-21]**
+- [x] D10 — Online bots: disclosed, queue fallback only; all bot-controlled seats labeled. **[OWNER CONFIRMED 2026-10-21]**
+- [x] D11 — 2.5D rendering accepted as visual direction (see ADR-0001). **[OWNER CONFIRMED 2026-10-21]**
+- [x] D12 — Dart SignalR client compatibility spike in Phase 4; WebSocket fallback ready (see ADR-0002). **[OWNER CONFIRMED 2026-10-21]**
+- [x] D13 — Offline virtual coins stay separate from online server wallet. **[OWNER CONFIRMED 2026-10-21]**
+- [x] D14 — India-first launch; no wagering/cash prizes; legal review before international. **[OWNER CONFIRMED 2026-10-21]**
 
 ### Cross-References
 

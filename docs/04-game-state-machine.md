@@ -79,12 +79,12 @@ stateDiagram-v2
 
 ### 1.3 Terminal Conditions
 
-**WIN-001 (CONFIRMED 2026-10-21):** The first qualifying finisher (empty hand after full round settlement per R-009, OWNER APPROVED 2026-10-21) takes first place and is the game winner. The last player still holding cards is the Donkey. Simultaneous finisher ranking is now resolved by R-010 (OWNER APPROVED 2026-10-21): distinct consecutive positions in clockwise seat order from the round leader; no tied ranks. All-empty draw (R-013) is not automatically approved by WIN-001, R-009, or R-010.
+**WIN-001 (CONFIRMED 2026-10-21):** The first qualifying finisher (empty hand after full round settlement per R-009, OWNER APPROVED 2026-10-21) takes first place and is the game winner. The last player still holding cards is the Donkey. Simultaneous finisher ranking is now resolved by R-010 (OWNER APPROVED 2026-10-21): distinct consecutive positions in clockwise seat order from the round leader; no tied ranks. All-empty resolved by R-013 (OWNER APPROVED 2026-10-21): rank by R-010 clockwise order; last-ranked finisher is Donkey.
 
 A match reaches `COMPLETED` when any of:
 - **Single Donkey:** After round resolution, exactly one active player holds cards. That player is the Donkey (R-012).
-- **All Empty (OPEN R-013):** After round resolution, zero active players hold cards. Proposed: draw/no-Donkey.
-- **Watchdog (OPEN R-017):** Round count exceeds configurable threshold (proposed: 200 rounds) or match wall-clock duration exceeds configurable limit (proposed: 30 minutes). Proposed: void/cancel, never assign arbitrary Donkey.
+- **All Empty (R-013 APPROVED 2026-10-21):** After round resolution, zero active players hold cards. All qualifying finishers are ranked by R-010 clockwise order from the round leader; the last-ranked finisher is Donkey.
+- **Watchdog (R-017 APPROVED 2026-10-21):** Round count exceeds 200 rounds or match wall-clock duration exceeds 30 minutes. Match is voided; never assign arbitrary Donkey.
 
 A match reaches `VOIDED` when:
 - Unrecoverable state corruption detected (checksum mismatch, impossible card distribution).
@@ -207,10 +207,13 @@ FUNCTION ResolveTurn(command: PlayCard):
         SET match.state = COMPLETED
         COMMIT terminal result (once, immutable)
     ELSE IF activePlayers.count == 0:
-        SET match.state = COMPLETED (DRAW, no Donkey) // R-013 OPEN
+        // R-013 APPROVED: rank all finishers by R-010 clockwise from leader; last = Donkey
+        RANK newFinishers using R-010 clockwise order from round leader
+        MARK last-ranked finisher as DONKEY
+        SET match.state = COMPLETED
         COMMIT terminal result
     ELSE IF roundCount > WATCHDOG_ROUND_LIMIT OR elapsed > WATCHDOG_TIME_LIMIT:
-        SET match.state = VOIDED // R-017 OPEN — proposed: 200 rounds or 30 min
+        SET match.state = VOIDED // R-017 APPROVED — 200 rounds or 30 min
     ELSE:
         // Determine next leader
         IF winner is still active:
@@ -402,7 +405,7 @@ flowchart TD
     C3 --> T{Terminal?}
     D3 --> T
     T -- 1 active player --> DONKEY[Mark last player as DONKEY → COMPLETED]
-    T -- 0 active players --> DRAW[DRAW / no Donkey → COMPLETED]
+    T -- 0 active players --> ALLEMPTY[All-Empty Ranking R-013 → last-ranked = DONKEY → COMPLETED]
     T -- 2+ active --> CONTINUE[Initialize next trick]
 ```
 
@@ -415,6 +418,7 @@ After card movement (hit collection or discard), finisher evaluation proceeds:
 3. If multiple players reach zero in the same round, they finish in clockwise seat order from the round leader and receive distinct consecutive positions (R-010, OWNER APPROVED 2026-10-21 — no tied ranks).
 4. A player who played their last card off-suit (causing a hit) but the hit winner is a different player: the off-suit player's hand is now empty. They finish (unless the hit winner was them, which is impossible since they played off-suit and only lead-suit wins).
 5. The hit winner always receives cards, so the hit winner never finishes in the same round as the hit.
+6. If all active players reach zero cards in the same round, the all-empty ranking per R-013 (OWNER APPROVED 2026-10-21) applies: rank all qualifying finishers using R-010 clockwise order from the round leader; the last-ranked finisher is Donkey.
 
 ---
 

@@ -26,16 +26,16 @@ Three ID schemes are used across Phase 1 documents. This table maps between them
 | D03 | R-008 | HPA-3 | HIT winner — leading suit only or cross-suit | **[OWNER APPROVED 2026-10-21]** |
 | D04 | R-009 | HPA-4 | Finisher timing — after resolution or immediate | **[OWNER APPROVED 2026-10-21]** |
 | D05 | R-010 | HPA-5 | Simultaneous finisher ranking | **[OWNER APPROVED 2026-10-21]** |
-| D06 | R-013 | HPA-6 | All players empty simultaneously | [OPEN] |
-| D07 | — | HPA-7 | Timeout / disconnect / bot takeover policy | [PROPOSED] |
-| D08 | — | HPA-8 | Bot fairness — no hidden hand access | [PROPOSED] |
-| D09 | — | HPA-9 | Room start: 4 players only at MVP | [PROPOSED] |
-| D10 | — | HPA-10 | Online bots: disclosed, queue fallback only | [PROPOSED] |
-| D11 | — | HPA-11 | 2.5D rendering (see ADR-0001) | [PROPOSED] |
-| D12 | — | HPA-12 | Dart SignalR client spike (see ADR-0002) | [PROPOSED] |
-| D13 | — | — | Offline currency isolation | [PROPOSED] |
-| D14 | — | — | India-first regional compliance | [PROPOSED] |
-| — | R-017 | — | Watchdog threshold for pathological matches | [OPEN] |
+| D06 | R-013 | HPA-6 | All players empty simultaneously | **[OWNER APPROVED 2026-10-21]** |
+| D07 | — | HPA-7 | Timeout / disconnect / bot takeover policy | **[OWNER CONFIRMED 2026-10-21]** |
+| D08 | — | HPA-8 | Bot fairness — no hidden hand access | **[OWNER CONFIRMED 2026-10-21]** |
+| D09 | — | HPA-9 | Room start: 4 players only at MVP | **[OWNER CONFIRMED 2026-10-21]** |
+| D10 | — | HPA-10 | Online bots: disclosed, queue fallback only | **[OWNER CONFIRMED 2026-10-21]** |
+| D11 | — | HPA-11 | 2.5D rendering (see ADR-0001) | **[OWNER CONFIRMED 2026-10-21]** |
+| D12 | — | HPA-12 | Dart SignalR client spike (see ADR-0002) | **[OWNER CONFIRMED 2026-10-21]** |
+| D13 | — | — | Offline currency isolation | **[OWNER CONFIRMED 2026-10-21]** |
+| D14 | — | — | India-first regional compliance | **[OWNER CONFIRMED 2026-10-21]** |
+| — | R-017 | — | Watchdog threshold for pathological matches | **[OWNER APPROVED 2026-10-21]** |
 | WIN-001 | — | — | Game objective: first to empty = winner, last with cards = Donkey | **[CONFIRMED 2026-10-21]** |
 
 **Note on IDs:** D-IDs are used in decision workflows and the approval checklist. R-IDs are used in the canonical ruleset (doc 03). HPA-IDs are used in the rules evidence table (doc 02). All three refer to the same underlying decisions.
@@ -62,20 +62,20 @@ These must be signed before `DM-RULES-1.0` is issued.
 | **D03** | **HIT winner determination** — in a round with a hit, does the highest leading-suit card win, or the highest card across all suits? | **APPROVED:** Highest leading-suit card wins; off-suit cards (including higher ranks like A♥) cannot win the trick | ~~(a) Highest rank regardless of suit wins; (b) Off-suit cards ranked separately with a secondary comparison~~ | Resolved. Owner approved leading-suit-only rule for our original game. | Owner decision (2026-10-21). This is a product choice, not independent competitor verification. Published rules say "largest card" without specifying cross-suit. | **OWNER APPROVED 2026-10-21.** Maps to R-008. |
 | **D04** | **Finisher timing** — does a player exit immediately on playing their last card, or after the round's collection/discard resolves? | **APPROVED:** After resolution; a hit collection may return cards to the player | ~~(a) Immediate exit on last card played (before resolution)~~ | Resolved. Owner approved after-resolution finisher timing. | Owner decision (2026-10-21). | **OWNER APPROVED 2026-10-21.** Maps to R-009. |
 | **D05** | **Simultaneous finishers** — when multiple players reach zero cards in the same round, are they ranked or tied? | **APPROVED:** Deterministic clockwise podium order from the round leader's seat; distinct consecutive positions; no tied ranks | ~~(a) All simultaneous finishers share the same rank (tied); (b) Rank by who played first in the round~~ | Resolved. Owner approved clockwise deterministic ranking. | Owner decision (2026-10-21). | **OWNER APPROVED 2026-10-21.** Maps to R-010. |
-| **D06** | **All players empty simultaneously** — what happens if every player runs out of cards in the same round? | Technical draw / no Donkey; no invented loser | (a) Replay the match; (b) Last player to have played a card is Donkey; (c) Void match | Inventing a loser is unfair. Draw is cleanest but may frustrate players expecting a winner. This is an edge case that may be rare in practice. | Product decision. | **APPROVE.** Maps to R-013. |
-| **D07** | **Timeout and disconnect policy** | 20s action deadline, 15s disconnect grace, disclosed bot takeover, reclaim at round boundary | (a) Longer/shorter timers; (b) Immediate forfeit on disconnect; (c) Pause match for all players; (d) No bot takeover — just run the clock | Too short frustrates mobile users on bad connections. Too long frustrates waiting players. Bot takeover without disclosure violates trust. | UX testing and product decision. | **APPROVE timeout values and takeover policy.** |
-| **D08** | **Bot fairness** — can bots (offline or online) inspect hidden opponent hands? | No; bots see only their own hand and played cards (same as a human seat) | (a) Allow offline bots to see all hands for stronger play; (b) Different difficulty levels have different visibility | If bots cheat, players will notice patterns and lose trust. Fair bots may play poorly, but that's preferable to perceived cheating. | Product decision on difficulty design. | **APPROVE.** |
+| **D06** | **All players empty simultaneously** — what happens if every player runs out of cards in the same round? | **APPROVED:** Rank all qualifying finishers by R-010 clockwise order from the round leader; last-ranked finisher is Donkey | ~~(a) Technical draw / no Donkey; (b) Replay the match; (c) Void match~~ | Resolved. Owner approved R-010 clockwise ranking with Donkey assignment. | Owner decision (2026-10-21). Deterministic, consistent with R-010 mechanic. | **OWNER APPROVED 2026-10-21.** Maps to R-013. |
+| **D07** | **Timeout and disconnect policy** | **CONFIRMED:** 20s action deadline, 15s disconnect grace, disclosed bot takeover, reclaim at round boundary | ~~(a) Longer/shorter timers; (b) Immediate forfeit on disconnect; (c) Pause match for all players; (d) No bot takeover — just run the clock~~ | Resolved. Owner confirmed recommended defaults. | Owner decision (2026-10-21). | **OWNER CONFIRMED 2026-10-21.** |
+| **D08** | **Bot fairness** — can bots (offline or online) inspect hidden opponent hands? | **CONFIRMED:** No; bots see only their own hand and played cards (same as a human seat) | ~~(a) Allow offline bots to see all hands for stronger play; (b) Different difficulty levels have different visibility~~ | Resolved. Owner confirmed no hidden-hand access. | Owner decision (2026-10-21). | **OWNER CONFIRMED 2026-10-21.** |
 
 ### NON-BLOCKING BUT IMPORTANT DECISIONS
 
 | ID | Question | Recommended Default | Alternatives | Risk of Guessing Wrong | Owner Action |
 |---|---|---|---|---|---|
-| **D09** | **Room start with unfilled seats** | Private rooms require 4 human or declared-bot seats; no 2/3-player variant at MVP | (a) Allow 2-3 players with modified dealing; (b) Auto-fill with bots | 2/3-player requires separate dealing rules (leftover cards) not yet specified. | **APPROVE 4-only MVP.** |
-| **D10** | **Online bots vs real players** | Bots disclosed; only as queue fallback after user opt-in or timeout | (a) Silent bot fill; (b) No online bots ever | Silent bots destroy trust if discovered. No bots means long queues early. | **APPROVE disclosure policy.** |
-| **D11** | **2.5D vs real 3D rendering** | Flame 2.5D with authored assets; no Unity/Unreal | (a) Unity with Flutter embedding; (b) Raw Flutter Canvas only | See ADR-0001. 2.5D is the performance/cost sweet spot for a card game. | **APPROVE.** |
-| **D12** | **Dart SignalR client package** | Compatibility spike against .NET 10 before committing; fallback to raw WebSocket + custom protocol | (a) Use `signalr_netcore` assuming compatibility; (b) Build custom WebSocket layer from day one | See ADR-0002. Assuming compatibility without testing risks Phase 4 rework. | **APPROVE spike in Phase 4.** |
-| **D13** | **Offline currency isolation** | Offline coins/progression fully separate from online authoritative balance | (a) Allow offline coins to sync to online on connection; (b) No offline progression at all | Syncing offline currency opens trivial exploitation via device clock/save manipulation. | **APPROVE isolation.** |
-| **D14** | **Regional compliance** | India launch with non-gambling economy; legal review before international expansion | (a) Launch globally immediately; (b) Restrict to specific states | Simulated gambling classification varies by Indian state. No real-money = lower risk but not zero. | **APPROVE India-first + legal review.** |
+| **D09** | **Room start with unfilled seats** | **CONFIRMED:** 4 human or declared-bot seats; no 2/3-player variant at MVP | ~~(a) Allow 2-3 players with modified dealing; (b) Auto-fill with bots~~ | Resolved. Owner confirmed 4-player MVP. | **OWNER CONFIRMED 2026-10-21.** |
+| **D10** | **Online bots vs real players** | **CONFIRMED:** Bots disclosed; only as queue fallback after user opt-in or timeout | ~~(a) Silent bot fill; (b) No online bots ever~~ | Resolved. Owner confirmed disclosure policy. | **OWNER CONFIRMED 2026-10-21.** |
+| **D11** | **2.5D vs real 3D rendering** | **CONFIRMED:** Flame 2.5D with authored assets; no Unity/Unreal | ~~(a) Unity with Flutter embedding; (b) Raw Flutter Canvas only~~ | Resolved. See ADR-0001. | **OWNER CONFIRMED 2026-10-21.** |
+| **D12** | **Dart SignalR client package** | **CONFIRMED:** Compatibility spike against .NET 10 in Phase 4; fallback to raw WebSocket + custom protocol | ~~(a) Use `signalr_netcore` assuming compatibility; (b) Build custom WebSocket layer from day one~~ | Resolved. See ADR-0002. | **OWNER CONFIRMED 2026-10-21.** |
+| **D13** | **Offline currency isolation** | **CONFIRMED:** Offline coins/progression fully separate from online authoritative balance | ~~(a) Allow offline coins to sync to online on connection; (b) No offline progression at all~~ | Resolved. Owner confirmed isolation. | **OWNER CONFIRMED 2026-10-21.** |
+| **D14** | **Regional compliance** | **CONFIRMED:** India launch with non-gambling economy; legal review before international expansion | ~~(a) Launch globally immediately; (b) Restrict to specific states~~ | Resolved. Owner confirmed India-first + legal review. | **OWNER CONFIRMED 2026-10-21.** |
 
 ---
 
@@ -134,21 +134,21 @@ D03 (HIT winner) ── CRITICAL; affects D04, D05, D06 resolution logic
      ├── D04 (finisher timing) ── affects D05, D06
      │    │
      │    ├── D05 (simultaneous finishers)
-     │    └── D06 (all empty)
+     │    └── D06 (all empty) ── OWNER APPROVED 2026-10-21
      │
-     └── D07 (timeout/disconnect) ── affects D08 (bot fairness), D10 (online bots)
+     └── D07 (timeout/disconnect) ── OWNER CONFIRMED 2026-10-21
           │
-          ├── D08 (bot fairness)
-          └── D10 (online bot disclosure)
+          ├── D08 (bot fairness) ── OWNER CONFIRMED 2026-10-21
+          └── D10 (online bot disclosure) ── OWNER CONFIRMED 2026-10-21
 
-D09 (4-player only) ── independent MVP scope decision
-D11 (2.5D) ──── independent; approved by ADR-0001
-D12 (SignalR client) ── independent; resolved by Phase 4 spike
-D13 (offline currency) ── independent
-D14 (regional compliance) ── independent; legal review parallel to development
+D09 (4-player only) ── OWNER CONFIRMED 2026-10-21
+D11 (2.5D) ──── OWNER CONFIRMED 2026-10-21; approved by ADR-0001
+D12 (SignalR client) ── OWNER CONFIRMED 2026-10-21; resolved by Phase 4 spike
+D13 (offline currency) ── OWNER CONFIRMED 2026-10-21
+D14 (regional compliance) ── OWNER CONFIRMED 2026-10-21; legal review parallel to development
 ```
 
-**Critical path:** ~~D03~~ → ~~D04~~ → ~~D05~~/D06 must be resolved as a group. D03, D04, and D05 are now OWNER APPROVED (2026-10-21). The remaining chain: all-empty draw (D06) is still OPEN and cannot be inferred from D03/D04/D05 approval.
+**Critical path:** ~~D03~~ → ~~D04~~ → ~~D05~~/~~D06~~ are all resolved. D03, D04, D05, and D06 are now OWNER APPROVED (2026-10-21). The full gameplay resolution chain is complete.
 
 ---
 
@@ -169,9 +169,9 @@ Phase 2 (deterministic engine implementation) **cannot begin** until:
 3. ~~D03 (HIT winner) is approved → determines round resolution~~ **OWNER APPROVED 2026-10-21**
 4. ~~D04 (finisher timing) is approved → determines exit logic~~ **OWNER APPROVED 2026-10-21**
 5. ~~D05 (simultaneous finishers) is approved → determines ranking logic~~ **OWNER APPROVED 2026-10-21**
-6. D06 (all empty) is approved → determines terminal condition
-7. D07 (timeout/disconnect) is at least provisionally approved → affects bot integration
-8. D08 (bot fairness) is approved → determines bot decision API
+6. ~~D06 (all empty) is approved → determines terminal condition~~ **OWNER APPROVED 2026-10-21**
+7. ~~D07 (timeout/disconnect) is at least provisionally approved → affects bot integration~~ **OWNER CONFIRMED 2026-10-21**
+8. ~~D08 (bot fairness) is approved → determines bot decision API~~ **OWNER CONFIRMED 2026-10-21**
 
 **Approval artifact:** Signed `RULE_FREEZE_APPROVAL_CHECKLIST.md` with ruleset version `DM-RULES-1.0` and date.
 

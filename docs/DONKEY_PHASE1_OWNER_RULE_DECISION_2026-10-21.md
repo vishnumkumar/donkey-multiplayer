@@ -1,9 +1,9 @@
 # Owner Rule Decision Record — 2026-10-21
 
-**Document ID:** DM-OWNER-DECISION-2026-10-21-R002-R003-R008-R009-R010  
+**Document ID:** DM-OWNER-DECISION-2026-10-21-R002-R003-R008-R009-R010-R013-D07-D14  
 **Date:** 2026-10-21  
 **Author:** Product Owner  
-**Status:** PARTIALLY APPROVED (R-002, R-003, R-008, R-009, R-010) — Phase 2 **NOT AUTHORIZED**
+**Status:** ALL DECISIONS RESOLVED — APPROVED (R-002, R-003, R-008, R-009, R-010, R-013, R-017) + CONFIRMED (D07–D14) — Rule freeze ready
 
 ---
 
@@ -90,8 +90,8 @@ A player qualifies as a finisher **only after the entire round has resolved**, i
 1. **HIT winner plays last card but collects:** A player holds only J♣, plays it, and a later player with no clubs plays A♥. Under R-008 the J♣ player wins the HIT and receives all trick cards. **They have not finished** under R-009.
 2. **No-HIT round, last card discarded:** A player plays their last card; the round has no HIT and all played cards are discarded. The player's hand remains empty. **They qualify as a finisher** after round resolution.
 3. **Off-suit HIT, another player collects:** A player plays their last card as an off-suit HIT, while another player wins collection with the highest leading-suit card. After resolution, the hitting player's hand remains empty. **They qualify as a finisher**.
-4. **Multiple same-round finishers:** If multiple players qualify in the same round, **R-010 remains OPEN** — do not assign unique first place based on arbitrary seat order until the owner chooses ties versus ranking.
-5. **All players empty:** If all active players empty in the same resolution, **R-013 remains OPEN** — do not infer the draw rule from R-009 approval.
+4. **Multiple same-round finishers:** If multiple players qualify in the same round, **R-010 (OWNER APPROVED 2026-10-21)** applies — distinct positions in clockwise order from the round leader.
+5. **All players empty:** If all active players empty in the same resolution, **R-013 (OWNER APPROVED 2026-10-21)** applies — rank all finishers by R-010 clockwise order from the round leader; the last-ranked finisher is Donkey.
 
 ### Mapping
 
@@ -127,7 +127,7 @@ After round resolution and all card movement (per R-009):
 ### Rules Integration
 
 - **R-009 prerequisite:** Finisher status is evaluated only after full round settlement. R-010 applies to the set of qualifying finishers identified by R-009.
-- **R-013 remains OPEN:** If ALL active players empty simultaneously, the all-empty outcome (draw vs. other) is a separate decision. R-010 does not resolve it.
+- **R-013 (APPROVED):** If ALL active players empty simultaneously, rank all qualifying finishers by R-010 clockwise order from the round leader; the last-ranked finisher is Donkey.
 - **WIN-001:** The first qualifying finisher (position 1) is the game winner. R-010 determines who gets position 1 when multiple players qualify in the same round.
 
 ### Mapping
@@ -137,6 +137,177 @@ After round resolution and all card movement (per R-009):
 | Decision Register | D05 | OWNER APPROVED |
 | Canonical Ruleset | R-010 | OWNER APPROVED |
 | Rules Evidence | HPA-5 | OWNER APPROVED |
+
+---
+
+## Decision: R-013 / D06 — All Players Empty Simultaneously
+
+**OWNER APPROVED 2026-10-21.**
+
+When all remaining active players empty their hands after the same completed round, first resolve all card movements under R-008/R-009, then rank all qualifying finishers using the approved R-010 clockwise order starting from the completed round's leader. The **last-ranked finisher is Donkey**. All other finishing positions and the WIN-001 first-place winner are preserved. This outcome is not classified as a draw or void.
+
+### Golden Scenarios
+
+1. **Two remaining players empty (leader S1):** S0 finished 1st, S2 finished 2nd. S1 and S3 each play their last card; no hit; cards discarded. After resolution, both hands empty. R-010 clockwise from leader S1: S1 → S3. S1 → 3rd; S3 → 4th (Donkey). 52-card conservation: all hands(0) + trick(0) + discard(52) = 52. ✓
+2. **Two remaining players empty (leader S3):** Same setup but leader S3. R-010 clockwise from S3: S3 → S1. S3 → 3rd; S1 → 4th (Donkey). Different leader reverses Donkey assignment.
+3. **All four players empty (leader S0):** Each player has one card; all follow suit; no hit. R-010 clockwise from S0: S0 → S1 → S2 → S3. S0 → 1st (winner); S3 → 4th (Donkey).
+4. **All four players empty (leader S2):** Same setup but leader S2. R-010 clockwise from S2: S2 → S3 → S0 → S1. S2 → 1st (winner); S1 → 4th (Donkey). Different leader changes all positions.
+
+### Distinction from Alternatives
+
+**Alternative A (Rejected):** Technical draw / no Donkey. Rejected — the game should always produce a Donkey when it reaches completion.
+
+**Alternative B (Rejected):** Last player to have received cards from a hit round is Donkey. Rejected — punishes for an unavoidable game state and requires tracking additional history.
+
+**Alternative C (Rejected):** Replay the match. Rejected — wastes player time for an extremely rare event.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D06 | OWNER APPROVED |
+| Canonical Ruleset | R-013 | OWNER APPROVED |
+| Rules Evidence | HPA-6 | OWNER APPROVED |
+
+---
+
+## Decision: R-017 — Watchdog Threshold
+
+**OWNER APPROVED 2026-10-21.**
+
+If a match exceeds **200 rounds** or **30 minutes** wall-clock duration from match start, whichever comes first, the match is **voided**. No Donkey is assigned. No competitive outcome is recorded. No rewards or penalties are granted. A diagnostic log is preserved. The threshold is tunable post-launch.
+
+### Golden Scenario
+
+A match has proceeded for 199 rounds with 2 active players still holding cards. Round 200 begins and completes normally. After round resolution, the watchdog detects roundCount = 200 ≥ WATCHDOG_ROUND_LIMIT. The match transitions to `VOIDED`. Neither player is declared Donkey. No rewards or penalties apply.
+
+### Distinction from Alternatives
+
+**Alternative (Rejected):** No watchdog; trust that the game always terminates naturally. Rejected — a bug or edge case could create an infinite loop, locking players and consuming server resources.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Canonical Ruleset | R-017 | OWNER APPROVED |
+
+---
+
+## Confirmed Default: D07 — Timeout / Disconnect Policy
+
+**OWNER CONFIRMED 2026-10-21.**
+
+20-second action deadline. 15-second disconnection grace period. Disclosed bot takeover after timeout. Player may reclaim their seat at the next round boundary. These values are tunable post-launch.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D07 | OWNER CONFIRMED |
+| Rules Evidence | HPA-7 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D08 — Bot Fairness
+
+**OWNER CONFIRMED 2026-10-21.**
+
+Bots (offline or online) may **not** inspect hidden opponent hands. Bot decision logic is restricted to information visible to the simulated seat: the bot's own hand and all played cards. This applies to all difficulty levels.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D08 | OWNER CONFIRMED |
+| Rules Evidence | HPA-8 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D09 — MVP Player Count
+
+**OWNER CONFIRMED 2026-10-21.**
+
+4 players only at MVP. No 2-player or 3-player variant until separately specified. Private rooms require 4 human or declared-bot seats.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D09 | OWNER CONFIRMED |
+| Rules Evidence | HPA-9 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D10 — Online Bot Disclosure
+
+**OWNER CONFIRMED 2026-10-21.**
+
+All bot-controlled seats are labeled. Bots are used as queue fallback only after user opt-in or timeout. No silent bot fill.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D10 | OWNER CONFIRMED |
+| Rules Evidence | HPA-10 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D11 — 2.5D Rendering
+
+**OWNER CONFIRMED 2026-10-21.**
+
+Flame 2.5D with authored assets. No Unity or Unreal engine. See ADR-0001 for technical basis.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D11 | OWNER CONFIRMED |
+| Rules Evidence | HPA-11 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D12 — Dart SignalR Client
+
+**OWNER CONFIRMED 2026-10-21.**
+
+Compatibility spike against .NET 10 SignalR in Phase 4 before committing. WebSocket fallback ready if the spike fails. See ADR-0002 for technical basis.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D12 | OWNER CONFIRMED |
+| Rules Evidence | HPA-12 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D13 — Offline Currency Isolation
+
+**OWNER CONFIRMED 2026-10-21.**
+
+Offline coins and progression are fully separate from the online server wallet. No upload or sync of offline earnings. This prevents exploitation via device clock or save manipulation.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D13 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D14 — Regional Compliance
+
+**OWNER CONFIRMED 2026-10-21.**
+
+India-first launch with a non-gambling economy. No wagering, no cash prizes, no transferable currency. Legal review required before international expansion.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D14 | OWNER CONFIRMED |
 
 ---
 
@@ -151,8 +322,8 @@ A qualifying finisher is a player whose hand remains empty after full round reso
 - **WIN-001 is a game objective**, not a HIT-round resolution rule. Do not conflate the first-place game winner (WIN-001) with the trick winner of a single HIT round (R-008).
 - **"Successfully"** is now defined by R-009: empty after full round settlement including HIT collection.
 - When multiple players qualify in the same round, they are ranked by clockwise seat order from the round leader per **R-010 (OWNER APPROVED 2026-10-21)**.
-- If all active players empty simultaneously, the outcome is still **OPEN** (R-013/D06).
-- Play is expected to continue to rank remaining positions; R-013 is **not** automatically approved by WIN-001, R-009, or R-010.
+- If all active players empty simultaneously, rank all finishers by R-010 clockwise order from the round leader; the last-ranked finisher is Donkey per **R-013 (OWNER APPROVED 2026-10-21)**.
+- Play is expected to continue to rank remaining positions until the Donkey is determined.
 
 ---
 
@@ -166,35 +337,35 @@ A qualifying finisher is a player whose hand remains empty after full round reso
 | **R-010 / D05** | Simultaneous finishers ranked clockwise from leader; distinct consecutive positions; no ties | **OWNER APPROVED — 2026-10-21** |
 | **WIN-001** | First qualifying finisher takes first place; last remaining player is Donkey | **OWNER CONFIRMED — 2026-10-21** |
 | **R-003 / D02** | A♠ holder may lead any card; A♠ not mandatory | **OWNER APPROVED — 2026-10-21** |
-| R-013 / D06 | All players empty at once | **OPEN** |
-| R-017 | Match watchdog threshold / void policy | **OPEN** |
-| D07 | Timeout/disconnect/bot takeover timing | **PENDING CONFIRMATION** |
-| D08 | Bot fairness / hidden-hand policy | **PENDING CONFIRMATION** |
-| D09 | Four-seat MVP scope | **PENDING CONFIRMATION** |
-| D10 | Disclosure of online bot participation | **PENDING CONFIRMATION** |
-| D11 | 2.5D rendering | **PENDING CONFIRMATION** |
-| D12 | Flutter SignalR compatibility spike | **PENDING CONFIRMATION / TECHNICAL SPIKE** |
-| D13 | Offline currency isolated from online | **PENDING CONFIRMATION** |
-| D14 | India-first launch / legal review | **PENDING CONFIRMATION** |
+| **R-013 / D06** | All players empty: rank by R-010 clockwise order; last-ranked finisher is Donkey | **OWNER APPROVED — 2026-10-21** |
+| **D07** | Timeout: 20s deadline, 15s grace, disclosed bot takeover, reclaim at round boundary | **OWNER CONFIRMED — 2026-10-21** |
+| **D08** | Bot fairness: no hidden-hand access; bots see only own hand + played cards | **OWNER CONFIRMED — 2026-10-21** |
+| **D09** | MVP: 4 players only; no 2/3-player variant | **OWNER CONFIRMED — 2026-10-21** |
+| **D10** | Online bots: disclosed, queue fallback only, all bot seats labeled | **OWNER CONFIRMED — 2026-10-21** |
+| **D11** | 2.5D rendering: Flame with authored assets (ADR-0001) | **OWNER CONFIRMED — 2026-10-21** |
+| **D12** | Dart SignalR: compatibility spike Phase 4; WebSocket fallback (ADR-0002) | **OWNER CONFIRMED — 2026-10-21** |
+| **D13** | Offline currency fully isolated from online server wallet | **OWNER CONFIRMED — 2026-10-21** |
+| **D14** | India-first launch; no wagering; legal review before international | **OWNER CONFIRMED — 2026-10-21** |
+| **R-017** | Watchdog: void after 200 rounds or 30 min; no arbitrary Donkey | **OWNER APPROVED — 2026-10-21** |
 
 ---
 
 ## Documentation and Implementation Guardrails
 
-1. Mark only **R-002, R-003, R-008, R-009, and R-010** as owner-approved, and WIN-001 as owner-confirmed. Do not silently mark any other OPEN or PROPOSED decision as approved.
-2. Update the canonical draft ruleset, rules evidence, test matrix, risk/decision register, Phase 1 report and owner checklist to reflect these five approvals consistently. Preserve rule version as **DRAFT** until all blocking decisions are signed.
-3. Treat R-013 (all-empty) as a separate **OPEN** decision. R-010 does not resolve the all-empty outcome.
-4. No application code, tests, migrations, assets or CI workflows are authorized yet. Phase 2 remains blocked until the complete rules freeze and explicit owner authorization.
+1. Mark **R-002, R-003, R-008, R-009, R-010, R-013, and R-017** as owner-approved; **D07, D08, D09, D10, D11, D12, D13, D14** as owner-confirmed (recommended defaults); and **WIN-001** as owner-confirmed objective.
+2. Update the canonical draft ruleset, rules evidence, test matrix, risk/decision register, Phase 1 report and owner checklist to reflect all 15 approvals/confirmations consistently. Preserve rule version as **DRAFT** until the owner issues `DM-RULES-1.0`.
+3. All blocking and proposed decisions are now resolved. Rule freeze (`DM-RULES-1.0`) and Phase 2 authorization may proceed at the product owner's discretion.
+4. No application code, tests, migrations, assets or CI workflows are authorized yet. Phase 2 requires explicit owner authorization after rule freeze.
 
 ---
 
 ## Cross-References
 
-- `docs/03-canonical-ruleset-v1-draft.md` §2 Shuffle and Deal, §4 Opening, §8 Hit Round Resolution, §9 Finisher Timing, §10 Simultaneous Finisher Ranking (updated)
-- `docs/02-verified-rules-and-open-questions.md` HPA-1, HPA-2, HPA-3, HPA-4, HPA-5 (updated)
-- `docs/12-risks-and-decisions.md` D01, D02, D03, D04, D05 rows (updated)
+- `docs/03-canonical-ruleset-v1-draft.md` §2 Shuffle and Deal, §4 Opening, §8 Hit Round Resolution, §9 Finisher Timing, §10 Simultaneous Finisher Ranking, §12 All Players Empty (updated)
+- `docs/02-verified-rules-and-open-questions.md` HPA-1, HPA-2, HPA-3, HPA-4, HPA-5, HPA-6 (updated)
+- `docs/12-risks-and-decisions.md` D01–D06 rows (approved), D07–D14 rows (confirmed) (updated)
 - `docs/04-game-state-machine.md` §1.3 WIN-001, §6.1 finisher determination (updated)
-- `docs/10-qa-test-matrix-and-acceptance.md` FD-004, FD-005 (updated)
+- `docs/10-qa-test-matrix-and-acceptance.md` FD-004, FD-005, FD-006, FD-008 (updated)
 - `docs/PHASE_1_REVIEW_REPORT.md` §3, §5, §10.1, §11 (updated)
-- `RULE_FREEZE_APPROVAL_CHECKLIST.md` D01, D02, D03, D04, D05 lines (checked)
-- `docs/REMAINING_DECISIONS_WORKSHEET.md` — D05 moved to resolved; sign-off worksheet for remaining pending items
+- `RULE_FREEZE_APPROVAL_CHECKLIST.md` D01–D06 lines (approved), D07–D14 lines (confirmed) (checked)
+- `docs/REMAINING_DECISIONS_WORKSHEET.md` — D07–D14 moved to resolved; R-017 is sole remaining item

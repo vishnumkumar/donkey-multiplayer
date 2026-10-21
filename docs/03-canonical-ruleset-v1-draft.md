@@ -27,8 +27,8 @@ Covers the full game lifecycle from deck composition through terminal result. Do
 | R-003 | A♠ opening constraint | Any card | ~~Must play A♠~~ | §4 — **OWNER APPROVED 2026-10-21** |
 | R-008 | Hit winner comparison | Leading-suit highest only | ~~Cross-suit highest rank~~ | §8 — **OWNER APPROVED 2026-10-21** |
 | R-010 | Simultaneous finisher ranking | Clockwise deterministic | ~~Tied ranks~~ | §10 — **OWNER APPROVED 2026-10-21** |
-| R-013 | All players empty | Draw / no Donkey | Replay; last-hit-recipient is Donkey | §12 |
-| R-017 | Watchdog threshold | Void after 200 rounds (configurable) | No watchdog | §14 |
+| R-013 | All players empty | ~~Draw / no Donkey~~ | ~~Replay; last-hit-recipient is Donkey~~ | §12 — **OWNER APPROVED 2026-10-21** |
+| R-017 | Watchdog threshold | Void after 200 rounds or 30 min | ~~No watchdog~~ | §14 — **OWNER APPROVED 2026-10-21** |
 
 ---
 
@@ -205,7 +205,7 @@ A player qualifies as a finisher **only after the entire round has resolved**, i
 
 **Acceptance example (scenario 3):** A player plays their last card as an off-suit HIT, while another player wins collection with the highest leading-suit card. After resolution, the hitting player's hand remains empty. **They qualify as a finisher**.
 
-> **Owner note (2026-10-21):** R-009 is approved for our original game. Multiple same-round finishers are now ranked by R-010 (OWNER APPROVED 2026-10-21) — distinct positions in clockwise order from the round leader. If all active players empty in the same resolution, R-013 remains OPEN — do not infer the draw rule from R-009 or R-010 approval.
+> **Owner note (2026-10-21):** R-009 is approved for our original game. Multiple same-round finishers are now ranked by R-010 (OWNER APPROVED 2026-10-21) — distinct positions in clockwise order from the round leader. If all active players empty in the same resolution, R-013 (OWNER APPROVED 2026-10-21) applies — rank all finishers by R-010 clockwise order; the last-ranked finisher is Donkey.
 
 ---
 
@@ -230,7 +230,7 @@ Round leader = Seat 1. After settlement, Seats 2 and 0 both qualify as finishers
 
 ### Rules Integration
 
-Apply R-008 (HIT winner), then R-009 (finisher evaluation after settlement), then R-010 (position assignment). If an all-empty terminal situation occurs, handle it under R-013 which remains **OPEN** — this approval does not choose the all-empty match outcome or silently override R-013.
+Apply R-008 (HIT winner), then R-009 (finisher evaluation after settlement), then R-010 (position assignment). If an all-empty terminal situation occurs, R-013 (OWNER APPROVED 2026-10-21) applies: rank all qualifying finishers by R-010 clockwise order from the round leader; the last-ranked finisher is Donkey.
 
 ### Historical Alternative Considered (Option B): Tied ranks
 
@@ -251,25 +251,29 @@ If the round winner (who would normally lead next) has zero cards after resoluti
 
 ---
 
-## 12. All Players Empty — Draw Condition
+## 12. All Players Empty — Clockwise Ranking with Donkey
 
-**[OPEN — R-013]**
+**[OWNER APPROVED — R-013 — 2026-10-21]**
 
 If every remaining active player reaches zero cards in the same round resolution:
 
-### Recommended (Option A): Draw / No Donkey
+1. Resolve all card movements under R-008 (hit collection) and R-009 (finisher evaluation after settlement).
+2. All remaining active players qualify as finishers (zero cards after settlement).
+3. Rank all qualifying finishers using the approved R-010 clockwise order starting from the completed round's leader (inclusive).
+4. Assign distinct, consecutive finishing positions.
+5. The **last-ranked finisher is Donkey**. All other finishing positions and the WIN-001 first-place winner are preserved.
 
-The match ends as a **technical draw**. No player is assigned the Donkey label. All finishing positions up to that point are retained. The final round's participants all share the next finishing position (or per §10 if clockwise ordering is approved).
+This rule produces a deterministic Donkey in every game that reaches completion, including the all-empty edge case. The outcome depends on seat position relative to the round leader — the same mechanic already approved in R-010.
 
-### Alternative (Option B): Last hit recipient is Donkey
+> **Owner note (2026-10-21):** R-013 approved as the product owner's choice. When all active players empty simultaneously, apply R-010 clockwise ranking; the last-ranked finisher is Donkey. No draw, no void. This is consistent with R-010 and always produces a Donkey.
 
-The player who most recently collected cards from a hit round is the Donkey. Others are ranked clockwise.
+### Historical Alternatives Considered
 
-### Alternative (Option C): Replay
+**Alternative A (Rejected):** Technical draw / no Donkey. No player assigned the Donkey label. Rejected — the game should always produce a Donkey when it reaches completion; a draw avoids the core game outcome.
 
-The match is voided and restarted. Original results discarded.
+**Alternative B (Rejected):** Last player to have received cards from a hit round is Donkey. Rejected — punishes for an unavoidable game state and requires tracking additional history.
 
-**Recommendation rationale:** Option A is the fairest — no invented loser. The probability of this scenario is extremely low in normal play (all four players would need to empty in one round from a state where all had exactly one card and no hit occurred).
+**Alternative C (Rejected):** Replay the match. Rejected — wastes player time for an extremely rare event.
 
 ---
 
@@ -283,7 +287,7 @@ The match is voided and restarted. Original results discarded.
 
 A qualifying finisher is a player whose hand remains empty after full round resolution (R-009 APPROVED). A HIT-round trick winner (who collects cards per R-008) is **not** necessarily the game winner — collecting trick cards means they have not finished.
 
-> **Owner note (2026-10-21):** WIN-001 is confirmed. R-009 (finisher timing) is OWNER APPROVED — "successfully" means empty after round settlement including HIT collection. R-010 (simultaneous finisher ranking) is OWNER APPROVED — multiple same-round finishers receive distinct positions in clockwise order from the round leader. If all active players empty simultaneously, the outcome is still **OPEN** (R-013/D06). R-013 is not automatically approved by WIN-001, R-009, or R-010.
+> **Owner note (2026-10-21):** WIN-001 is confirmed. R-009 (finisher timing) is OWNER APPROVED — "successfully" means empty after round settlement including HIT collection. R-010 (simultaneous finisher ranking) is OWNER APPROVED — multiple same-round finishers receive distinct positions in clockwise order from the round leader. R-013 (all-empty) is OWNER APPROVED 2026-10-21 — when all active players empty simultaneously, rank all finishers by R-010 clockwise order from the round leader; the last-ranked finisher is Donkey.
 
 ### Donkey Declaration
 
@@ -292,7 +296,7 @@ The match ends when exactly **one active player remains with cards** after a rou
 1. After round resolution and finisher evaluation:
 2. Count active players (those with ≥1 card who are not finishers).
 3. If exactly 1 active player remains → that player is the **Donkey**.
-4. If 0 active players remain → draw condition (§12).
+4. If 0 active players remain → all-empty ranking per R-013 (§12); last-ranked finisher is Donkey.
 5. If ≥2 active players remain → game continues; next leader per §11.
 
 **Match result:**
@@ -304,11 +308,9 @@ The match ends when exactly **one active player remains with cards** after a rou
 
 ## 14. Watchdog — Pathological Match Void
 
-**[OPEN — R-017]**
+**[OWNER APPROVED 2026-10-21 — R-017]**
 
-### Recommended
-
-If a match exceeds a configurable round limit (proposed: **200 rounds**) or a configurable wall-clock duration (proposed: **30 minutes** from match start), the match is **voided**:
+If a match exceeds **200 rounds** or **30 minutes** wall-clock duration from match start, whichever comes first, the match is **voided**:
 
 - No Donkey is assigned.
 - No competitive outcome is recorded.
@@ -316,11 +318,9 @@ If a match exceeds a configurable round limit (proposed: **200 rounds**) or a co
 - A diagnostic log with the match seed and event journal is preserved for analysis.
 - The match transitions to the `VOIDED` terminal state (see [04-game-state-machine.md](04-game-state-machine.md) §1.1).
 
-The watchdog must **never** assign an arbitrary Donkey or fabricate a winner. A voided match records no competitive outcome, no rewards, and no penalties for any player.
+The watchdog must **never** assign an arbitrary Donkey or fabricate a winner. A voided match records no competitive outcome, no rewards, and no penalties for any player. The threshold is tunable post-launch.
 
-### Alternative
-
-No watchdog; trust that the game always terminates naturally. Risk: a bug or edge case could create an infinite loop, locking four players and consuming server resources.
+> **Owner note (2026-10-21):** Approved with recommended defaults — 200 rounds or 30 minutes. ~~Alternative: no watchdog.~~ Protects against infinite loops; threshold is tunable.
 
 ---
 
@@ -705,11 +705,11 @@ Resolution:
   (S0 and S2 are skipped entirely)
 ```
 
-### Fixture 8: All Hands Emptied (Draw)
+### Fixture 8: All Remaining Players Empty — Two Seats (R-013 APPROVED)
 
 ```
 Setup:
-  Active players: [S1, S3] (S0 and S2 are finishers)
+  Active players: [S1, S3] (S0 finished 1st, S2 finished 2nd)
   S1's hand: [7♠]
   S3's hand: [3♠]
   Leader: S1
@@ -723,11 +723,142 @@ Resolution:
   Winner: S1 (7♠)
   Cards → discard
 
-  Post-resolution:
-    S1 hand: 0 → finisher
-    S3 hand: 0 → finisher
+  Post-resolution finisher evaluation (R-009):
+    S1 hand: 0 → qualifying finisher
+    S3 hand: 0 → qualifying finisher
     Active players: 0
-    Result (Option A — recommended): DRAW / NO DONKEY
+
+  All-empty ranking (R-013 APPROVED):
+    Apply R-010 clockwise from round leader S1: S1 → S3.
+    S1 → 3rd place; S3 → 4th place (Donkey).
+    52-card conservation: S0 hand(0) + S1 hand(0) + S2 hand(0) + S3 hand(0)
+      + trick(0) + discard(52) = 52. ✓
+
+Final result:
+  1st: S0 (finished earlier)
+  2nd: S2 (finished earlier)
+  3rd: S1
+  4th (Donkey): S3
+```
+
+### Fixture 8a: All Remaining Players Empty — Two Seats, Different Leader (R-013 APPROVED)
+
+```
+Setup:
+  Active players: [S1, S3] (S0 finished 1st, S2 finished 2nd)
+  S1's hand: [3♠]
+  S3's hand: [7♠]
+  Leader: S3
+
+Plays:
+  S3: 7♠ (leads spades, last card)
+  S1: 3♠ (follows suit, last card)
+
+Resolution:
+  Hit: false
+  Winner: S3 (7♠)
+  Cards → discard
+
+  Post-resolution finisher evaluation (R-009):
+    S1 hand: 0 → qualifying finisher
+    S3 hand: 0 → qualifying finisher
+    Active players: 0
+
+  All-empty ranking (R-013 APPROVED):
+    Apply R-010 clockwise from round leader S3: S3 → S0 → S1.
+    Among qualifying finishers: S3 precedes S1.
+    S3 → 3rd place; S1 → 4th place (Donkey).
+    52-card conservation: all hands(0) + trick(0) + discard(52) = 52. ✓
+
+Final result:
+  1st: S0 (finished earlier)
+  2nd: S2 (finished earlier)
+  3rd: S3
+  4th (Donkey): S1
+
+Note: Different leader (S3 vs S1 in Fixture 8) reverses the Donkey assignment.
+Deterministic ranking depends on round leader position.
+```
+
+### Fixture 8b: All Four Players Empty — Same Round (R-013 APPROVED)
+
+```
+Setup:
+  Active players: [S0, S1, S2, S3] (no prior finishers)
+  S0's hand: [A♣]
+  S1's hand: [K♣]
+  S2's hand: [Q♣]
+  S3's hand: [J♣]
+  Leader: S0
+
+Plays:
+  S0: A♣ (leads clubs, last card)
+  S1: K♣ (follows suit, last card)
+  S2: Q♣ (follows suit, last card)
+  S3: J♣ (follows suit, last card)
+
+Resolution:
+  Hit: false
+  Winner: S0 (A♣ — highest club)
+  Cards → discard
+
+  Post-resolution finisher evaluation (R-009):
+    S0 hand: 0 → qualifying finisher
+    S1 hand: 0 → qualifying finisher
+    S2 hand: 0 → qualifying finisher
+    S3 hand: 0 → qualifying finisher
+    Active players: 0
+
+  All-empty ranking (R-013 APPROVED):
+    Apply R-010 clockwise from round leader S0: S0 → S1 → S2 → S3.
+    S0 → 1st place (winner); S1 → 2nd; S2 → 3rd; S3 → 4th (Donkey).
+    52-card conservation: all hands(0) + trick(0) + discard(52) = 52. ✓
+
+Final result:
+  1st (Winner): S0
+  2nd: S1
+  3rd: S2
+  4th (Donkey): S3
+```
+
+### Fixture 8c: All Four Players Empty — Different Leader (R-013 APPROVED)
+
+```
+Setup:
+  Active players: [S0, S1, S2, S3] (no prior finishers)
+  S0's hand: [5♦]
+  S1's hand: [9♦]
+  S2's hand: [K♦]
+  S3's hand: [2♦]
+  Leader: S2
+
+Plays:
+  S2: K♦ (leads diamonds, last card)
+  S3: 2♦ (follows suit, last card)
+  S0: 5♦ (follows suit, last card)
+  S1: 9♦ (follows suit, last card)
+
+Resolution:
+  Hit: false
+  Winner: S2 (K♦ — highest diamond)
+  Cards → discard
+
+  Post-resolution finisher evaluation (R-009):
+    All four players hand: 0 → all qualifying finishers
+    Active players: 0
+
+  All-empty ranking (R-013 APPROVED):
+    Apply R-010 clockwise from round leader S2: S2 → S3 → S0 → S1.
+    S2 → 1st place (winner); S3 → 2nd; S0 → 3rd; S1 → 4th (Donkey).
+    52-card conservation: all hands(0) + trick(0) + discard(52) = 52. ✓
+
+Final result:
+  1st (Winner): S2
+  2nd: S3
+  3rd: S0
+  4th (Donkey): S1
+
+Note: Leader S2 vs S0 in Fixture 8b changes all positions.
 ```
 
 ### Fixture 9: Duplicate Action (Idempotency)
@@ -801,10 +932,10 @@ flowchart TD
     EVAL_FINISH --> CHECK_TERMINAL{Terminal Condition?}
     
     CHECK_TERMINAL -->|1 Active Player| DONKEY[Declare Donkey — Match Complete]
-    CHECK_TERMINAL -->|0 Active Players| DRAW[Draw — No Donkey — OPEN R-013]
+    CHECK_TERMINAL -->|0 Active Players| ALLEMPTY[All-Empty Ranking — R-013 APPROVED]
     CHECK_TERMINAL -->|≥2 Active| NEXT_LEADER[Determine Next Leader]
     
-    NEXT_LEADER --> WATCHDOG{Round or Time Limit Exceeded? — OPEN R-017}
+    NEXT_LEADER --> WATCHDOG{Round or Time Limit Exceeded? — R-017 APPROVED}
     WATCHDOG -->|Yes| VOID[Match Voided — No Donkey]
     WATCHDOG -->|No| ROUND_START
 ```
@@ -832,6 +963,6 @@ flowchart TD
 | [07-offline-online-parity-strategy.md](07-offline-online-parity-strategy.md) | Cross-language parity using these fixtures |
 | [10-qa-test-matrix-and-acceptance.md](10-qa-test-matrix-and-acceptance.md) | Full test matrix derived from these rules |
 | [12-risks-and-decisions.md](12-risks-and-decisions.md) | Decision register for OPEN items |
-| [DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md](DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md) | Formal owner decision record for R-002, R-008, R-009, R-010 and WIN-001 |
+| [DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md](DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md) | Formal owner decision record for R-002, R-003, R-008, R-009, R-010, R-013 and WIN-001 |
 | [REMAINING_DECISIONS_WORKSHEET.md](REMAINING_DECISIONS_WORKSHEET.md) | Per-item sign-off worksheet for all pending decisions |
 | `RULE_FREEZE_APPROVAL_CHECKLIST.md` | Owner sign-off checklist |
