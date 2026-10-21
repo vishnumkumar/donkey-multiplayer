@@ -2,7 +2,7 @@
 
 **Document ID:** DM-WORKSHEET-PENDING  
 **Date:** 2026-10-21  
-**Status:** PENDING OWNER SIGN-OFF — all items below must be resolved before DM-RULES-1.0 and Phase 2
+**Status:** ALL ITEMS RESOLVED — see summary below
 
 ---
 
@@ -25,25 +25,7 @@
 | D12 | Dart SignalR client | **OWNER CONFIRMED** — compatibility spike in Phase 4; WebSocket fallback ready (ADR-0002) | 2026-10-21 |
 | D13 | Offline currency isolation | **OWNER CONFIRMED** — offline coins/progression fully separate from online server wallet | 2026-10-21 |
 | D14 | Regional compliance | **OWNER CONFIRMED** — India-first launch; no wagering/cash prizes; legal review before international expansion | 2026-10-21 |
-
----
-
-## OPEN — Blocking Gameplay Decisions
-
-These require explicit owner approval. Each has a recommended default and alternatives.
-
-### 1. R-017 — Watchdog Threshold
-
-| | |
-|---|---|
-| **Question** | At what threshold should the server void a pathological match? |
-| **Recommended** | Void after 200 rounds OR 30 minutes wall-clock time, whichever comes first. Never assign arbitrary Donkey. |
-| **Alternative** | Different threshold values, or no watchdog at all. |
-| **Risk if wrong** | LOW — protects against infinite loops. Threshold is tunable post-launch. |
-| **Maps to** | R-017 |
-
-**Owner decision:** ☐ APPROVE recommended ☐ SPECIFY threshold: ____________  
-**Signed:** __________________ **Date:** __________
+| R-017 | Watchdog threshold | **OWNER APPROVED** — void after 200 rounds or 30 minutes wall-clock time, whichever comes first; never assign arbitrary Donkey; threshold tunable post-launch | 2026-10-21 |
 
 ---
 
@@ -51,13 +33,13 @@ These require explicit owner approval. Each has a recommended default and altern
 
 | Category | Count | Items |
 |---|---|---|
-| **OWNER APPROVED** | 6 | D01/R-002, D02/R-003, D03/R-008, D04/R-009, D05/R-010, D06/R-013 |
+| **OWNER APPROVED** | 7 | D01/R-002, D02/R-003, D03/R-008, D04/R-009, D05/R-010, D06/R-013, R-017 |
 | **OWNER CONFIRMED** | 8 | WIN-001, D07, D08, D09, D10, D11, D12, D13, D14 |
-| **OPEN (blocking)** | 1 | R-017 |
+| **OPEN (blocking)** | 0 | — |
 | **PROPOSED** | 0 | — |
-| **Total requiring sign-off** | 1 | R-017 only |
+| **Total requiring sign-off** | 0 | All items resolved |
 
-**Rule freeze condition:** Only when R-017 is signed does the ruleset become `DM-RULES-1.0` and Phase 2 is authorized.
+**Rule freeze condition:** All blocking and proposed decisions are now signed. Ruleset `DM-RULES-1.0` may be issued and Phase 2 authorized at the product owner's discretion.
 
 ---
 

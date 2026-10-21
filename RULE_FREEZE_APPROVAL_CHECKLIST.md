@@ -12,7 +12,7 @@ Status: **PENDING OWNER APPROVAL**. Check and sign every blocking point before P
 - [x] D06 (R-013) — All players empty simultaneously: rank by R-010 clockwise order; last-ranked finisher is Donkey. **[OWNER APPROVED 2026-10-21]** — no draw; deterministic ranking consistent with R-010.
 - [x] D07 — Timeout/disconnect policy: 20s deadline, 15s grace, bot takeover, reclaim at round boundary. **[OWNER CONFIRMED 2026-10-21]** — recommended defaults accepted.
 - [x] D08 — Bot fairness: bots see only own hand + played cards. **[OWNER CONFIRMED 2026-10-21]** — recommended default accepted; no hidden-hand access.
-- [ ] R-017 — Watchdog: void after 200 rounds or 30 minutes **(proposed)** or alternative threshold? **[OPEN]**
+- [x] R-017 — Watchdog: void after 200 rounds or 30 minutes, whichever comes first; never assign arbitrary Donkey. **[OWNER APPROVED 2026-10-21]**
 
 ### Confirmed Product Objectives
 

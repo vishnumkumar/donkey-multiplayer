@@ -165,9 +165,11 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | Aspect | Detail |
 |---|---|
 | **Source evidence** | No published rule for pathological infinite loops. |
-| **Our proposal** | Technical watchdog may void a match after N rounds (threshold TBD). **Never** award an arbitrary Donkey. |
-| **Classification** | **[OPEN]** — threshold needs testing |
-| **Options** | **A (Recommended):** Void after configurable round limit (e.g., 200 rounds) — prevents infinite matches, no unfair outcome. **B:** No watchdog; trust that game always terminates — risky if edge cases exist. |
+| **Our rule** | Watchdog voids a match after 200 rounds or 30 minutes wall-clock time, whichever comes first. **Never** award an arbitrary Donkey. |
+| **Classification** | **[OWNER APPROVED 2026-10-21]** — recommended threshold accepted. |
+| **Owner decision** | Void after 200 rounds or 30 minutes. Threshold is tunable post-launch. Protects against infinite loops without assigning unfair outcomes. |
+| **Options considered** | **A (APPROVED):** Void after 200 rounds or 30 min — prevents infinite matches, no unfair outcome. **B (Not selected):** No watchdog; trust that game always terminates. |
+| **Risk of guessing** | N/A — resolved by owner decision. |
 | **Maps to** | R-017 |
 
 ### HPA-12: Offline Currency Isolation
@@ -208,7 +210,7 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | **Timeout** | Not addressed | — | **OWNER CONFIRMED** | 20s deadline, 15s grace, bot takeover — **OWNER CONFIRMED 2026-10-21** | See HPA-8 |
 | **Disconnect** | Not addressed | — | **OWNER CONFIRMED** | Reconnect with snapshot; bot during grace — **OWNER CONFIRMED 2026-10-21** | See HPA-8 |
 | **Bot behavior** | Not addressed | — | **OWNER CONFIRMED** | No hidden-hand access; labeled seats — **OWNER CONFIRMED 2026-10-21** | See HPA-9 |
-| **Watchdog** | Not addressed | — | **OPEN** | Void after N rounds; no arbitrary Donkey | See HPA-11 |
+| **Watchdog** | Not addressed | — | **OWNER APPROVED** | Void after 200 rounds or 30 min; no arbitrary Donkey — **OWNER APPROVED 2026-10-21** | See HPA-11 |
 
 ---
 

@@ -74,7 +74,7 @@ Covers rules engine tests, cross-language parity, client integration, network re
 | EC-001 | First round: A♠ holder leads any card (not A♠) | Accepted if R-003 approved as "any card" | R-003 [OPEN] |
 | EC-002 | First round: A♠ holder forced to play A♠ | Accepted if R-003 approved as "must play A♠" | R-003 [OPEN] |
 | EC-003 | Hit round: leading-suit winner exits after resolution | Next leader is clockwise from exited winner | R-011 |
-| EC-004 | Match reaches 200 rounds or 30 minutes elapsed | Watchdog triggers on either condition; match voided, no Donkey awarded | R-017 [OPEN] |
+| EC-004 | Match reaches 200 rounds or 30 minutes elapsed | Watchdog triggers on either condition; match voided, no Donkey awarded | R-017 [OWNER APPROVED 2026-10-21] |
 | EC-005 | Player has 1 card; it's off-suit to lead | Player plays it (HIT); hand empty; collect goes to lead-suit winner; player finishes | R-009, R-010 |
 
 ---

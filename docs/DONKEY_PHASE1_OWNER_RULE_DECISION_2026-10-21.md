@@ -3,7 +3,7 @@
 **Document ID:** DM-OWNER-DECISION-2026-10-21-R002-R003-R008-R009-R010-R013-D07-D14  
 **Date:** 2026-10-21  
 **Author:** Product Owner  
-**Status:** APPROVED (R-002, R-003, R-008, R-009, R-010, R-013) + CONFIRMED (D07–D14) — R-017 OPEN — Phase 2 **NOT AUTHORIZED**
+**Status:** ALL DECISIONS RESOLVED — APPROVED (R-002, R-003, R-008, R-009, R-010, R-013, R-017) + CONFIRMED (D07–D14) — Rule freeze ready
 
 ---
 
@@ -171,6 +171,28 @@ When all remaining active players empty their hands after the same completed rou
 
 ---
 
+## Decision: R-017 — Watchdog Threshold
+
+**OWNER APPROVED 2026-10-21.**
+
+If a match exceeds **200 rounds** or **30 minutes** wall-clock duration from match start, whichever comes first, the match is **voided**. No Donkey is assigned. No competitive outcome is recorded. No rewards or penalties are granted. A diagnostic log is preserved. The threshold is tunable post-launch.
+
+### Golden Scenario
+
+A match has proceeded for 199 rounds with 2 active players still holding cards. Round 200 begins and completes normally. After round resolution, the watchdog detects roundCount = 200 ≥ WATCHDOG_ROUND_LIMIT. The match transitions to `VOIDED`. Neither player is declared Donkey. No rewards or penalties apply.
+
+### Distinction from Alternatives
+
+**Alternative (Rejected):** No watchdog; trust that the game always terminates naturally. Rejected — a bug or edge case could create an infinite loop, locking players and consuming server resources.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Canonical Ruleset | R-017 | OWNER APPROVED |
+
+---
+
 ## Confirmed Default: D07 — Timeout / Disconnect Policy
 
 **OWNER CONFIRMED 2026-10-21.**
@@ -324,16 +346,16 @@ A qualifying finisher is a player whose hand remains empty after full round reso
 | **D12** | Dart SignalR: compatibility spike Phase 4; WebSocket fallback (ADR-0002) | **OWNER CONFIRMED — 2026-10-21** |
 | **D13** | Offline currency fully isolated from online server wallet | **OWNER CONFIRMED — 2026-10-21** |
 | **D14** | India-first launch; no wagering; legal review before international | **OWNER CONFIRMED — 2026-10-21** |
-| R-017 | Match watchdog threshold / void policy | **OPEN** |
+| **R-017** | Watchdog: void after 200 rounds or 30 min; no arbitrary Donkey | **OWNER APPROVED — 2026-10-21** |
 
 ---
 
 ## Documentation and Implementation Guardrails
 
-1. Mark **R-002, R-003, R-008, R-009, R-010, and R-013** as owner-approved; **D07, D08, D09, D10, D11, D12, D13, D14** as owner-confirmed (recommended defaults); and **WIN-001** as owner-confirmed objective.
-2. Update the canonical draft ruleset, rules evidence, test matrix, risk/decision register, Phase 1 report and owner checklist to reflect these 14 approvals/confirmations consistently. Preserve rule version as **DRAFT** until all blocking decisions are signed.
-3. R-017 (watchdog threshold) remains the sole OPEN blocking decision. Phase 2 is not authorized.
-4. No application code, tests, migrations, assets or CI workflows are authorized yet. Phase 2 remains blocked until R-017 is resolved and the complete rules freeze is signed.
+1. Mark **R-002, R-003, R-008, R-009, R-010, R-013, and R-017** as owner-approved; **D07, D08, D09, D10, D11, D12, D13, D14** as owner-confirmed (recommended defaults); and **WIN-001** as owner-confirmed objective.
+2. Update the canonical draft ruleset, rules evidence, test matrix, risk/decision register, Phase 1 report and owner checklist to reflect all 15 approvals/confirmations consistently. Preserve rule version as **DRAFT** until the owner issues `DM-RULES-1.0`.
+3. All blocking and proposed decisions are now resolved. Rule freeze (`DM-RULES-1.0`) and Phase 2 authorization may proceed at the product owner's discretion.
+4. No application code, tests, migrations, assets or CI workflows are authorized yet. Phase 2 requires explicit owner authorization after rule freeze.
 
 ---
 

@@ -35,7 +35,7 @@ Three ID schemes are used across Phase 1 documents. This table maps between them
 | D12 | — | HPA-12 | Dart SignalR client spike (see ADR-0002) | **[OWNER CONFIRMED 2026-10-21]** |
 | D13 | — | — | Offline currency isolation | **[OWNER CONFIRMED 2026-10-21]** |
 | D14 | — | — | India-first regional compliance | **[OWNER CONFIRMED 2026-10-21]** |
-| — | R-017 | — | Watchdog threshold for pathological matches | [OPEN] |
+| — | R-017 | — | Watchdog threshold for pathological matches | **[OWNER APPROVED 2026-10-21]** |
 | WIN-001 | — | — | Game objective: first to empty = winner, last with cards = Donkey | **[CONFIRMED 2026-10-21]** |
 
 **Note on IDs:** D-IDs are used in decision workflows and the approval checklist. R-IDs are used in the canonical ruleset (doc 03). HPA-IDs are used in the rules evidence table (doc 02). All three refer to the same underlying decisions.

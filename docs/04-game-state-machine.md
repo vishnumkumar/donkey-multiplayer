@@ -79,12 +79,12 @@ stateDiagram-v2
 
 ### 1.3 Terminal Conditions
 
-**WIN-001 (CONFIRMED 2026-10-21):** The first qualifying finisher (empty hand after full round settlement per R-009, OWNER APPROVED 2026-10-21) takes first place and is the game winner. The last player still holding cards is the Donkey. Simultaneous finisher ranking is now resolved by R-010 (OWNER APPROVED 2026-10-21): distinct consecutive positions in clockwise seat order from the round leader; no tied ranks. All-empty draw (R-013) is not automatically approved by WIN-001, R-009, or R-010.
+**WIN-001 (CONFIRMED 2026-10-21):** The first qualifying finisher (empty hand after full round settlement per R-009, OWNER APPROVED 2026-10-21) takes first place and is the game winner. The last player still holding cards is the Donkey. Simultaneous finisher ranking is now resolved by R-010 (OWNER APPROVED 2026-10-21): distinct consecutive positions in clockwise seat order from the round leader; no tied ranks. All-empty resolved by R-013 (OWNER APPROVED 2026-10-21): rank by R-010 clockwise order; last-ranked finisher is Donkey.
 
 A match reaches `COMPLETED` when any of:
 - **Single Donkey:** After round resolution, exactly one active player holds cards. That player is the Donkey (R-012).
 - **All Empty (R-013 APPROVED 2026-10-21):** After round resolution, zero active players hold cards. All qualifying finishers are ranked by R-010 clockwise order from the round leader; the last-ranked finisher is Donkey.
-- **Watchdog (OPEN R-017):** Round count exceeds configurable threshold (proposed: 200 rounds) or match wall-clock duration exceeds configurable limit (proposed: 30 minutes). Proposed: void/cancel, never assign arbitrary Donkey.
+- **Watchdog (R-017 APPROVED 2026-10-21):** Round count exceeds 200 rounds or match wall-clock duration exceeds 30 minutes. Match is voided; never assign arbitrary Donkey.
 
 A match reaches `VOIDED` when:
 - Unrecoverable state corruption detected (checksum mismatch, impossible card distribution).
@@ -213,7 +213,7 @@ FUNCTION ResolveTurn(command: PlayCard):
         SET match.state = COMPLETED
         COMMIT terminal result
     ELSE IF roundCount > WATCHDOG_ROUND_LIMIT OR elapsed > WATCHDOG_TIME_LIMIT:
-        SET match.state = VOIDED // R-017 OPEN — proposed: 200 rounds or 30 min
+        SET match.state = VOIDED // R-017 APPROVED — 200 rounds or 30 min
     ELSE:
         // Determine next leader
         IF winner is still active:

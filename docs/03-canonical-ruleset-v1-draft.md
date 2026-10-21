@@ -28,7 +28,7 @@ Covers the full game lifecycle from deck composition through terminal result. Do
 | R-008 | Hit winner comparison | Leading-suit highest only | ~~Cross-suit highest rank~~ | §8 — **OWNER APPROVED 2026-10-21** |
 | R-010 | Simultaneous finisher ranking | Clockwise deterministic | ~~Tied ranks~~ | §10 — **OWNER APPROVED 2026-10-21** |
 | R-013 | All players empty | ~~Draw / no Donkey~~ | ~~Replay; last-hit-recipient is Donkey~~ | §12 — **OWNER APPROVED 2026-10-21** |
-| R-017 | Watchdog threshold | Void after 200 rounds (configurable) | No watchdog | §14 |
+| R-017 | Watchdog threshold | Void after 200 rounds or 30 min | ~~No watchdog~~ | §14 — **OWNER APPROVED 2026-10-21** |
 
 ---
 
@@ -308,11 +308,9 @@ The match ends when exactly **one active player remains with cards** after a rou
 
 ## 14. Watchdog — Pathological Match Void
 
-**[OPEN — R-017]**
+**[OWNER APPROVED 2026-10-21 — R-017]**
 
-### Recommended
-
-If a match exceeds a configurable round limit (proposed: **200 rounds**) or a configurable wall-clock duration (proposed: **30 minutes** from match start), the match is **voided**:
+If a match exceeds **200 rounds** or **30 minutes** wall-clock duration from match start, whichever comes first, the match is **voided**:
 
 - No Donkey is assigned.
 - No competitive outcome is recorded.
@@ -320,11 +318,9 @@ If a match exceeds a configurable round limit (proposed: **200 rounds**) or a co
 - A diagnostic log with the match seed and event journal is preserved for analysis.
 - The match transitions to the `VOIDED` terminal state (see [04-game-state-machine.md](04-game-state-machine.md) §1.1).
 
-The watchdog must **never** assign an arbitrary Donkey or fabricate a winner. A voided match records no competitive outcome, no rewards, and no penalties for any player.
+The watchdog must **never** assign an arbitrary Donkey or fabricate a winner. A voided match records no competitive outcome, no rewards, and no penalties for any player. The threshold is tunable post-launch.
 
-### Alternative
-
-No watchdog; trust that the game always terminates naturally. Risk: a bug or edge case could create an infinite loop, locking four players and consuming server resources.
+> **Owner note (2026-10-21):** Approved with recommended defaults — 200 rounds or 30 minutes. ~~Alternative: no watchdog.~~ Protects against infinite loops; threshold is tunable.
 
 ---
 
@@ -939,7 +935,7 @@ flowchart TD
     CHECK_TERMINAL -->|0 Active Players| ALLEMPTY[All-Empty Ranking — R-013 APPROVED]
     CHECK_TERMINAL -->|≥2 Active| NEXT_LEADER[Determine Next Leader]
     
-    NEXT_LEADER --> WATCHDOG{Round or Time Limit Exceeded? — OPEN R-017}
+    NEXT_LEADER --> WATCHDOG{Round or Time Limit Exceeded? — R-017 APPROVED}
     WATCHDOG -->|Yes| VOID[Match Voided — No Donkey]
     WATCHDOG -->|No| ROUND_START
 ```
