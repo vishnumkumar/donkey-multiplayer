@@ -11,7 +11,8 @@
 | ID | Decision | Resolution | Date |
 |---|---|---|---|
 | D03 / R-008 | HIT winner: leading-suit highest only | **OWNER APPROVED** — product choice, not competitor verification | 2026-10-21 |
-| WIN-001 | Game objective: first to empty = winner | **CONFIRMED** — mechanics pending R-009/R-010/R-013 | 2026-10-21 |
+| D04 / R-009 | Finisher timing: after round resolution | **OWNER APPROVED** — finisher identified only after full round settlement including HIT collection | 2026-10-21 |
+| WIN-001 | Game objective: first qualifying finisher (per R-009) = winner | **CONFIRMED** — "successfully" now defined by R-009 (APPROVED); R-010/R-013 remain OPEN | 2026-10-21 |
 
 ---
 
@@ -100,23 +101,7 @@ These require explicit owner approval. Each has a recommended default and altern
 
 These have recommended defaults that are safe to implement. Owner should confirm or override.
 
-### 6. D04 / R-009 — Finisher Timing
-
-| | |
-|---|---|
-| **Question** | Does a player exit immediately on playing their last card, or after the round resolves? |
-| **Recommended** | After round resolution — a HIT collection may return cards to the player. |
-| **Alternative** | Immediate exit on last card played (creates paradoxes with HIT collection). |
-| **Risk if wrong** | HIGH if wrong — changes endgame dynamics. After-resolution is the only logically consistent choice. |
-| **Note** | WIN-001 ("successfully empties") depends on this decision. |
-| **Maps to** | R-009, HPA-4 |
-
-**Owner decision:** ☐ CONFIRM recommended ☐ OVERRIDE: ____________  
-**Signed:** __________________ **Date:** __________
-
----
-
-### 7. D07 — Timeout / Disconnect Policy
+### 6. D07 — Timeout / Disconnect Policy
 
 | | |
 |---|---|
@@ -130,7 +115,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 8. D08 — Bot Fairness
+### 7. D08 — Bot Fairness
 
 | | |
 |---|---|
@@ -144,7 +129,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 9. D09 — MVP Player Count
+### 8. D09 — MVP Player Count
 
 | | |
 |---|---|
@@ -155,7 +140,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 10. D10 — Online Bot Disclosure
+### 9. D10 — Online Bot Disclosure
 
 | | |
 |---|---|
@@ -166,7 +151,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 11. D11 — 2.5D Rendering
+### 10. D11 — 2.5D Rendering
 
 | | |
 |---|---|
@@ -177,7 +162,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 12. D12 — Dart SignalR Client
+### 11. D12 — Dart SignalR Client
 
 | | |
 |---|---|
@@ -188,7 +173,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 13. D13 — Offline Currency Isolation
+### 12. D13 — Offline Currency Isolation
 
 | | |
 |---|---|
@@ -199,7 +184,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 14. D14 — Regional Compliance
+### 13. D14 — Regional Compliance
 
 | | |
 |---|---|
@@ -214,11 +199,11 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 | Category | Count | Items |
 |---|---|---|
-| **OWNER APPROVED** | 1 | D03/R-008 |
+| **OWNER APPROVED** | 2 | D03/R-008, D04/R-009 |
 | **CONFIRMED OBJECTIVE** | 1 | WIN-001 |
 | **OPEN (blocking)** | 5 | D01, D02, D05, D06, R-017 |
-| **PROPOSED (confirm)** | 8 | D04, D07, D08, D09, D10, D11, D12, D13, D14 |
-| **Total requiring sign-off** | 13 | All of the above except D03 and WIN-001 |
+| **PROPOSED (confirm)** | 7 | D07, D08, D09, D10, D11, D12, D13, D14 |
+| **Total requiring sign-off** | 12 | All of the above except D03, D04 and WIN-001 |
 
 **Rule freeze condition:** Only when every item above is signed does the ruleset become `DM-RULES-1.0` and Phase 2 is authorized.
 

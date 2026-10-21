@@ -24,7 +24,7 @@ Three ID schemes are used across Phase 1 documents. This table maps between them
 | D01 | R-002 | HPA-1 | Shuffle distribution policy | [OPEN] |
 | D02 | R-003 | HPA-2 | A♠ opening constraint | [OPEN] |
 | D03 | R-008 | HPA-3 | HIT winner — leading suit only or cross-suit | **[OWNER APPROVED 2026-10-21]** |
-| D04 | R-009 | HPA-4 | Finisher timing — after resolution or immediate | [PROPOSED] |
+| D04 | R-009 | HPA-4 | Finisher timing — after resolution or immediate | **[OWNER APPROVED 2026-10-21]** |
 | D05 | R-010 | HPA-5 | Simultaneous finisher ranking | [OPEN] |
 | D06 | R-013 | HPA-6 | All players empty simultaneously | [OPEN] |
 | D07 | — | HPA-7 | Timeout / disconnect / bot takeover policy | [PROPOSED] |
@@ -60,7 +60,7 @@ These must be signed before `DM-RULES-1.0` is issued.
 | **D01** | **Shuffle distribution policy** — uniform CSPRNG 52-card shuffle and 13 each, or intentional suit-distribution skewing? | Uniform shuffle; no forced imbalance | (a) Replicate competitor's undisclosed suit-skewing algorithm; (b) Implement a disclosed balancing heuristic (e.g., guarantee each player gets ≥2 of each suit) | If we skip skewing and the competitor's version depends on it for gameplay feel, our game may feel different. If we invent skewing without understanding the target, we introduce untested bias and potential fairness complaints. | Competitor gameplay observation or explicit product decision to differentiate. | **APPROVE or SPECIFY alternative.** Maps to R-002. |
 | **D02** | **Must A♠ be the opening card?** The holder of A♠ starts — but must they lead A♠ specifically, or any card? | Holder starts with any card; A♠ not mandatory | (a) A♠ must be the first card played; (b) A♠ holder chooses but A♠ is highlighted as suggested | If mandatory A♠ is the real rule and we skip it, first-round strategy differs. If we force A♠ and the real rule is free choice, we constrain player strategy unnecessarily. | Competitor gameplay observation or product decision. | **APPROVE or SPECIFY.** Maps to R-003. |
 | **D03** | **HIT winner determination** — in a round with a hit, does the highest leading-suit card win, or the highest card across all suits? | **APPROVED:** Highest leading-suit card wins; off-suit cards (including higher ranks like A♥) cannot win the trick | ~~(a) Highest rank regardless of suit wins; (b) Off-suit cards ranked separately with a secondary comparison~~ | Resolved. Owner approved leading-suit-only rule for our original game. | Owner decision (2026-10-21). This is a product choice, not independent competitor verification. Published rules say "largest card" without specifying cross-suit. | **OWNER APPROVED 2026-10-21.** Maps to R-008. |
-| **D04** | **Finisher timing** — does a player exit immediately on playing their last card, or after the round's collection/discard resolves? | After resolution; a hit collection may return cards to the player | (a) Immediate exit on last card played (before resolution) | If immediate, a player who plays their last card off-suit in a hit cannot receive cards back — changes endgame dynamics significantly. After-resolution is safer and more intuitive. | Product decision; can be validated with competitor gameplay. | **APPROVE.** Maps to R-009. |
+| **D04** | **Finisher timing** — does a player exit immediately on playing their last card, or after the round's collection/discard resolves? | **APPROVED:** After resolution; a hit collection may return cards to the player | ~~(a) Immediate exit on last card played (before resolution)~~ | Resolved. Owner approved after-resolution finisher timing. | Owner decision (2026-10-21). | **OWNER APPROVED 2026-10-21.** Maps to R-009. |
 | **D05** | **Simultaneous finishers** — when multiple players reach zero cards in the same round, are they ranked or tied? | Deterministic clockwise podium order from the round leader's seat | (a) All simultaneous finishers share the same rank (tied); (b) Rank by who played first in the round | Tied ranks are simpler but may feel arbitrary in competitive play. Clockwise provides determinism but may seem unfair to the last clockwise player. | Product/UX decision. | **APPROVE or SPECIFY.** Maps to R-010. |
 | **D06** | **All players empty simultaneously** — what happens if every player runs out of cards in the same round? | Technical draw / no Donkey; no invented loser | (a) Replay the match; (b) Last player to have played a card is Donkey; (c) Void match | Inventing a loser is unfair. Draw is cleanest but may frustrate players expecting a winner. This is an edge case that may be rare in practice. | Product decision. | **APPROVE.** Maps to R-013. |
 | **D07** | **Timeout and disconnect policy** | 20s action deadline, 15s disconnect grace, disclosed bot takeover, reclaim at round boundary | (a) Longer/shorter timers; (b) Immediate forfeit on disconnect; (c) Pause match for all players; (d) No bot takeover — just run the clock | Too short frustrates mobile users on bad connections. Too long frustrates waiting players. Bot takeover without disclosure violates trust. | UX testing and product decision. | **APPROVE timeout values and takeover policy.** |
@@ -148,7 +148,7 @@ D13 (offline currency) ── independent
 D14 (regional compliance) ── independent; legal review parallel to development
 ```
 
-**Critical path:** ~~D03~~ → D04 → D05/D06 must be resolved as a group. D03 is now OWNER APPROVED (2026-10-21). The remaining chain: the finisher timing rule (D04) determines when finishers are identified, which determines simultaneous-finish (D05) and all-empty (D06) behavior.
+**Critical path:** ~~D03~~ → ~~D04~~ → D05/D06 must be resolved as a group. D03 and D04 are now OWNER APPROVED (2026-10-21). The remaining chain: simultaneous-finish ranking (D05) and all-empty draw (D06) are still OPEN and cannot be inferred from D03/D04 approval.
 
 ---
 
@@ -167,7 +167,7 @@ Phase 2 (deterministic engine implementation) **cannot begin** until:
 1. D01 (shuffle policy) is approved → determines shuffle algorithm
 2. D02 (A♠ opening) is approved → determines first-turn logic
 3. ~~D03 (HIT winner) is approved → determines round resolution~~ **OWNER APPROVED 2026-10-21**
-4. D04 (finisher timing) is approved → determines exit logic
+4. ~~D04 (finisher timing) is approved → determines exit logic~~ **OWNER APPROVED 2026-10-21**
 5. D05 (simultaneous finishers) is approved → determines ranking logic
 6. D06 (all empty) is approved → determines terminal condition
 7. D07 (timeout/disconnect) is at least provisionally approved → affects bot integration

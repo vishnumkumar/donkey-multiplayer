@@ -76,12 +76,13 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | Aspect | Detail |
 |---|---|
 | **Source evidence** | Not addressed in published rules. |
-| **Our proposal** | A player does **not** become a finisher immediately upon playing their last card. The entire round is resolved first (hit collection may return cards to the player). |
-| **Classification** | **[PROPOSED]** — critical for correctness |
+| **Our rule** | A player qualifies as a finisher **only after the entire round has resolved**, including any HIT collection and card transfers. An empty hand immediately after the last card is played does not by itself establish a finish. |
+| **Classification** | **[OWNER APPROVED 2026-10-21]** — resolved by product owner decision. |
+| **Owner decision** | Finisher identified only after round settlement, including HIT collection. A player who played their last card but then receives collected trick cards is not a finisher. A player still empty after settlement qualifies and exits subsequent rounds. |
 | **Gap** | No explicit source guidance on when "empty hand" is evaluated. |
-| **Options** | **A (Recommended):** Evaluate finishers after round resolution — prevents incorrect early exit when hit returns cards. **B:** Immediate exit upon playing last card — simpler but creates paradoxes with hit collection. |
-| **Risk of guessing** | Option B creates game-breaking edge cases where a player exits but should have received collected cards. Option A is the only logically consistent choice. |
-| **Maps to** | R-009, D04 (partial) |
+| **Options considered** | **A (APPROVED):** Evaluate finishers after round resolution — prevents incorrect early exit when hit returns cards. **B (Rejected):** Immediate exit upon playing last card — creates paradoxes with hit collection. |
+| **Risk of guessing** | N/A — resolved by owner decision. |
+| **Maps to** | R-009, D04 |
 
 ### HPA-5: Multiple Simultaneous Finishers
 
