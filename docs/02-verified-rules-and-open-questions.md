@@ -51,11 +51,12 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | Aspect | Detail |
 |---|---|
 | **Source evidence** | "Holder of Ace of Spades starts the first round" — source says **starts**, not **must play A♠**. |
-| **Our proposal** | A♠ holder acts first but may lead **any** held card. A♠ is not mandatory. |
-| **Classification** | **[OPEN]** |
-| **Gap** | "Starts" is ambiguous — could mean "starts by playing A♠" or "starts the round (plays any card)." |
-| **Options** | **A (Recommended):** Any card — more strategic freedom. **B:** Must play A♠ — simpler, removes first-move choice. |
-| **Risk of guessing** | Low strategic impact either way; both are common in similar card games. |
+| **Our rule** | A♠ holder acts first but may lead **any** held card. A♠ is not mandatory. |
+| **Classification** | **[OWNER APPROVED 2026-10-21]** — resolved by product owner decision. |
+| **Owner decision** | Free choice — A♠ holder starts the round but may lead any held card. Playing A♠ is legal but not required. "Starts" read as "goes first," not "must play a specific card." |
+| **Gap** | "Starts" is ambiguous — could mean "starts by playing A♠" or "starts the round (plays any card)." Source ambiguity (HPA-2) remains unresolved for competitor behavior. |
+| **Options considered** | **A (APPROVED):** Any card — more strategic freedom; natural reading of "starts." **B (Rejected):** Must play A♠ — simpler, removes first-move choice. |
+| **Risk of guessing** | N/A — resolved by owner decision. |
 | **Maps to** | R-003, D02 |
 
 ### HPA-3: Hit Winner — Cross-Suit Comparison
@@ -184,7 +185,7 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | **Player count** | Four players | donkeymaster.in | **CONFIRMED** | Exactly 4 seated players at match start | 2/3 player variants unspecified |
 | **Deal** | Entire deck dealt evenly to four players (13 each) | donkeymaster.in | **CONFIRMED** | 13 cards each | None |
 | **Suit distribution** | "Deals intentionally avoid equal suit distribution" | donkeymaster.in | **CONFIRMED** (claim exists) | Uniform shuffle — **OWNER APPROVED 2026-10-21**; do not implement unknown algorithm | Algorithm not published; see HPA-1. Owner chose uniform CSPRNG shuffle as product choice. |
-| **Opening** | "Holder of Ace of Spades starts the first round" | donkeymaster.in | **CONFIRMED** (who starts) | A♠ holder leads first; any card legal | Whether A♠ must be played: **OPEN**; see HPA-2 |
+| **Opening** | "Holder of Ace of Spades starts the first round" | donkeymaster.in | **CONFIRMED** (who starts) | A♠ holder leads first; any card legal — **OWNER APPROVED 2026-10-21** | Owner chose free choice; see HPA-2 |
 | **Follow suit** | Players must follow lead suit if held | donkeymaster.in | **CONFIRMED** | If holding ≥1 card of lead suit, must play one | Enforcement mechanism is our design |
 | **Hit definition** | Playing off-suit when void in lead suit = HIT | donkeymaster.in | **CONFIRMED** | Off-suit play when void = hit flag | None |
 | **No-hit resolution** | Cards leave hands (discarded); highest card player leads next | donkeymaster.in | **CONFIRMED** (partial) | Highest leading-suit card wins; cards to discard pile | "Highest card" ambiguous across suits |

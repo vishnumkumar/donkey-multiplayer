@@ -5,7 +5,7 @@ Status: **PENDING OWNER APPROVAL**. Check and sign every blocking point before P
 ### Blocking Gameplay Decisions
 
 - [x] D01 (R-002) — Shuffle policy: uniform CSPRNG, no suit skewing. **[OWNER APPROVED 2026-10-21]** — product owner's choice for our original game; no suit-distribution skewing or balancing heuristic.
-- [ ] D02 (R-003) — A♠ holder may lead any card **(recommended)** or must lead A♠? **[OPEN]**
+- [x] D02 (R-003) — A♠ holder may lead any card (free choice). **[OWNER APPROVED 2026-10-21]** — product owner's choice; "starts" means goes first, A♠ not mandatory.
 - [x] D03 (R-008) — HIT winner: highest leading-suit card only. **[OWNER APPROVED 2026-10-21]** — product owner's choice for our original game, not independent competitor verification.
 - [x] D04 (R-009) — Finisher timing: after round resolution. **[OWNER APPROVED 2026-10-21]** — finisher identified only after full round settlement including HIT collection.
 - [x] D05 (R-010) — Simultaneous finishers: distinct clockwise positions from round leader. **[OWNER APPROVED 2026-10-21]** — no tied ranks; deterministic ordering.
