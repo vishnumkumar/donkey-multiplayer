@@ -492,7 +492,7 @@ Cosmetics and pricing metadata. Schema to be designed when monetization scope is
 
 | Classification | Description | Examples |
 |---|---|---|
-| **SECRET** | Never exposed to any client, any log, any crash export. | `match_events.payload` (full hand data), `match_snapshots.state_data`, `player_sessions.refresh_token_hash`, shuffle seed before match completion. |
+| **SECRET** | Never exposed to any client, any log, any crash export. | `match_events.payload` (full hand data), `match_snapshots.state_data`, `player_sessions.refresh_token_hash`, deck order and dealt hand assignments before match completion. |
 | **INTERNAL** | Available to owning player only via authenticated API; never to other players. | Own hand contents, own match history details, own reward balance, `player_sessions.device_fingerprint`. |
 | **PLAYER-PRIVATE** | Visible to the player and admin only. | `player_reports.description`, account deletion dates. |
 | **PUBLIC-MATCH** | Visible to all match participants during or after the match. | Cards played face-up in current trick, finish positions, Donkey designation, match outcome. |
@@ -502,7 +502,7 @@ Cosmetics and pricing metadata. Schema to be designed when monetization scope is
 
 - **REST endpoints** return seat-filtered DTOs. The `/matches/{id}/snapshot` endpoint returns only the requesting player's hand and public trick state. Opponent hands are represented as card counts only.
 - **SignalR events** are filtered per recipient. `CardPlayed` includes the played card (public). `RoundResolved` includes the requesting player's updated hand but not opponents'. Reconnect `StateResync` includes own hand only.
-- **Logs** must never contain card identifiers, hand contents, or shuffle seeds. Use match correlation IDs and event types only.
+- **Logs** must never contain card identifiers, hand contents, or deck order / dealt hand assignments. Use match correlation IDs and event types only.
 - **Error responses** must not leak game state. A validation error says "illegal move" not "you have [card list]."
 - **Crash exports / telemetry** strip all `SECRET` and `INTERNAL` fields.
 - **Database backups** encrypt `match_snapshots.state_data` at rest. Access to `match_events` table requires elevated service credentials.

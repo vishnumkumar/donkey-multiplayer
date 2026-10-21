@@ -820,7 +820,7 @@ Rate limit responses include `Retry-After` header (REST) or `RATE_LIMITED` error
 | Connection state | Yes | Yes (broadcast) | N/A |
 | Finish position | Yes | Yes (broadcast) | Yes |
 | Match result | Yes | Yes | Yes |
-| Shuffle seed | NEVER | NEVER | Optional (replay feature, future) |
+| Deck order / dealt hands | NEVER | NEVER | Optional (replay feature, future) |
 
 ### 6.2 Testing Requirements
 

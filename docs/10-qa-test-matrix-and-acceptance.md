@@ -87,8 +87,8 @@ These invariants must hold **at every state transition** and are tested via prop
 |---|---|---|
 | INV-001 | Exactly 52 distinct cards exist across all hands + current trick + discard pile | Assert at every transition in 100K simulation |
 | INV-002 | No card appears in two locations simultaneously | Assert uniqueness across all containers |
-| INV-003 | Hit resolution: trick cards move to exactly one winner hand; discard pile unchanged | Assert hand sizes and discard size after hit |
-| INV-004 | No-hit resolution: trick cards move to discard; all hands unchanged | Assert hand sizes and discard size after no-hit |
+| INV-003 | Hit resolution: all trick cards move to exactly one winner's hand; discard pile unchanged. Winner's hand = pre-round size − 1 + trick size (played 1, received all). Each non-winner active player's hand is reduced by exactly 1. | Assert winner hand delta = trick size − 1; assert non-winner hand delta = −1; assert discard unchanged |
+| INV-004 | No-hit resolution: trick cards move to discard; no cards move to any hand. Each active player's hand is reduced by exactly 1 (the card they played); discard pile grows by the number of active players in the round. | Assert per-player hand size = pre-round size − 1; assert discard delta = active player count; assert no hand gained cards |
 | INV-005 | Current turn always belongs to an active (non-finished) seat | Assert at every WAITING_FOR_PLAY state |
 | INV-006 | State version is strictly monotonically increasing | Assert version > previous version at every transition |
 | INV-007 | Finish order is append-only; no finished player re-enters | Assert finished set only grows |
@@ -124,8 +124,8 @@ These invariants must hold **at every state transition** and are tested via prop
 
 ### 3.3 Failure Handling
 
-- Any invariant violation: emit match seed, full event log, and state at failure point.
-- Auto-generate a deterministic test case from the failing seed.
+- Any invariant violation: emit the test PRNG seed (simulation only), full event log, and state at failure point.
+- Auto-generate a deterministic test case from the failing PRNG seed.
 - No simulation pass until all generated failure cases are resolved and added to the regression suite.
 
 ---

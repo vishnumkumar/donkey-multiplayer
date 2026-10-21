@@ -22,7 +22,7 @@
 
 ## 2. Fixture Scenario Coverage
 
-All 10 required gameplay scenarios are documented with explicit test fixtures in `03-canonical-ruleset-v1-draft.md` §18:
+All required gameplay scenarios are documented with explicit specification fixtures in `03-canonical-ruleset-v1-draft.md` §18. These are documentation-level specifications reviewed for logical correctness; they are not automated test results.
 
 | # | Scenario | Fixture(s) | Rule(s) | Status |
 |---|---|---|---|---|
@@ -34,11 +34,14 @@ All 10 required gameplay scenarios are documented with explicit test fixtures in
 | 6 | Simultaneous finishers (clockwise) | Fixtures 6a, 6b, 6c | R-010 | Documented |
 | 7 | All players empty simultaneously | Fixtures 8, 8a, 8b, 8c | R-013 | Documented |
 | 8 | HIT returns cards to empty player | Fixtures 5a, 10a | R-009, R-014 | Documented |
-| 9 | Watchdog — match voided | Fixture 11 | R-017 | Documented |
-| 10 | 52-card conservation | Fixtures 8, 8a, 8b, 8c (explicit checks) | INV-1 | Documented |
-| 11 | Idempotent action replay | Fixture 9 | — | Documented |
-| 12 | Terminal — Donkey declaration | Fixture 10 | R-012, WIN-001 | Documented |
-| 13 | Two active seats | Fixture 7 | — | Documented |
+| 9 | Watchdog — void at boundary (≥200) | Fixture 11 | R-017 | Documented |
+| 10 | Watchdog — round 199 continues | Fixture 11a | R-017 | Documented |
+| 11 | Watchdog — natural termination precedence | Fixture 11b | R-017 | Documented |
+| 12 | Watchdog — time limit exceeded | Fixture 11c | R-017 | Documented |
+| 13 | 52-card conservation | Fixtures 8, 8a, 8b, 8c (explicit checks) | INV-1 | Documented |
+| 14 | Idempotent action replay | Fixture 9 | — | Documented |
+| 15 | Terminal — Donkey declaration | Fixture 10 | R-012, WIN-001 | Documented |
+| 16 | Two active seats | Fixture 7 | — | Documented |
 
 ---
 
@@ -76,6 +79,24 @@ All 10 required gameplay scenarios are documented with explicit test fixtures in
 | Checklist status PENDING | RULE_FREEZE_APPROVAL_CHECKLIST | Changed to ALL ITEMS APPROVED |
 | Missing watchdog fixture | doc 03, §18 | Added Fixture 11 (R-017 watchdog void) |
 | Missing HIT-restores-hand fixture | doc 03, §18 | Added Fixture 10a (R-014 HIT returns cards) |
+| HIT hand-size arithmetic wrong (3→4) | doc 03, Fixtures 5a, 6c, 10a | Corrected: start 1, play 1→0, receive 4 trick cards→hand size 4 |
+| Fixture 5 delta notation unclear | doc 03, Fixture 5 | Clarified "net +3 (played 1, received all 4 trick cards)" |
+| Watchdog `>` vs `>=` inconsistency | doc 03 §14, doc 04 pseudocode/§1.3 | Standardised on `>=` (≥200 rounds, ≥30 min) everywhere |
+| Watchdog evaluation timing missing | doc 03 §14 | Added timing paragraph and natural-termination precedence rule |
+| Single watchdog fixture → four boundary | doc 03 §18 | Replaced Fixture 11 with 11, 11a, 11b, 11c covering boundary cases |
+| §2.3 "Shuffle Seed Security" contradicted CSPRNG | doc 03 §2.3 | Rewritten as "Shuffle Security and Audit"; production CSPRNG has no seed |
+| §14 audit referenced "match seed" | doc 03 §14 | Changed to "dealt hand assignments" |
+| §16.1 bot info referenced "shuffle seed" | doc 03 §16.1 | Changed to "dealt hand assignments of other seats" |
+| Shuffle requirements implied production seed | doc 08 | Clarified CSPRNG has no reproducible seed; audit uses dealt hand assignments |
+| Post-match audit referenced seed | doc 08 | Changed to "dealt hand assignments stored in sealed match record" |
+| SEC-09 referenced "shuffle seeds" | doc 08 | Changed to "dealt hand assignments, deck order" |
+| INV-003 lacked explicit arithmetic | doc 10 | Added "Winner's hand = pre-round size − 1 + trick size; each non-winner −1" |
+| INV-004 "all hands unchanged" wrong for no-HIT | doc 10 | Corrected: each active hand reduced by 1; discard grows by active count |
+| Simulation §3.3 "match seed" ambiguous | doc 10 | Clarified as "test PRNG seed (simulation only)" |
+| Server logs never-list referenced "shuffle seed" | doc 08, §2.1 | Changed to "deck order or dealt hand assignments" |
+| Data visibility table referenced "Shuffle seed" | doc 06, §6.1 | Changed to "Deck order / dealt hands" |
+| SECRET classification referenced "shuffle seed" | doc 05, §5.1 | Changed to "deck order and dealt hand assignments" |
+| Logging rule referenced "shuffle seeds" | doc 05, §5.2 | Changed to "deck order / dealt hand assignments" |
 
 ---
 
@@ -112,11 +133,12 @@ The DM-RULES-1.0-RC release candidate is complete:
 - All 7 OWNER APPROVED gameplay rules are locked and documented
 - All 8 OWNER CONFIRMED product/technical decisions are recorded
 - WIN-001 game objective is confirmed
-- 15+ golden test fixtures cover all required scenarios including edge cases
-- 10 state invariants (INV-1 through INV-10) are specified
-- 52-card conservation is verified in all full-game fixtures
-- No contradictions remain between documents
+- 16+ specification fixtures document all required scenarios including edge cases (reviewed for logical correctness; no automated tests yet)
+- 10 state invariants (INV-1 through INV-10) are specified with explicit arithmetic
+- 52-card conservation is checked in all full-game fixture narratives
+- No contradictions remain between documents (cross-checked in correction pass)
 - No stale OPEN/PENDING statuses remain for game rules
+- HIT arithmetic, watchdog boundaries, RNG documentation, and QA invariants corrected
 
 **READY FOR FINAL OWNER SIGN-OFF to issue DM-RULES-1.0 and authorize Phase 2.**
 
