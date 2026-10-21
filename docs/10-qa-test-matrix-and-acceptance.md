@@ -38,7 +38,7 @@ Covers rules engine tests, cross-language parity, client integration, network re
 |---|---|---|---|---|---|
 | RR-001 | Lead: 8♣, Follow: 10♣, Q♣, 2♣ | No | Seat playing Q♣ (highest ♣) | Discard pile | R-007 |
 | RR-002 | Lead: 8♣, Follow: J♣, 10♣, 2♥ | Yes | Seat playing J♣ (highest ♣) | Winner's hand | R-008 |
-| RR-003 | Lead: 8♣, Follow: J♣, 10♣, A♥ | Yes | Seat playing J♣ (highest ♣, not A♥) | Winner's hand | R-008 [OPEN] |
+| RR-003 | Lead: 8♣, Follow: J♣, 10♣, A♥ | Yes | Seat playing J♣ (highest ♣, not A♥) | Winner's hand | R-008 [OWNER APPROVED 2026-10-21] |
 | RR-004 | Lead: A♣, Follow: 2♣, 3♣, 4♣ | No | Seat playing A♣ (highest ♣) | Discard pile | R-006, R-007 |
 | RR-005 | Lead: 2♣, Follow: 3♣, 5♥, 4♣ | Yes | Seat playing 4♣ (highest ♣) | Winner's hand | R-008 |
 | RR-006 | Lead: K♠, Follow: A♠, 3♥, 7♠ | Yes | Seat playing A♠ (highest ♠) | Winner's hand | R-006, R-008 |

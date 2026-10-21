@@ -62,11 +62,13 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | Aspect | Detail |
 |---|---|
 | **Source evidence** | Developer uses "largest card" without specifying whether off-suit cards participate in comparison. Example: lead 8♣, players play J♣, 10♣, A♥ — does A♥ (rank 14) beat J♣ (rank 11)? |
-| **Our proposal** | Highest rank **of the leading suit only** wins the trick. Off-suit (hit) cards cannot win. |
-| **Classification** | **[OPEN]** — this is the **highest-priority ambiguity** for correctness. |
+| **Our rule** | Highest rank **of the leading suit only** wins the trick. Off-suit (hit) cards cannot win. |
+| **Classification** | **[OWNER APPROVED 2026-10-21]** — resolved by product owner decision, not by independent competitor verification. |
+| **Owner decision** | "When any player makes a HIT… the highest-ranked card of the leading suit only wins the round… No off-suit card can win merely by having a greater rank." Acceptance example: lead 8♣; players then play J♣, 10♣, A♥. The A♥ is a HIT; the J♣ seat wins and collects all four cards. |
+| **Distinction** | This is the product owner's choice for our original game, not independent proof that CodeHound uses it. The source ambiguity (HPA-3) remains unresolved for competitor behavior. |
 | **Gap** | "Largest card" could mean largest overall (A♥ beats J♣) or largest of leading suit (J♣ wins). These produce fundamentally different gameplay. |
-| **Options** | **A (Recommended):** Leading-suit highest wins — standard in most trick-taking games; off-suit is a penalty (hit), not a power play. **B:** Absolute highest rank wins regardless of suit — makes off-suit play strategically viable, radically changes hit dynamics. **C:** Leading suit wins ties, off-suit wins only if strictly higher — hybrid; complex to explain. |
-| **Risk of guessing** | **HIGH.** Wrong choice produces a fundamentally different game. Must be verified or explicitly decided. |
+| **Options considered** | **A (APPROVED):** Leading-suit highest wins — standard in most trick-taking games; off-suit is a penalty (hit), not a power play. **B (Rejected):** Absolute highest rank wins regardless of suit — makes off-suit play strategically viable, radically changes hit dynamics. **C (Rejected):** Leading suit wins ties, off-suit wins only if strictly higher — hybrid; complex to explain. |
+| **Risk of guessing** | N/A — resolved by owner decision. |
 | **Maps to** | R-008, D03 |
 
 ### HPA-4: Finisher Timing

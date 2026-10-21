@@ -6,13 +6,17 @@ Status: **PENDING OWNER APPROVAL**. Check and sign every blocking point before P
 
 - [ ] D01 (R-002) — Shuffle policy: uniform CSPRNG, no suit skewing **(recommended)** or intentional suit-distribution policy? **[OPEN]**
 - [ ] D02 (R-003) — A♠ holder may lead any card **(recommended)** or must lead A♠? **[OPEN]**
-- [ ] D03 (R-008) — HIT winner: highest leading-suit card only **(recommended, pending competitor observation)** or highest rank across all suits? **[OPEN]**
+- [x] D03 (R-008) — HIT winner: highest leading-suit card only. **[OWNER APPROVED 2026-10-21]** — product owner's choice for our original game, not independent competitor verification.
 - [ ] D04 (R-009) — Finisher timing: after round resolution **(recommended)** or immediate on last card played?
 - [ ] D05 (R-010) — Simultaneous finishers: clockwise podium order **(proposed)** or tied ranks? **[OPEN]**
 - [ ] D06 (R-013) — All players empty simultaneously: draw / no Donkey **(recommended)** or replay? **[OPEN]**
 - [ ] D07 — Timeout/disconnect policy: 20s deadline, 15s grace, bot takeover, reclaim at round boundary **(proposed)** or alternative timers?
 - [ ] D08 — Bot fairness: bots see only own hand + played cards **(recommended)** or allow hidden-hand access for difficulty?
 - [ ] R-017 — Watchdog: void after 200 rounds or 30 minutes **(proposed)** or alternative threshold? **[OPEN]**
+
+### Confirmed Product Objectives
+
+- [x] **WIN-001** — First player to successfully empty their entire hand = first-place game winner. Last player with cards = Donkey. **[CONFIRMED 2026-10-21]** — Precise mechanics ("successfully") depend on R-009 finisher timing; simultaneous finisher ranking (R-010/D05), all-empty draw (R-013/D06) not automatically approved by this statement.
 
 ### Non-Blocking but Important Decisions
 

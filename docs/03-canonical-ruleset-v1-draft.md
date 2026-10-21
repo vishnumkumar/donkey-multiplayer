@@ -25,7 +25,7 @@ Covers the full game lifecycle from deck composition through terminal result. Do
 |---|---|---|---|---|
 | R-002 | Shuffle policy | Uniform CSPRNG | Suit-balanced heuristic; rejection sampling | §2 |
 | R-003 | A♠ opening constraint | Any card | Must play A♠ | §4 |
-| R-008 | Hit winner comparison | Leading-suit highest only | Cross-suit highest rank | §8 |
+| R-008 | Hit winner comparison | Leading-suit highest only | ~~Cross-suit highest rank~~ | §8 — **OWNER APPROVED 2026-10-21** |
 | R-010 | Simultaneous finisher ranking | Clockwise deterministic | Tied ranks | §10 |
 | R-013 | All players empty | Draw / no Donkey | Replay; last-hit-recipient is Donkey | §12 |
 | R-017 | Watchdog threshold | Void after 200 rounds (configurable) | No watchdog | §14 |
@@ -155,26 +155,26 @@ When all active players in the round have played and **no** play was flagged as 
 
 ## 8. Hit Round Resolution
 
-**[OPEN — R-008]**
+**[OWNER APPROVED — R-008 — 2026-10-21]**
 
 When all active players in the round have played and **at least one** play was flagged as a hit:
-
-### Recommended (Option A): Leading-suit highest wins
 
 1. **Winner determination:** The player who played the **highest-rank card of the leading suit** wins the round. Off-suit (hit) cards **do not participate** in winner comparison.
 2. **Card disposition:** **All** cards played in the round (including off-suit hit cards) are added to the **winner's hand**.
 3. **Next leader:** The winner leads the next round.
 
-**Example:** Lead 8♣ → J♣ → 10♣ → A♥ (hit). Winner = J♣ player. J♣ player receives all 4 cards into hand.
+**Acceptance example (owner-provided):** Lead 8♣; players then play J♣, 10♣, A♥. The A♥ is a HIT; the J♣ seat wins and collects all four cards.
 
-### Alternative (Option B): Absolute highest rank wins
+> **Owner note (2026-10-21):** "This is the product owner's choice for our original game, not independent proof that CodeHound uses it."
+
+### Historical Alternative Considered (Option B): Absolute highest rank wins
 
 1. **Winner determination:** The player who played the **highest-rank card regardless of suit** wins. If tied (same rank, different suits), the leading-suit card wins ties.
 2. Cards and leader as above.
 
 **Example (Option B):** Lead 8♣ → J♣ → 10♣ → A♥. Winner = A♥ player (rank 14 > 11). A♥ player receives all 4 cards.
 
-**Impact:** Option A and Option B produce fundamentally different games. Under Option A, hitting is always a penalty (you lose your card into someone else's hand). Under Option B, hitting with a high card is strategically viable. **This must be decided before implementation.**
+**Rationale for Option A:** Under Option A, hitting is always a penalty (you lose your card into someone else's hand). Under Option B, hitting with a high card is strategically viable. Option A was chosen by the product owner as the intended design for our original game.
 
 ---
 
@@ -249,6 +249,14 @@ The match is voided and restarted. Original results discarded.
 ## 13. Terminal Condition — Donkey Declaration
 
 **[CONFIRMED objective; PROPOSED trigger — R-012]**
+
+### WIN-001: Game Objective — CONFIRMED PRODUCT OBJECTIVE (2026-10-21)
+
+**The first player who successfully empties their entire hand is the first-place game winner. The last player still holding cards is the Donkey.**
+
+> **Owner note (2026-10-21):** This is a confirmed product objective. However, "successfully" depends on finisher timing (R-009) — a player who plays their last card off-suit in a HIT may receive cards back. Whether play continues to rank other finishers, how to classify simultaneous finishers (R-010/D05), and all-empty draw (R-013/D06) are **not** automatically approved by the first-to-empty statement. Precise mechanics remain pending on those OPEN/PROPOSED decisions.
+
+### Donkey Declaration
 
 The match ends when exactly **one active player remains with cards** after a round is fully resolved.
 
@@ -422,7 +430,7 @@ Resolution:
   Discard: no change
 ```
 
-### Fixture 3: Off-Suit Higher Rank in Hit (CRITICAL — validates R-008)
+### Fixture 3: Off-Suit Higher Rank in Hit (validates R-008 — OWNER APPROVED)
 
 ```
 Setup:
@@ -435,17 +443,16 @@ Plays:
   S2: 10♣ (follows suit)
   S3: A♥ (no clubs → HIT, rank 14)
 
-Resolution (Option A — recommended):
+Resolution (APPROVED — leading-suit highest wins):
   Hit: true
   Winner: S1 (J♣, rank 11 — highest CLUB, not A♥)
   Card disposition: All 4 cards → S1's hand
 
-Resolution (Option B — alternative):
-  Hit: true
+Historical alternative considered (Option B — rejected):
   Winner: S3 (A♥, rank 14 — absolute highest)
   Card disposition: All 4 cards → S3's hand
 
-THIS FIXTURE MUST MATCH THE APPROVED DECISION FOR R-008.
+R-008 approved by owner 2026-10-21. This fixture uses the approved resolution.
 ```
 
 ### Fixture 4: Follow-Suit Enforcement (Illegal Move Rejection)
@@ -621,7 +628,7 @@ flowchart TD
     RESOLVE -->|No Hit| NO_HIT[Highest Lead-Suit Card Wins]
     NO_HIT --> DISCARD[Cards → Discard Pile]
     
-    RESOLVE -->|Hit| HIT_WIN[Highest Lead-Suit Card Wins — OPEN R-008]
+    RESOLVE -->|Hit| HIT_WIN[Highest Lead-Suit Card Wins — R-008 APPROVED]
     HIT_WIN --> COLLECT[All Cards → Winner's Hand]
     
     DISCARD --> EVAL_FINISH[Evaluate Finishers — Zero-Card Players]
@@ -646,7 +653,7 @@ flowchart TD
 - [ ] All OPEN items present recommended option plus at least one alternative
 - [ ] No ambiguity is silently resolved
 - [ ] Test fixtures cover all major resolution paths
-- [ ] Fixtures include the critical R-008 off-suit comparison case with both outcomes
+- [x] Fixtures include the critical R-008 off-suit comparison case (owner approved 2026-10-21; Option A locked)
 - [ ] State invariants are complete and testable
 - [ ] Document is sufficient for two independent engineers to implement identical state machines
 

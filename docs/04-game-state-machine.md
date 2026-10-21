@@ -79,6 +79,8 @@ stateDiagram-v2
 
 ### 1.3 Terminal Conditions
 
+**WIN-001 (CONFIRMED 2026-10-21):** The first player who successfully empties their entire hand is the first-place game winner. The last player still holding cards is the Donkey. Precise mechanics of "successfully" depend on finisher timing (R-009); simultaneous finisher ranking (R-010) and all-empty draw (R-013) are not automatically approved by WIN-001.
+
 A match reaches `COMPLETED` when any of:
 - **Single Donkey:** After round resolution, exactly one active player holds cards. That player is the Donkey (R-012).
 - **All Empty (OPEN R-013):** After round resolution, zero active players hold cards. Proposed: draw/no-Donkey.
