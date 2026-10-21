@@ -24,7 +24,7 @@ Covers the full game lifecycle from deck composition through terminal result. Do
 | ID | Decision | Recommended | Alternative(s) | See |
 |---|---|---|---|---|
 | R-002 | Shuffle policy | Uniform CSPRNG | ~~Suit-balanced heuristic; rejection sampling~~ | §2 — **OWNER APPROVED 2026-10-21** |
-| R-003 | A♠ opening constraint | Any card | Must play A♠ | §4 |
+| R-003 | A♠ opening constraint | Any card | ~~Must play A♠~~ | §4 — **OWNER APPROVED 2026-10-21** |
 | R-008 | Hit winner comparison | Leading-suit highest only | ~~Cross-suit highest rank~~ | §8 — **OWNER APPROVED 2026-10-21** |
 | R-010 | Simultaneous finisher ranking | Clockwise deterministic | ~~Tied ranks~~ | §10 — **OWNER APPROVED 2026-10-21** |
 | R-013 | All players empty | Draw / no Donkey | Replay; last-hit-recipient is Donkey | §12 |
@@ -99,15 +99,15 @@ Uniform random permutation (Fisher-Yates) using a cryptographically secure rando
 
 ## 4. Opening — First Round Leader
 
-**[OPEN — R-003]**
+**[OWNER APPROVED — R-003 — 2026-10-21]**
 
-The player holding the Ace of Spades (A♠) leads the first round.
+The player holding the Ace of Spades (A♠) leads the first round. The A♠ holder may lead with **any** card from their hand. Playing A♠ is legal but not required.
 
-**Recommended (Option A):** The A♠ holder may lead with **any** card from their hand. Playing A♠ is legal but not required.
+> **Owner note (2026-10-21):** Free choice approved as the product owner's choice for our original game. "Starts" in the source text is naturally read as "goes first," not "must play a specific card." This gives the first player strategic choice.
 
-**Alternative (Option B):** The A♠ holder **must** play A♠ as the first card. If selected, this is the only forced-card rule in the game.
+### Historical Alternative Considered (Option B): Must play A♠
 
-**Rationale for recommendation:** "Starts" in the source text is naturally read as "goes first," not "must play a specific card." Option A gives the first player strategic choice. Option B is simpler but removes first-move agency.
+The A♠ holder **must** play A♠ as the first card. This would be the only forced-card rule in the game. Rejected — removes first-move agency without clear gameplay benefit.
 
 ---
 
