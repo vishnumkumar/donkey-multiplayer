@@ -307,15 +307,18 @@ Phase 2 (deterministic engine implementation) is blocked until:
 
 ## 11. Status
 
-### `PHASE 1 REVIEWED — AWAITING OWNER RULE APPROVAL`
+### `PHASE 1 — R-008 APPROVED; OTHER RULES PENDING OWNER SIGN-OFF; NO CODE IMPLEMENTED`
 
-- 17 documentation files created and reviewed in `docs/`
+- 17 documentation files + 2 new documents (owner decision record, remaining-decision worksheet) in `docs/`
 - Architect review completed: 10 findings corrected, 0 remaining document contradictions
 - No Dart, C#, SQL, YAML, JSON, Docker, CI, or implementation files created
 - No packages installed, no scaffolding generated, no builds run
-- 5 OPEN decisions require explicit owner approval before Phase 2 (D03/R-008 approved 2026-10-21)
-- 1 confirmed product objective: WIN-001 (first to empty = winner; last with cards = Donkey)
-- 6 PROPOSED decisions have safe defaults but should be confirmed
+- **1 OWNER APPROVED:** D03/R-008 (HIT winner: leading-suit highest only) — 2026-10-21
+- **1 CONFIRMED OBJECTIVE:** WIN-001 (first to empty = winner; last with cards = Donkey) — mechanics pending
+- **5 OPEN decisions** require explicit owner approval before Phase 2
+- **8 PROPOSED decisions** have safe defaults but should be confirmed
+- See `docs/REMAINING_DECISIONS_WORKSHEET.md` for full per-item sign-off worksheet
+- Competitor cross-suit HIT behavior: **NOT VERIFIED** — R-008 is our product choice
 
 ---
 

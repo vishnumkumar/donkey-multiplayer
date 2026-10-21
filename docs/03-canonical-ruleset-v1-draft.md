@@ -167,6 +167,8 @@ When all active players in the round have played and **at least one** play was f
 
 > **Owner note (2026-10-21):** "This is the product owner's choice for our original game, not independent proof that CodeHound uses it."
 
+**Competitor behavior: NOT VERIFIED.** The competitor's published description says "largest card" without specifying cross-suit comparison. Their actual implementation behavior has not been independently verified. This rule is our product design, not a claim about the competitor.
+
 ### Historical Alternative Considered (Option B): Absolute highest rank wins
 
 1. **Winner determination:** The player who played the **highest-rank card regardless of suit** wins. If tied (same rank, different suits), the leading-suit card wins ties.
@@ -668,4 +670,6 @@ flowchart TD
 | [07-offline-online-parity-strategy.md](07-offline-online-parity-strategy.md) | Cross-language parity using these fixtures |
 | [10-qa-test-matrix-and-acceptance.md](10-qa-test-matrix-and-acceptance.md) | Full test matrix derived from these rules |
 | [12-risks-and-decisions.md](12-risks-and-decisions.md) | Decision register for OPEN items |
+| [DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md](DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md) | Formal owner decision record for R-008 and WIN-001 |
+| [REMAINING_DECISIONS_WORKSHEET.md](REMAINING_DECISIONS_WORKSHEET.md) | Per-item sign-off worksheet for all pending decisions |
 | `RULE_FREEZE_APPROVAL_CHECKLIST.md` | Owner sign-off checklist |
