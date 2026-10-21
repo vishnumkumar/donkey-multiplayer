@@ -89,12 +89,13 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | Aspect | Detail |
 |---|---|
 | **Source evidence** | No published rule for the case where multiple players reach zero cards in the same round resolution. |
-| **Our proposal** | Rank finishers deterministically in **clockwise seat order** relative to the round leader. |
-| **Classification** | **[OPEN]** |
-| **Gap** | Could also award tied ranks (all share same position). |
-| **Options** | **A (Recommended):** Clockwise deterministic — simple, unambiguous, testable. **B:** Tied ranks — fairer in theory but complicates podium display and leaderboard math. |
-| **Risk of guessing** | Low impact on game balance; primarily affects results display. |
-| **Maps to** | R-010, D04 |
+| **Our rule** | Assign **distinct, consecutive positions** in clockwise seat order starting with the completed round's leader (inclusive). Do not award tied ranks. |
+| **Classification** | **[OWNER APPROVED 2026-10-21]** — resolved by product owner decision. |
+| **Owner decision** | When two or more players become qualifying finishers in the same fully settled round, traverse clockwise from the round leader and assign the next available finishing position to each qualifying seat encountered. Deterministic example: leader = Seat 1; Seats 2 and 0 qualify; clockwise from leader: Seat 2 gets next position, then Seat 0. |
+| **Gap** | No published source guidance; this is a product choice. |
+| **Options considered** | **A (APPROVED):** Clockwise deterministic — simple, unambiguous, testable. **B (Rejected):** Tied ranks — fairer in theory but complicates podium display and leaderboard math. |
+| **Risk of guessing** | N/A — resolved by owner decision. |
+| **Maps to** | R-010, D05 |
 
 ### HPA-6: All Players Empty Together
 

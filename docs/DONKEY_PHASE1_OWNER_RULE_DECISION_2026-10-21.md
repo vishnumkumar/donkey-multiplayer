@@ -1,9 +1,9 @@
 # Owner Rule Decision Record — 2026-10-21
 
-**Document ID:** DM-OWNER-DECISION-2026-10-21-R008-R009  
+**Document ID:** DM-OWNER-DECISION-2026-10-21-R008-R009-R010  
 **Date:** 2026-10-21  
 **Author:** Product Owner  
-**Status:** PARTIALLY APPROVED — Phase 2 **NOT AUTHORIZED**
+**Status:** PARTIALLY APPROVED (R-008, R-009, R-010) — Phase 2 **NOT AUTHORIZED**
 
 ---
 
@@ -55,6 +55,43 @@ A player qualifies as a finisher **only after the entire round has resolved**, i
 
 ---
 
+## Decision: R-010 / D05 — Simultaneous Finisher Ranking
+
+**OWNER APPROVED 2026-10-21.**
+
+When two or more players become qualifying finishers in the same fully settled round (per R-009), assign **distinct, consecutive finishing positions** in **clockwise seat order** starting from the completed round's leader (inclusive). No tied ranks are awarded.
+
+### Deterministic Algorithm
+
+After round resolution and all card movement (per R-009):
+1. Identify all active players whose hand is now empty — these are the round's qualifying finishers.
+2. Starting from the round leader's seat, traverse clockwise through all seats.
+3. For each seat encountered that is a qualifying finisher, assign the next available finishing position.
+4. Players who already finished in prior rounds are skipped (they already hold a position).
+5. Active players who still hold cards are skipped.
+
+### Golden Scenarios
+
+1. **Two finishers, leader S1:** Seats S2 and S3 both empty after resolution. Clockwise from S1: S2 gets next position, S3 gets the one after. S0 and S1 still have cards — play continues.
+2. **Two finishers, leader S3:** Seats S0 and S2 both empty after resolution. Clockwise from S3: S0 gets next position, S2 gets the one after. Different leader changes the ordering.
+3. **HIT prevents finish:** S1 plays last card (leading suit), collects the HIT trick → S1 now has cards → NOT a finisher. S3 played last card off-suit → hand empty after resolution → S3 finishes alone. R-010 does not apply when only one player qualifies.
+
+### Rules Integration
+
+- **R-009 prerequisite:** Finisher status is evaluated only after full round settlement. R-010 applies to the set of qualifying finishers identified by R-009.
+- **R-013 remains OPEN:** If ALL active players empty simultaneously, the all-empty outcome (draw vs. other) is a separate decision. R-010 does not resolve it.
+- **WIN-001:** The first qualifying finisher (position 1) is the game winner. R-010 determines who gets position 1 when multiple players qualify in the same round.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D05 | OWNER APPROVED |
+| Canonical Ruleset | R-010 | OWNER APPROVED |
+| Rules Evidence | HPA-5 | OWNER APPROVED |
+
+---
+
 ## Confirmed Product Objective: WIN-001
 
 **The first qualifying finisher takes first place and is the game winner. The last player still holding cards is the Donkey.**
@@ -65,9 +102,9 @@ A qualifying finisher is a player whose hand remains empty after full round reso
 
 - **WIN-001 is a game objective**, not a HIT-round resolution rule. Do not conflate the first-place game winner (WIN-001) with the trick winner of a single HIT round (R-008).
 - **"Successfully"** is now defined by R-009: empty after full round settlement including HIT collection.
-- When multiple players qualify in the same round, unique first-place priority versus tied rank is still **OPEN** (R-010/D05).
+- When multiple players qualify in the same round, they are ranked by clockwise seat order from the round leader per **R-010 (OWNER APPROVED 2026-10-21)**.
 - If all active players empty simultaneously, the outcome is still **OPEN** (R-013/D06).
-- Play is expected to continue to rank remaining positions, but R-010 and R-013 are **not** automatically approved by WIN-001 or R-009.
+- Play is expected to continue to rank remaining positions; R-013 is **not** automatically approved by WIN-001, R-009, or R-010.
 
 ---
 
@@ -77,10 +114,10 @@ A qualifying finisher is a player whose hand remains empty after full round reso
 |---|---|---|
 | **R-008 / D03** | HIT round won by highest card of the leading suit | **OWNER APPROVED — 2026-10-21** |
 | **R-009 / D04** | Finisher identified only after round settlement, including HIT collection | **OWNER APPROVED — 2026-10-21** |
-| **WIN-001** | First qualifying finisher takes first place (when unambiguous); last remaining player is Donkey | **OWNER CONFIRMED — 2026-10-21** |
+| **R-010 / D05** | Simultaneous finishers ranked clockwise from leader; distinct consecutive positions; no ties | **OWNER APPROVED — 2026-10-21** |
+| **WIN-001** | First qualifying finisher takes first place; last remaining player is Donkey | **OWNER CONFIRMED — 2026-10-21** |
 | R-002 / D01 | Shuffle / deal distribution | **OPEN** |
 | R-003 / D02 | A♠ holder opening-card constraint | **OPEN** |
-| R-010 / D05 | Simultaneous finisher positions / ties | **OPEN** |
 | R-013 / D06 | All players empty at once | **OPEN** |
 | R-017 | Match watchdog threshold / void policy | **OPEN** |
 | D07 | Timeout/disconnect/bot takeover timing | **PENDING CONFIRMATION** |
@@ -96,17 +133,20 @@ A qualifying finisher is a player whose hand remains empty after full round reso
 
 ## Documentation and Implementation Guardrails
 
-1. Mark only **R-008 and R-009** as owner-approved, and WIN-001 as owner-confirmed. Do not silently mark any other OPEN or PROPOSED decision as approved.
-2. Update the canonical draft ruleset, rules evidence, test matrix, risk/decision register, Phase 1 report and owner checklist to reflect these two approvals consistently. Preserve rule version as **DRAFT** until all blocking decisions are signed.
-3. Treat R-010 (same-round multi-finish) and R-013 (all-empty) as separate **OPEN** decisions.
+1. Mark only **R-008, R-009, and R-010** as owner-approved, and WIN-001 as owner-confirmed. Do not silently mark any other OPEN or PROPOSED decision as approved.
+2. Update the canonical draft ruleset, rules evidence, test matrix, risk/decision register, Phase 1 report and owner checklist to reflect these three approvals consistently. Preserve rule version as **DRAFT** until all blocking decisions are signed.
+3. Treat R-013 (all-empty) as a separate **OPEN** decision. R-010 does not resolve the all-empty outcome.
 4. No application code, tests, migrations, assets or CI workflows are authorized yet. Phase 2 remains blocked until the complete rules freeze and explicit owner authorization.
 
 ---
 
 ## Cross-References
 
-- `docs/03-canonical-ruleset-v1-draft.md` §8 Hit Round Resolution, §9 Finisher Timing (updated)
-- `docs/02-verified-rules-and-open-questions.md` HPA-3, HPA-4 (updated)
-- `docs/12-risks-and-decisions.md` D03, D04 rows (updated)
-- `RULE_FREEZE_APPROVAL_CHECKLIST.md` D03, D04 lines (checked)
-- `docs/REMAINING_DECISIONS_WORKSHEET.md` — full sign-off worksheet for all pending items
+- `docs/03-canonical-ruleset-v1-draft.md` §8 Hit Round Resolution, §9 Finisher Timing, §10 Simultaneous Finisher Ranking (updated)
+- `docs/02-verified-rules-and-open-questions.md` HPA-3, HPA-4, HPA-5 (updated)
+- `docs/12-risks-and-decisions.md` D03, D04, D05 rows (updated)
+- `docs/04-game-state-machine.md` §1.3 WIN-001, §6.1 finisher determination (updated)
+- `docs/10-qa-test-matrix-and-acceptance.md` FD-004, FD-005 (updated)
+- `docs/PHASE_1_REVIEW_REPORT.md` §3, §5, §10.1, §11 (updated)
+- `RULE_FREEZE_APPROVAL_CHECKLIST.md` D03, D04, D05 lines (checked)
+- `docs/REMAINING_DECISIONS_WORKSHEET.md` — D05 moved to resolved; sign-off worksheet for remaining pending items

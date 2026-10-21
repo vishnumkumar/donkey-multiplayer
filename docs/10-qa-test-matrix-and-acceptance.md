@@ -51,8 +51,8 @@ Covers rules engine tests, cross-language parity, client integration, network re
 | FD-001 | Player plays last card; no hit; not winner | Player becomes finisher after discard resolution | R-009 [OWNER APPROVED 2026-10-21] |
 | FD-002 | Player plays last card; hit; player is NOT winner | Winner collects cards → player's hand still empty → finisher | R-009 [OWNER APPROVED 2026-10-21] |
 | FD-003 | Player plays last card; hit; player IS leading-suit winner | Winner collects cards → player now has cards → NOT a finisher | R-009 [OWNER APPROVED 2026-10-21], R-014 |
-| FD-004 | Two players play last cards in same round; no hit | Both become finishers; rank by clockwise order from round leader | R-010 [OPEN] |
-| FD-005 | Two players play last cards; hit; winner is one of them | Winner gets cards back (not finisher); other player finishes | R-009, R-010 |
+| FD-004 | Two players play last cards in same round; no hit | Both become finishers; rank by clockwise order from round leader (distinct consecutive positions, no ties) | R-010 [OWNER APPROVED 2026-10-21] |
+| FD-005 | Two players play last cards; hit; winner is one of them | Winner gets cards back (not finisher); other player finishes | R-009 [OWNER APPROVED 2026-10-21], R-010 [OWNER APPROVED 2026-10-21] |
 | FD-006 | All 4 players play last cards; no hit | **All finish simultaneously → DRAW / no Donkey** | R-013 [OPEN] |
 | FD-007 | 3 players finished; 1 remains with cards | Remaining player declared Donkey | R-012 |
 | FD-008 | 2 active players; both play last card; no hit | Both finish → DRAW / no Donkey (no one left with cards) | R-013 [OPEN] |

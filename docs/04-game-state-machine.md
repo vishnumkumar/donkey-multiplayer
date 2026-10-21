@@ -79,7 +79,7 @@ stateDiagram-v2
 
 ### 1.3 Terminal Conditions
 
-**WIN-001 (CONFIRMED 2026-10-21):** The first qualifying finisher (empty hand after full round settlement per R-009, OWNER APPROVED 2026-10-21) takes first place and is the game winner. The last player still holding cards is the Donkey. Simultaneous finisher ranking (R-010) and all-empty draw (R-013) are not automatically approved by WIN-001 or R-009.
+**WIN-001 (CONFIRMED 2026-10-21):** The first qualifying finisher (empty hand after full round settlement per R-009, OWNER APPROVED 2026-10-21) takes first place and is the game winner. The last player still holding cards is the Donkey. Simultaneous finisher ranking is now resolved by R-010 (OWNER APPROVED 2026-10-21): distinct consecutive positions in clockwise seat order from the round leader; no tied ranks. All-empty draw (R-013) is not automatically approved by WIN-001, R-009, or R-010.
 
 A match reaches `COMPLETED` when any of:
 - **Single Donkey:** After round resolution, exactly one active player holds cards. That player is the Donkey (R-012).
@@ -193,11 +193,12 @@ FUNCTION ResolveTurn(command: PlayCard):
         MOVE ALL trick cards INTO discardPile
 
     // Step 8: Determine finishers (AFTER card movement per R-009)
+    // Clockwise order from round leader per R-010 (OWNER APPROVED 2026-10-21)
     newFinishers = []
     FOR EACH active player in clockwise order from round leader:
         IF player.hand.count == 0:
             APPEND player TO newFinishers
-            ASSIGN next finishing rank
+            ASSIGN next available finishing rank (distinct, consecutive per R-010)
 
     // Step 9: Check terminal condition
     activePlayers = players NOT finished
@@ -411,7 +412,7 @@ After card movement (hit collection or discard), finisher evaluation proceeds:
 
 1. Scan active players in **clockwise order starting from the round leader**.
 2. Any player with zero cards is marked as a finisher and assigned the next sequential rank.
-3. If multiple players reach zero in the same round, they finish in clockwise seat order (R-010, OPEN — alternative: tied ranks).
+3. If multiple players reach zero in the same round, they finish in clockwise seat order from the round leader and receive distinct consecutive positions (R-010, OWNER APPROVED 2026-10-21 — no tied ranks).
 4. A player who played their last card off-suit (causing a hit) but the hit winner is a different player: the off-suit player's hand is now empty. They finish (unless the hit winner was them, which is impossible since they played off-suit and only lead-suit wins).
 5. The hit winner always receives cards, so the hit winner never finishes in the same round as the hit.
 

@@ -12,7 +12,8 @@
 |---|---|---|---|
 | D03 / R-008 | HIT winner: leading-suit highest only | **OWNER APPROVED** — product choice, not competitor verification | 2026-10-21 |
 | D04 / R-009 | Finisher timing: after round resolution | **OWNER APPROVED** — finisher identified only after full round settlement including HIT collection | 2026-10-21 |
-| WIN-001 | Game objective: first qualifying finisher (per R-009) = winner | **CONFIRMED** — "successfully" now defined by R-009 (APPROVED); R-010/R-013 remain OPEN | 2026-10-21 |
+| D05 / R-010 | Simultaneous finisher ranking: clockwise from leader | **OWNER APPROVED** — distinct consecutive positions in clockwise seat order from round leader; no tied ranks | 2026-10-21 |
+| WIN-001 | Game objective: first qualifying finisher (per R-009) = winner | **CONFIRMED** — "successfully" now defined by R-009 (APPROVED); simultaneous finisher ranking resolved by R-010 (APPROVED); R-013 remains OPEN | 2026-10-21 |
 
 ---
 
@@ -51,22 +52,7 @@ These require explicit owner approval. Each has a recommended default and altern
 
 ---
 
-### 3. D05 / R-010 — Simultaneous Finisher Ranking
-
-| | |
-|---|---|
-| **Question** | When multiple players empty their hand in the same round, how are they ranked? |
-| **Recommended** | Deterministic clockwise podium order from the round leader's seat. |
-| **Alternative** | All simultaneous finishers share the same rank (tied). |
-| **Risk if wrong** | MEDIUM — affects competitive fairness perception. Clockwise is deterministic; tied ranks complicate leaderboards. |
-| **Maps to** | R-010, HPA-5 |
-
-**Owner decision:** ☐ APPROVE recommended ☐ SPECIFY alternative: ____________  
-**Signed:** __________________ **Date:** __________
-
----
-
-### 4. D06 / R-013 — All Players Empty Simultaneously
+### 3. D06 / R-013 — All Players Empty Simultaneously
 
 | | |
 |---|---|
@@ -82,7 +68,7 @@ These require explicit owner approval. Each has a recommended default and altern
 
 ---
 
-### 5. R-017 — Watchdog Threshold
+### 4. R-017 — Watchdog Threshold
 
 | | |
 |---|---|
@@ -101,7 +87,7 @@ These require explicit owner approval. Each has a recommended default and altern
 
 These have recommended defaults that are safe to implement. Owner should confirm or override.
 
-### 6. D07 — Timeout / Disconnect Policy
+### 5. D07 — Timeout / Disconnect Policy
 
 | | |
 |---|---|
@@ -115,7 +101,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 7. D08 — Bot Fairness
+### 6. D08 — Bot Fairness
 
 | | |
 |---|---|
@@ -129,7 +115,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 8. D09 — MVP Player Count
+### 7. D09 — MVP Player Count
 
 | | |
 |---|---|
@@ -140,7 +126,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 9. D10 — Online Bot Disclosure
+### 8. D10 — Online Bot Disclosure
 
 | | |
 |---|---|
@@ -151,7 +137,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 10. D11 — 2.5D Rendering
+### 9. D11 — 2.5D Rendering
 
 | | |
 |---|---|
@@ -162,7 +148,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 11. D12 — Dart SignalR Client
+### 10. D12 — Dart SignalR Client
 
 | | |
 |---|---|
@@ -173,7 +159,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 12. D13 — Offline Currency Isolation
+### 11. D13 — Offline Currency Isolation
 
 | | |
 |---|---|
@@ -184,7 +170,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 13. D14 — Regional Compliance
+### 12. D14 — Regional Compliance
 
 | | |
 |---|---|
@@ -199,11 +185,11 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 | Category | Count | Items |
 |---|---|---|
-| **OWNER APPROVED** | 2 | D03/R-008, D04/R-009 |
+| **OWNER APPROVED** | 3 | D03/R-008, D04/R-009, D05/R-010 |
 | **CONFIRMED OBJECTIVE** | 1 | WIN-001 |
-| **OPEN (blocking)** | 5 | D01, D02, D05, D06, R-017 |
+| **OPEN (blocking)** | 4 | D01, D02, D06, R-017 |
 | **PROPOSED (confirm)** | 7 | D07, D08, D09, D10, D11, D12, D13, D14 |
-| **Total requiring sign-off** | 12 | All of the above except D03, D04 and WIN-001 |
+| **Total requiring sign-off** | 11 | All of the above except D03, D04, D05 and WIN-001 |
 
 **Rule freeze condition:** Only when every item above is signed does the ruleset become `DM-RULES-1.0` and Phase 2 is authorized.
 

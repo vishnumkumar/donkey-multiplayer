@@ -8,7 +8,7 @@ Status: **PENDING OWNER APPROVAL**. Check and sign every blocking point before P
 - [ ] D02 (R-003) — A♠ holder may lead any card **(recommended)** or must lead A♠? **[OPEN]**
 - [x] D03 (R-008) — HIT winner: highest leading-suit card only. **[OWNER APPROVED 2026-10-21]** — product owner's choice for our original game, not independent competitor verification.
 - [x] D04 (R-009) — Finisher timing: after round resolution. **[OWNER APPROVED 2026-10-21]** — finisher identified only after full round settlement including HIT collection.
-- [ ] D05 (R-010) — Simultaneous finishers: clockwise podium order **(proposed)** or tied ranks? **[OPEN]**
+- [x] D05 (R-010) — Simultaneous finishers: distinct clockwise positions from round leader. **[OWNER APPROVED 2026-10-21]** — no tied ranks; deterministic ordering.
 - [ ] D06 (R-013) — All players empty simultaneously: draw / no Donkey **(recommended)** or replay? **[OPEN]**
 - [ ] D07 — Timeout/disconnect policy: 20s deadline, 15s grace, bot takeover, reclaim at round boundary **(proposed)** or alternative timers?
 - [ ] D08 — Bot fairness: bots see only own hand + played cards **(recommended)** or allow hidden-hand access for difficulty?
@@ -16,7 +16,7 @@ Status: **PENDING OWNER APPROVAL**. Check and sign every blocking point before P
 
 ### Confirmed Product Objectives
 
-- [x] **WIN-001** — First qualifying finisher (empty hand after round settlement per R-009) takes first place = game winner. Last player with cards = Donkey. **[CONFIRMED 2026-10-21]** — "Successfully" now defined by R-009 (APPROVED). Simultaneous finisher ranking (R-010/D05) and all-empty draw (R-013/D06) remain OPEN — not automatically approved.
+- [x] **WIN-001** — First qualifying finisher (empty hand after round settlement per R-009) takes first place = game winner. Last player with cards = Donkey. **[CONFIRMED 2026-10-21]** — "Successfully" now defined by R-009 (APPROVED). Simultaneous finisher ranking now resolved by R-010/D05 (OWNER APPROVED 2026-10-21). All-empty draw (R-013/D06) remains OPEN — not automatically approved.
 
 ### Non-Blocking but Important Decisions
 
