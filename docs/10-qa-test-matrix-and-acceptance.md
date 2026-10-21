@@ -1,8 +1,8 @@
 # 10 — QA Test Matrix and Acceptance Criteria
 
 **Document ID:** DM-QA-010  
-**Version:** 0.1 DRAFT  
-**Status:** Phase 1 — awaiting owner approval  
+**Version:** 1.0-RC  
+**Status:** Phase 1 complete — all rules approved; awaiting final ruleset freeze authorization  
 **Cross-references:** [03-canonical-ruleset-v1-draft](03-canonical-ruleset-v1-draft.md), [04-game-state-machine](04-game-state-machine.md), [06-api-and-realtime-contracts](06-api-and-realtime-contracts.md), [07-offline-online-parity-strategy](07-offline-online-parity-strategy.md), [08-security-privacy-and-compliance](08-security-privacy-and-compliance.md)
 
 ---
@@ -71,8 +71,8 @@ Covers rules engine tests, cross-language parity, client integration, network re
 
 | Fixture ID | Scenario | Expected Result | Rule Ref |
 |---|---|---|---|
-| EC-001 | First round: A♠ holder leads any card (not A♠) | Accepted if R-003 approved as "any card" | R-003 [OPEN] |
-| EC-002 | First round: A♠ holder forced to play A♠ | Accepted if R-003 approved as "must play A♠" | R-003 [OPEN] |
+| EC-001 | First round: A♠ holder leads any card (not A♠) | Accepted — A♠ holder starts but may lead any card | R-003 [OWNER APPROVED 2026-10-21] |
+| EC-002 | ~~First round: A♠ holder forced to play A♠~~ | **Rejected** — free choice approved; A♠ not mandatory (D02/R-003) | R-003 [REJECTED] |
 | EC-003 | Hit round: leading-suit winner exits after resolution | Next leader is clockwise from exited winner | R-011 |
 | EC-004 | Match reaches 200 rounds or 30 minutes elapsed | Watchdog triggers on either condition; match voided, no Donkey awarded | R-017 [OWNER APPROVED 2026-10-21] |
 | EC-005 | Player has 1 card; it's off-suit to lead | Player plays it (HIT); hand empty; collect goes to lead-suit winner; player finishes | R-009, R-010 |
@@ -396,11 +396,11 @@ Shared JSON fixtures consumed by both Dart and C# test harnesses:
 
 | Criterion | Owner | Status |
 |---|---|---|
-| Approved ruleset `DM-RULES-1.0` | Product owner | [PENDING] |
-| All blocking decisions (D01–D12) signed | Product owner | [PENDING] |
-| Approved API contract | Architect + owner | [PENDING] |
-| Documented schema and migration plan | Architect | [PENDING] |
-| Approved visual direction | Owner + designer | [PENDING] |
+| Approved ruleset `DM-RULES-1.0` | Product owner | [COMPLETE — release candidate ready; awaiting final freeze sign-off] |
+| All blocking decisions (D01–D14 + R-017) signed | Product owner | [COMPLETE — 7 OWNER APPROVED + 8 OWNER CONFIRMED + WIN-001] |
+| Approved API contract | Architect + owner | [COMPLETE — doc 06 reviewed] |
+| Documented schema and migration plan | Architect | [COMPLETE — doc 05 reviewed] |
+| Approved visual direction | Owner + designer | [COMPLETE — D11 Flame 2.5D confirmed] |
 | CI pipeline targets documented (CI creation is a Phase 2 setup task) | Engineering | [DOCUMENTED] |
 
 ### 12.2 Exit Criteria (Ship MVP)

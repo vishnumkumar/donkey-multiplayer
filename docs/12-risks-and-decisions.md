@@ -1,9 +1,9 @@
 # 12 — Risk Register and Decision Log
 
 **Document ID:** DM-DOC-12  
-**Version:** 0.1 DRAFT  
-**Date:** 2026-10-20  
-**Status:** AWAITING OWNER APPROVAL — do not implement before sign-off
+**Version:** 1.0-RC  
+**Date:** 2026-10-21  
+**Status:** Phase 1 complete — all rules approved; awaiting final ruleset freeze authorization
 
 ## Purpose
 

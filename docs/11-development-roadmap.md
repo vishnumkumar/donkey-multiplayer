@@ -1,8 +1,8 @@
 # 11 — Development Roadmap
 
 **Document ID:** DM-ROAD-011  
-**Version:** 0.1 DRAFT  
-**Status:** Phase 1 — awaiting owner approval  
+**Version:** 1.0-RC  
+**Status:** Phase 1 complete — all rules approved; awaiting final ruleset freeze authorization  
 **Cross-references:** [01-prd-and-user-stories](01-prd-and-user-stories.md), [05-architecture-and-data-model](05-architecture-and-data-model.md), [10-qa-test-matrix-and-acceptance](10-qa-test-matrix-and-acceptance.md), [12-risks-and-decisions](12-risks-and-decisions.md)
 
 ---

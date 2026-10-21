@@ -1,6 +1,6 @@
 # ADR-0002: ASP.NET Core + SignalR with Durable Match Actors
 
-**Status:** PROPOSED  
+**Status:** ACCEPTED  
 **Date:** 2026-10-20  
 **Decision Makers:** Product Owner / Technical Lead  
 **Relates to:** D11 (2.5D), D12 (SignalR client), `05-architecture-and-data-model.md`, `06-api-and-realtime-contracts.md`

@@ -1,8 +1,8 @@
 # 09 — Visual, UX and Art Direction
 
 **Document ID:** DM-VIS-009  
-**Version:** 0.1 DRAFT  
-**Status:** Phase 1 — awaiting owner approval  
+**Version:** 1.0-RC  
+**Status:** Phase 1 complete — all rules approved; awaiting final ruleset freeze authorization  
 **Cross-references:** [04-game-state-machine](04-game-state-machine.md), [10-qa-test-matrix-and-acceptance](10-qa-test-matrix-and-acceptance.md), [ADR/0001-flutter-flame-2-5d](ADR/0001-flutter-flame-2-5d.md)
 
 ---

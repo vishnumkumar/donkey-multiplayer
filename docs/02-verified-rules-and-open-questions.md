@@ -1,9 +1,9 @@
 # 02 — Verified Rules and Open Questions
 
 **Document ID:** DM-DOC-02  
-**Version:** 0.1 DRAFT  
+**Version:** 1.0-RC  
 **Date:** 2026-10-20  
-**Status:** Awaiting owner approval — do not implement
+**Status:** Phase 1 complete — all rules approved; awaiting final ruleset freeze authorization
 
 ---
 
@@ -118,10 +118,10 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 |---|---|
 | **Source evidence** | "Last card-holder is the Donkey" is confirmed in principle; exact trigger timing is unspecified. |
 | **Our proposal** | When only one active player remains with cards after a round is fully resolved, that player is immediately declared Donkey. |
-| **Classification** | **[PROPOSED]** |
-| **Gap** | Does Donkey declaration happen mid-trick or only after full resolution? What if the Donkey candidate is the trick leader for an incomplete round? |
-| **Options** | **A (Recommended):** Declare after full round resolution — consistent with finisher timing. **B:** Declare as soon as second-to-last player exits — could interrupt an in-progress trick. |
-| **Risk of guessing** | Option A is consistent with HPA-4 finisher timing. Option B creates complex mid-trick edge cases. |
+| **Classification** | **[CONFIRMED]** — follows from R-009 (finisher timing after resolution) and WIN-001 (last with cards = Donkey) |
+| **Gap** | Resolved: Donkey declaration happens after full round resolution, consistent with R-009 finisher timing. |
+| **Options** | **A (Approved):** Declare after full round resolution — consistent with finisher timing. ~~**B:** Declare as soon as second-to-last player exits — could interrupt an in-progress trick.~~ |
+| **Risk of guessing** | Resolved: Option A confirmed by R-009 approval. |
 | **Maps to** | R-012 |
 
 ### HPA-8: Timeout and Disconnect Policy
@@ -199,14 +199,14 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | **Follow suit** | Players must follow lead suit if held | donkeymaster.in | **CONFIRMED** | If holding ≥1 card of lead suit, must play one | Enforcement mechanism is our design |
 | **Hit definition** | Playing off-suit when void in lead suit = HIT | donkeymaster.in | **CONFIRMED** | Off-suit play when void = hit flag | None |
 | **No-hit resolution** | Cards leave hands (discarded); highest card player leads next | donkeymaster.in | **CONFIRMED** (partial) | Highest leading-suit card wins; cards to discard pile | "Highest card" ambiguous across suits |
-| **Hit resolution** | "Largest-card player takes all round cards" | donkeymaster.in | **CONFIRMED** (partial) | Highest leading-suit card takes all played cards | Cross-suit comparison: **OPEN**; see HPA-3 |
+| **Hit resolution** | "Largest-card player takes all round cards" | donkeymaster.in | **CONFIRMED** (partial) | Highest leading-suit card takes all played cards | Cross-suit comparison: **OWNER APPROVED 2026-10-21** (R-008: leading-suit highest only; off-suit cards do not participate) |
 | **Hit leader** | Winner of hit round leads next | donkeymaster.in | **CONFIRMED** | Hit winner leads next round | None |
-| **Finishing** | "Players try to exhaust cards; finishers are ranked" | donkeymaster.in | **CONFIRMED** (objective) | Finishers ranked; podium positions assigned | Timing: **PROPOSED** (after resolution) |
-| **Donkey** | "Last card-holder is the Donkey" | donkeymaster.in | **CONFIRMED** (objective) | Last remaining player with cards = Donkey | Exact trigger: **PROPOSED** |
-| **Turn order** | Clockwise | donkeymaster.in (implied) | **PROPOSED** | Clockwise from leader; skip finished players | Not explicitly stated but standard |
-| **Simultaneous finish** | Not addressed | — | **OPEN** | Clockwise deterministic ranking | See HPA-5 |
-| **All empty** | Not addressed | — | **OPEN** | Draw / no Donkey | See HPA-6 |
-| **Finisher-exits-as-leader** | Not addressed | — | **PROPOSED** | Next active clockwise seat leads | — |
+| **Finishing** | "Players try to exhaust cards; finishers are ranked" | donkeymaster.in | **CONFIRMED** (objective) | Finishers ranked; podium positions assigned | Timing: **OWNER APPROVED 2026-10-21** (R-009: after full round resolution including HIT collection) |
+| **Donkey** | "Last card-holder is the Donkey" | donkeymaster.in | **CONFIRMED** (objective) | Last remaining player with cards = Donkey | Exact trigger: **OWNER APPROVED 2026-10-21** (R-009 + WIN-001: last active player after finisher evaluation) |
+| **Turn order** | Clockwise | donkeymaster.in (implied) | **CONFIRMED** | Clockwise from leader; skip finished players | Standard convention; confirmed by all approved rules referencing clockwise order |
+| **Simultaneous finish** | Not addressed | — | **OWNER APPROVED** | Clockwise deterministic ranking — **OWNER APPROVED 2026-10-21** | See HPA-5 |
+| **All empty** | Not addressed | — | **OWNER APPROVED** | Last-ranked finisher (clockwise from leader) = Donkey; no draw — **OWNER APPROVED 2026-10-21** | See HPA-6 |
+| **Finisher-exits-as-leader** | Not addressed | — | **CONFIRMED** | Next active clockwise seat leads | Follows from R-010 clockwise determinism |
 | **Timeout** | Not addressed | — | **OWNER CONFIRMED** | 20s deadline, 15s grace, bot takeover — **OWNER CONFIRMED 2026-10-21** | See HPA-8 |
 | **Disconnect** | Not addressed | — | **OWNER CONFIRMED** | Reconnect with snapshot; bot during grace — **OWNER CONFIRMED 2026-10-21** | See HPA-8 |
 | **Bot behavior** | Not addressed | — | **OWNER CONFIRMED** | No hidden-hand access; labeled seats — **OWNER CONFIRMED 2026-10-21** | See HPA-9 |

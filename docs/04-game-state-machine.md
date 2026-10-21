@@ -1,7 +1,7 @@
 # 04 — Game State Machine
 
 **Document ID:** DM-SM-004
-**Version:** 0.1 DRAFT — not approved
+**Version:** 1.0-RC
 **Date:** 2026-10-20
 **Status:** Phase 1 specification only. No implementation code.
 
