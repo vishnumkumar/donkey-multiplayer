@@ -26,7 +26,7 @@ Covers the full game lifecycle from deck composition through terminal result. Do
 | R-002 | Shuffle policy | Uniform CSPRNG | Suit-balanced heuristic; rejection sampling | §2 |
 | R-003 | A♠ opening constraint | Any card | Must play A♠ | §4 |
 | R-008 | Hit winner comparison | Leading-suit highest only | ~~Cross-suit highest rank~~ | §8 — **OWNER APPROVED 2026-10-21** |
-| R-010 | Simultaneous finisher ranking | Clockwise deterministic | Tied ranks | §10 |
+| R-010 | Simultaneous finisher ranking | Clockwise deterministic | ~~Tied ranks~~ | §10 — **OWNER APPROVED 2026-10-21** |
 | R-013 | All players empty | Draw / no Donkey | Replay; last-hit-recipient is Donkey | §12 |
 | R-017 | Watchdog threshold | Void after 200 rounds (configurable) | No watchdog | §14 |
 
@@ -199,25 +199,38 @@ A player qualifies as a finisher **only after the entire round has resolved**, i
 
 **Acceptance example (scenario 3):** A player plays their last card as an off-suit HIT, while another player wins collection with the highest leading-suit card. After resolution, the hitting player's hand remains empty. **They qualify as a finisher**.
 
-> **Owner note (2026-10-21):** R-009 is approved for our original game. If multiple players qualify in the same round, R-010 remains OPEN — do not assign unique first place based on arbitrary seat order until the owner chooses ties versus ranking. If all active players empty in the same resolution, R-013 remains OPEN — do not infer the draw rule from R-009 approval.
+> **Owner note (2026-10-21):** R-009 is approved for our original game. Multiple same-round finishers are now ranked by R-010 (OWNER APPROVED 2026-10-21) — distinct positions in clockwise order from the round leader. If all active players empty in the same resolution, R-013 remains OPEN — do not infer the draw rule from R-009 or R-010 approval.
 
 ---
 
 ## 10. Simultaneous Finisher Ranking
 
-**[OPEN — R-010]**
+**[OWNER APPROVED — R-010 — 2026-10-21]**
 
-When multiple players reach zero cards in the same round resolution:
+When two or more players become qualifying finishers as the result of the **same fully settled round**, assign **distinct, consecutive positions** in clockwise seat order starting **with the completed round's leader** (inclusive), considering only those who qualify in that resolution. Do not award tied ranks.
 
-### Recommended (Option A): Clockwise deterministic
+A **qualifying finisher** is a player whose hand is empty **after the entire round has resolved**, including HIT collection, as already approved in R-009.
 
-Assign finishing positions in **clockwise seat order** starting from the round leader. The first zero-card player clockwise from the leader gets the next available position, then the next, etc.
+### Deterministic Algorithm
 
-### Alternative (Option B): Tied ranks
+1. After round resolution (R-008 for hit, §7 for no-hit) and card movement, identify all active players with zero cards.
+2. Starting from the round leader's seat, traverse clockwise through all seats.
+3. For each seat encountered that is a qualifying finisher in this round, assign the next available finishing position.
+4. Non-finishers and already-finished players are skipped in the traversal.
+
+### Acceptance Example (Owner-Provided)
+
+Round leader = Seat 1. After settlement, Seats 2 and 0 both qualify as finishers. Clockwise traversal from leader: 1 → 2 → 3 → 0. Among the finishers, Seat 2 precedes Seat 0. If these are the first players ever to finish, Seat 2 ranks 1st (winner) and Seat 0 ranks 2nd.
+
+### Rules Integration
+
+Apply R-008 (HIT winner), then R-009 (finisher evaluation after settlement), then R-010 (position assignment). If an all-empty terminal situation occurs, handle it under R-013 which remains **OPEN** — this approval does not choose the all-empty match outcome or silently override R-013.
+
+### Historical Alternative Considered (Option B): Tied ranks
 
 All simultaneously finishing players share the same finishing position (e.g., two players tie for 1st; next finisher is 3rd).
 
-**Example (Option A):** Round leader is Seat 1. After resolution, Seats 0 and 2 both have zero cards. Clockwise from leader: Seat 2 comes first, then Seat 0. So Seat 2 gets position N, Seat 0 gets position N+1.
+**Rationale for Option A:** Clockwise deterministic ranking provides unambiguous, testable positions. Tied ranks complicate leaderboard display and competitive fairness perception. Option A was chosen by the product owner.
 
 ---
 
@@ -264,7 +277,7 @@ The match is voided and restarted. Original results discarded.
 
 A qualifying finisher is a player whose hand remains empty after full round resolution (R-009 APPROVED). A HIT-round trick winner (who collects cards per R-008) is **not** necessarily the game winner — collecting trick cards means they have not finished.
 
-> **Owner note (2026-10-21):** WIN-001 is confirmed. R-009 (finisher timing) is now OWNER APPROVED — "successfully" means empty after round settlement including HIT collection. However, when multiple players qualify in the same round, unique first-place priority versus tied rank is still **OPEN** (R-010/D05). If all active players empty simultaneously, the outcome is still **OPEN** (R-013/D06). Play is expected to continue to rank remaining positions, but R-010 and R-013 are not automatically approved by WIN-001 or R-009.
+> **Owner note (2026-10-21):** WIN-001 is confirmed. R-009 (finisher timing) is OWNER APPROVED — "successfully" means empty after round settlement including HIT collection. R-010 (simultaneous finisher ranking) is OWNER APPROVED — multiple same-round finishers receive distinct positions in clockwise order from the round leader. If all active players empty simultaneously, the outcome is still **OPEN** (R-013/D06). R-013 is not automatically approved by WIN-001, R-009, or R-010.
 
 ### Donkey Declaration
 
@@ -564,6 +577,108 @@ Resolution:
   hand remains empty → qualifies as finisher after round resolution.
 ```
 
+### Fixture 6a: Two Simultaneous Finishers — Clockwise Ranking (R-010 APPROVED)
+
+```
+Setup:
+  Active players: [S0, S1, S2, S3]
+  Leader: S1
+  S0 finished earlier (1st place)
+  S2's hand: [10♣] (last card)
+  S3's hand: [2♣] (last card)
+
+Plays:
+  S1: 8♣ (leads clubs)
+  S2: 10♣ (follows suit — last card)
+  S3: 2♣ (follows suit — last card)
+
+Resolution:
+  Hit: false
+  Winner: S2 (10♣ — highest club)
+  Cards → discard
+
+  Post-resolution finisher evaluation (R-009):
+    S2 hand size: 0 → qualifying finisher
+    S3 hand size: 0 → qualifying finisher
+    S1 hand size: decreased by 1 → still active (if > 0)
+
+  Simultaneous finisher ranking (R-010 APPROVED):
+    Round leader = S1. Clockwise traversal: S1 → S2 → S3 → S0.
+    Among qualifying finishers: S2 comes before S3.
+    S2 → 2nd place; S3 → 3rd place.
+    S1 is last active player → DONKEY (4th place).
+
+Final result:
+  1st: S0 (finished earlier)
+  2nd: S2
+  3rd: S3
+  4th (Donkey): S1
+```
+
+### Fixture 6b: Two Simultaneous Finishers — Different Leader Seat (R-010 APPROVED)
+
+```
+Setup:
+  Active players: [S0, S1, S2, S3]
+  Leader: S3
+  S2's hand: [Q♦] (last card)
+  S0's hand: [5♦] (last card)
+
+Plays:
+  S3: 9♦ (leads diamonds)
+  S0: 5♦ (follows suit — last card)
+  S1: K♦ (follows suit)
+  S2: Q♦ (follows suit — last card)
+
+Resolution:
+  Hit: false
+  Winner: S1 (K♦ — highest diamond)
+  Cards → discard
+
+  Post-resolution finisher evaluation (R-009):
+    S0 hand size: 0 → qualifying finisher
+    S2 hand size: 0 → qualifying finisher
+
+  Simultaneous finisher ranking (R-010 APPROVED):
+    Round leader = S3. Clockwise: S3 → S0 → S1 → S2.
+    Among qualifying finishers: S0 precedes S2.
+    S0 → 1st place (winner); S2 → 2nd place.
+
+Note: Leader seat changes the ranking order. With S1 as leader,
+S2 would precede S0 instead.
+```
+
+### Fixture 6c: HIT Prevents Finish — Not a Simultaneous Finisher (R-009 + R-010)
+
+```
+Setup:
+  Active players: [S0, S1, S2, S3]
+  Leader: S0
+  S1's hand: [J♣] (last card)
+  S3's hand: [A♥] (last card)
+
+Plays:
+  S0: 8♣ (leads clubs)
+  S1: J♣ (follows suit — last card)
+  S2: 10♣ (follows suit)
+  S3: A♥ (no clubs → HIT — last card)
+
+Resolution (R-008 + R-009):
+  Hit: true
+  Winner: S1 (J♣ — highest club, per R-008)
+  Cards → S1's hand
+
+  Post-resolution finisher evaluation (R-009):
+    S1 hand size: 3 (played 1, received 4) → NOT a finisher
+    S3 hand size: 0 (played off-suit HIT; another player collected) → FINISHER
+
+  R-010 does not apply: only one qualifying finisher in this round.
+  S3 receives the next finishing position.
+
+Key: S1 played their last card but HIT collection prevents
+qualification. Only S3 qualifies despite both playing last cards.
+```
+
 ### Fixture 7: Two Active Seats
 
 ```
@@ -711,6 +826,6 @@ flowchart TD
 | [07-offline-online-parity-strategy.md](07-offline-online-parity-strategy.md) | Cross-language parity using these fixtures |
 | [10-qa-test-matrix-and-acceptance.md](10-qa-test-matrix-and-acceptance.md) | Full test matrix derived from these rules |
 | [12-risks-and-decisions.md](12-risks-and-decisions.md) | Decision register for OPEN items |
-| [DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md](DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md) | Formal owner decision record for R-008 and WIN-001 |
+| [DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md](DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md) | Formal owner decision record for R-008, R-009, R-010 and WIN-001 |
 | [REMAINING_DECISIONS_WORKSHEET.md](REMAINING_DECISIONS_WORKSHEET.md) | Per-item sign-off worksheet for all pending decisions |
 | `RULE_FREEZE_APPROVAL_CHECKLIST.md` | Owner sign-off checklist |
