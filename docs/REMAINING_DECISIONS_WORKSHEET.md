@@ -13,6 +13,7 @@
 | D03 / R-008 | HIT winner: leading-suit highest only | **OWNER APPROVED** — product choice, not competitor verification | 2026-10-21 |
 | D04 / R-009 | Finisher timing: after round resolution | **OWNER APPROVED** — finisher identified only after full round settlement including HIT collection | 2026-10-21 |
 | D05 / R-010 | Simultaneous finisher ranking: clockwise from leader | **OWNER APPROVED** — distinct consecutive positions in clockwise seat order from round leader; no tied ranks | 2026-10-21 |
+| D01 / R-002 | Shuffle distribution: uniform CSPRNG | **OWNER APPROVED** — uniform Fisher-Yates CSPRNG shuffle; 13 cards each; no suit-distribution skewing or balancing heuristic; fair, simple, testable, original | 2026-10-21 |
 | WIN-001 | Game objective: first qualifying finisher (per R-009) = winner | **CONFIRMED** — "successfully" now defined by R-009 (APPROVED); simultaneous finisher ranking resolved by R-010 (APPROVED); R-013 remains OPEN | 2026-10-21 |
 
 ---
@@ -21,23 +22,7 @@
 
 These require explicit owner approval. Each has a recommended default and alternatives.
 
-### 1. D01 / R-002 — Shuffle Distribution Policy
-
-| | |
-|---|---|
-| **Question** | Uniform CSPRNG 52-card shuffle, or intentional suit-distribution skewing? |
-| **Recommended** | Uniform shuffle; no forced imbalance. Fair, simple, testable, original. |
-| **Alternative A** | Replicate competitor's undisclosed suit-skewing algorithm (proprietary; unknown). |
-| **Alternative B** | Disclosed balancing heuristic (e.g., guarantee each player gets ≥2 of each suit). |
-| **Risk if wrong** | MEDIUM — affects game feel, not correctness. Can be patched post-launch. |
-| **Maps to** | R-002, HPA-1 |
-
-**Owner decision:** ☐ APPROVE recommended ☐ SPECIFY alternative: ____________  
-**Signed:** __________________ **Date:** __________
-
----
-
-### 2. D02 / R-003 — A♠ Opening Constraint
+### 1. D02 / R-003 — A♠ Opening Constraint
 
 | | |
 |---|---|
@@ -52,7 +37,7 @@ These require explicit owner approval. Each has a recommended default and altern
 
 ---
 
-### 3. D06 / R-013 — All Players Empty Simultaneously
+### 2. D06 / R-013 — All Players Empty Simultaneously
 
 | | |
 |---|---|
@@ -68,7 +53,7 @@ These require explicit owner approval. Each has a recommended default and altern
 
 ---
 
-### 4. R-017 — Watchdog Threshold
+### 3. R-017 — Watchdog Threshold
 
 | | |
 |---|---|
@@ -87,7 +72,7 @@ These require explicit owner approval. Each has a recommended default and altern
 
 These have recommended defaults that are safe to implement. Owner should confirm or override.
 
-### 5. D07 — Timeout / Disconnect Policy
+### 4. D07 — Timeout / Disconnect Policy
 
 | | |
 |---|---|
@@ -101,7 +86,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 6. D08 — Bot Fairness
+### 5. D08 — Bot Fairness
 
 | | |
 |---|---|
@@ -115,7 +100,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 7. D09 — MVP Player Count
+### 6. D09 — MVP Player Count
 
 | | |
 |---|---|
@@ -126,7 +111,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 8. D10 — Online Bot Disclosure
+### 7. D10 — Online Bot Disclosure
 
 | | |
 |---|---|
@@ -137,7 +122,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 9. D11 — 2.5D Rendering
+### 8. D11 — 2.5D Rendering
 
 | | |
 |---|---|
@@ -148,7 +133,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 10. D12 — Dart SignalR Client
+### 9. D12 — Dart SignalR Client
 
 | | |
 |---|---|
@@ -159,7 +144,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 11. D13 — Offline Currency Isolation
+### 10. D13 — Offline Currency Isolation
 
 | | |
 |---|---|
@@ -170,7 +155,7 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 ---
 
-### 12. D14 — Regional Compliance
+### 11. D14 — Regional Compliance
 
 | | |
 |---|---|
@@ -185,11 +170,11 @@ These have recommended defaults that are safe to implement. Owner should confirm
 
 | Category | Count | Items |
 |---|---|---|
-| **OWNER APPROVED** | 3 | D03/R-008, D04/R-009, D05/R-010 |
+| **OWNER APPROVED** | 4 | D01/R-002, D03/R-008, D04/R-009, D05/R-010 |
 | **CONFIRMED OBJECTIVE** | 1 | WIN-001 |
-| **OPEN (blocking)** | 4 | D01, D02, D06, R-017 |
+| **OPEN (blocking)** | 3 | D02, D06, R-017 |
 | **PROPOSED (confirm)** | 7 | D07, D08, D09, D10, D11, D12, D13, D14 |
-| **Total requiring sign-off** | 11 | All of the above except D03, D04, D05 and WIN-001 |
+| **Total requiring sign-off** | 10 | All of the above except D01, D03, D04, D05 and WIN-001 |
 
 **Rule freeze condition:** Only when every item above is signed does the ruleset become `DM-RULES-1.0` and Phase 2 is authorized.
 

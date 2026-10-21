@@ -67,7 +67,7 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 | Rule ID | Description | Status | Source/Evidence |
 |---|---|---|---|
 | R-001 | 4 players, 1 standard 52-card deck, no jokers | **CONFIRMED** | Developer site: "52 cards", "4 players" |
-| R-002 | Uniform CSPRNG shuffle, 13 cards each; no suit-distribution manipulation | **PROPOSED** | Developer mentions uneven suit distribution but publishes no algorithm. We propose unbiased shuffle. |
+| R-002 | Uniform CSPRNG shuffle, 13 cards each; no suit-distribution manipulation | **OWNER APPROVED 2026-10-21** | Owner decision: uniform CSPRNG Fisher-Yates shuffle. Product choice, not competitor verification. |
 | R-003 | A♠ holder starts; may lead any card (A♠ not mandatory) | **OPEN** | Developer: "holder of Ace of Spades starts". Does not specify A♠ must be played. |
 | R-004 | Round = 1 card from each active player, clockwise; finished players skipped | **PROPOSED** | Implied by developer description; clockwise order is standard card game convention. |
 | R-005 | Must follow lead suit if held; else any card = HIT | **CONFIRMED** | Developer: "follow suit"; "if you don't have...play another suit, that's called HIT" |
@@ -87,8 +87,8 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 ### Summary
 
 - **CONFIRMED:** 5 rules (R-001, R-005, R-006, R-012, plus R-007 partial)
-- **PROPOSED:** 7 rules (R-002, R-004, R-007, R-011, R-014, R-015, R-016)
-- **OWNER APPROVED:** 3 rules (R-008, R-009, R-010 — 2026-10-21)
+- **PROPOSED:** 6 rules (R-004, R-007, R-011, R-014, R-015, R-016)
+- **OWNER APPROVED:** 4 rules (R-002, R-008, R-009, R-010 — 2026-10-21)
 - **OPEN (blocking):** 2 rules (R-003, R-013) + R-017 threshold
 
 ---
@@ -114,7 +114,7 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 |---|---|---|---|---|
 | **1** | **D03: HIT winner — leading suit only or cross-suit?** | Leading suit only (off-suit cannot win) | ~~Cross-suit highest rank wins~~ | **OWNER APPROVED 2026-10-21.** Product owner's choice for our original game. |
 | **2** | **D02: Must A♠ be the opening card?** | No, holder may lead any card | A♠ must be first card played | **HIGH.** Affects first-round strategy for every game. |
-| **3** | **D01: Shuffle distribution policy** | Uniform CSPRNG, no suit skewing | Implement disclosed balancing heuristic | **MEDIUM.** Affects game feel but not correctness. Can be patched post-launch. |
+| **3** | **D01: Shuffle distribution policy** | Uniform CSPRNG, no suit skewing | ~~Implement disclosed balancing heuristic~~ | **OWNER APPROVED 2026-10-21.** Product owner's choice for our original game. |
 | **4** | **D05: Simultaneous finisher ranking** | Clockwise from round leader | ~~Tied ranks~~ | **OWNER APPROVED 2026-10-21.** Distinct consecutive positions in clockwise seat order from round leader. |
 | **5** | **D06: All players empty simultaneously** | Technical draw / no Donkey | Replay match; last player to act loses | **LOW** (rare edge case) but must be defined for determinism. |
 | **6** | **D04: Finisher timing** | After round resolution | ~~Immediate on last card played~~ | **OWNER APPROVED 2026-10-21.** Finisher identified after full round settlement. |
@@ -272,7 +272,7 @@ These decisions **cannot** be resolved by the architect. They require gameplay o
 
 | # | Decision | Recommended | Risk of Wrong Default | Owner Action |
 |---|---|---|---|---|
-| 1 | **R-002 / D01:** Shuffle policy — uniform CSPRNG, no suit skewing | Uniform shuffle | MEDIUM — affects game feel, not correctness | APPROVE or SPECIFY |
+| ~~1~~ | **R-002 / D01:** Shuffle policy — uniform CSPRNG, no suit skewing | Uniform shuffle | ~~MEDIUM~~ Resolved | **OWNER APPROVED 2026-10-21** |
 | 2 | **R-003 / D02:** A♠ holder may lead any card (A♠ not mandatory) | Free choice | HIGH — affects first-round strategy | APPROVE or SPECIFY |
 | ~~3~~ | **R-008 / D03:** HIT winner = highest leading-suit card only; off-suit cannot win | Leading-suit only | ~~CRITICAL~~ Resolved | **OWNER APPROVED 2026-10-21** |
 | ~~4~~ | **R-010 / D05:** Simultaneous finishers ranked clockwise from leader | Clockwise podium | ~~MEDIUM~~ Resolved | **OWNER APPROVED 2026-10-21** |
@@ -307,18 +307,19 @@ Phase 2 (deterministic engine implementation) is blocked until:
 
 ## 11. Status
 
-### `PHASE 1 — R-008, R-009 & R-010 OWNER APPROVED; ALL OTHER UNAPPROVED DECISIONS PENDING; NO CODE IMPLEMENTED`
+### `PHASE 1 — R-002, R-008, R-009 & R-010 OWNER APPROVED; ALL OTHER UNAPPROVED DECISIONS PENDING; NO CODE IMPLEMENTED`
 
 - 17 documentation files + 2 new documents (owner decision record, remaining-decision worksheet) in `docs/`
 - Architect review completed: 10 findings corrected, 0 remaining document contradictions
 - No Dart, C#, SQL, YAML, JSON, Docker, CI, or implementation files created
 - No packages installed, no scaffolding generated, no builds run
-- **3 OWNER APPROVED:** D03/R-008 (HIT winner: leading-suit highest only), D04/R-009 (finisher timing: after round resolution), D05/R-010 (simultaneous finisher ranking: clockwise from leader) — 2026-10-21
+- **4 OWNER APPROVED:** D01/R-002 (shuffle: uniform CSPRNG, no suit skewing), D03/R-008 (HIT winner: leading-suit highest only), D04/R-009 (finisher timing: after round resolution), D05/R-010 (simultaneous finisher ranking: clockwise from leader) — 2026-10-21
 - **1 CONFIRMED OBJECTIVE:** WIN-001 (first qualifying finisher = winner; last with cards = Donkey)
-- **3 OPEN decisions** require explicit owner approval before Phase 2 (D01, D02, D06 + R-017)
+- **2 OPEN decisions** require explicit owner approval before Phase 2 (D02, D06 + R-017)
 - **7 PROPOSED decisions** have safe defaults but should be confirmed (D07–D14)
 - See `docs/REMAINING_DECISIONS_WORKSHEET.md` for full per-item sign-off worksheet
 - Competitor cross-suit HIT behavior: **NOT VERIFIED** — R-008 is our product choice
+- Competitor suit-distribution algorithm: **NOT VERIFIED** — R-002 is our product choice
 
 ---
 

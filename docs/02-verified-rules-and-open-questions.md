@@ -38,11 +38,12 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | Aspect | Detail |
 |---|---|
 | **Source evidence** | Developer site states deals intentionally avoid equal suit distribution across players. Algorithm not published. |
-| **Our proposal** | Uniform 52-card CSPRNG shuffle; deal 13 to each player. No forced suit imbalance. |
-| **Classification** | **[OPEN]** |
-| **Gap** | The competitor's distribution algorithm is proprietary. Implementing an unknown manipulation risks incorrect gameplay feel or legal concerns. |
-| **Options** | **A (Recommended):** Uniform shuffle — fair, simple, testable, original. **B:** Light suit-balancing heuristic (e.g., ensure no player gets >7 of one suit) — closer to competitor claim but invents an unverified algorithm. **C:** Post-shuffle rejection sampling (discard deals with extreme distribution) — middle ground but adds complexity. |
-| **Risk of guessing** | If competitor's distribution materially affects strategy, our game may feel different. Acceptable for an original product. |
+| **Our rule** | Uniform 52-card CSPRNG Fisher-Yates shuffle; deal 13 to each player. No suit-distribution skewing or balancing heuristic. |
+| **Classification** | **[OWNER APPROVED 2026-10-21]** — resolved by product owner decision. |
+| **Owner decision** | Uniform CSPRNG shuffle approved. Fair, simple, testable, original. The competitor's distribution algorithm is proprietary and unpublished — we do not replicate or approximate it. |
+| **Gap** | The competitor's distribution algorithm is proprietary. Source ambiguity (HPA-1) remains unresolved for competitor behavior. |
+| **Options considered** | **A (APPROVED):** Uniform shuffle — fair, simple, testable, original. **B (Rejected):** Light suit-balancing heuristic (e.g., ensure no player gets >7 of one suit) — closer to competitor claim but invents an unverified algorithm. **C (Rejected):** Post-shuffle rejection sampling (discard deals with extreme distribution) — middle ground but adds complexity. |
+| **Risk of guessing** | N/A — resolved by owner decision. |
 | **Maps to** | R-002, D01 |
 
 ### HPA-2: Opening Card Constraint
@@ -182,7 +183,7 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | **Rank order** | Ascending 2–10, J, Q, K, A | donkeymaster.in | **CONFIRMED** | A(14) > K(13) > … > 2(2) | None |
 | **Player count** | Four players | donkeymaster.in | **CONFIRMED** | Exactly 4 seated players at match start | 2/3 player variants unspecified |
 | **Deal** | Entire deck dealt evenly to four players (13 each) | donkeymaster.in | **CONFIRMED** | 13 cards each | None |
-| **Suit distribution** | "Deals intentionally avoid equal suit distribution" | donkeymaster.in | **CONFIRMED** (claim exists) | Uniform shuffle — do not implement unknown algorithm | Algorithm not published; see HPA-1 |
+| **Suit distribution** | "Deals intentionally avoid equal suit distribution" | donkeymaster.in | **CONFIRMED** (claim exists) | Uniform shuffle — **OWNER APPROVED 2026-10-21**; do not implement unknown algorithm | Algorithm not published; see HPA-1. Owner chose uniform CSPRNG shuffle as product choice. |
 | **Opening** | "Holder of Ace of Spades starts the first round" | donkeymaster.in | **CONFIRMED** (who starts) | A♠ holder leads first; any card legal | Whether A♠ must be played: **OPEN**; see HPA-2 |
 | **Follow suit** | Players must follow lead suit if held | donkeymaster.in | **CONFIRMED** | If holding ≥1 card of lead suit, must play one | Enforcement mechanism is our design |
 | **Hit definition** | Playing off-suit when void in lead suit = HIT | donkeymaster.in | **CONFIRMED** | Off-suit play when void = hit flag | None |

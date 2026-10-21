@@ -23,7 +23,7 @@ Covers the full game lifecycle from deck composition through terminal result. Do
 
 | ID | Decision | Recommended | Alternative(s) | See |
 |---|---|---|---|---|
-| R-002 | Shuffle policy | Uniform CSPRNG | Suit-balanced heuristic; rejection sampling | §2 |
+| R-002 | Shuffle policy | Uniform CSPRNG | ~~Suit-balanced heuristic; rejection sampling~~ | §2 — **OWNER APPROVED 2026-10-21** |
 | R-003 | A♠ opening constraint | Any card | Must play A♠ | §4 |
 | R-008 | Hit winner comparison | Leading-suit highest only | ~~Cross-suit highest rank~~ | §8 — **OWNER APPROVED 2026-10-21** |
 | R-010 | Simultaneous finisher ranking | Clockwise deterministic | ~~Tied ranks~~ | §10 — **OWNER APPROVED 2026-10-21** |
@@ -56,13 +56,19 @@ Ace is always high. There is no low-Ace variant.
 
 ### 2.1 Shuffle
 
-**[OPEN — R-002]**
+**[OWNER APPROVED — R-002 — 2026-10-21]**
 
-**Recommended:** Uniform random permutation (Fisher-Yates) using a cryptographically secure random number generator (CSPRNG) for production play. The server generates the shuffle for online matches; the local Dart engine generates the shuffle for offline matches.
+Uniform random permutation (Fisher-Yates) using a cryptographically secure random number generator (CSPRNG) for production play. The server generates the shuffle for online matches; the local Dart engine generates the shuffle for offline matches. No suit-distribution skewing or balancing heuristic is applied.
 
 **Test/simulation distinction:** Production shuffles use CSPRNG (not seedable for replay). Test fixtures and simulation harnesses use a seeded deterministic PRNG with a recorded seed for reproducibility. See [07-offline-online-parity-strategy.md](07-offline-online-parity-strategy.md) §6 for platform RNG handling.
 
-**Alternative:** The competitor reference mentions intentional non-uniform suit distribution. Since the algorithm is not published, implementing an unknown manipulation is not recommended. If the owner decides to add suit balancing, a separate specification of the algorithm is required before implementation.
+> **Owner note (2026-10-21):** Uniform CSPRNG shuffle approved as the product owner's choice for our original game. The competitor reference mentions intentional non-uniform suit distribution, but the algorithm is proprietary and unpublished. We do not replicate or approximate it. Fair, simple, testable, original.
+
+### Historical Alternatives Considered
+
+**Alternative A (Rejected):** Replicate the competitor's undisclosed suit-skewing algorithm. Rejected because the algorithm is proprietary and unknown — implementing an unverified manipulation risks incorrect gameplay feel and potential fairness complaints.
+
+**Alternative B (Rejected):** Disclosed balancing heuristic (e.g., guarantee each player gets ≥2 of each suit). Rejected in favor of uniform randomness — no invented bias, fully testable, no additional complexity.
 
 ### 2.2 Deal
 
@@ -826,6 +832,6 @@ flowchart TD
 | [07-offline-online-parity-strategy.md](07-offline-online-parity-strategy.md) | Cross-language parity using these fixtures |
 | [10-qa-test-matrix-and-acceptance.md](10-qa-test-matrix-and-acceptance.md) | Full test matrix derived from these rules |
 | [12-risks-and-decisions.md](12-risks-and-decisions.md) | Decision register for OPEN items |
-| [DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md](DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md) | Formal owner decision record for R-008, R-009, R-010 and WIN-001 |
+| [DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md](DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md) | Formal owner decision record for R-002, R-008, R-009, R-010 and WIN-001 |
 | [REMAINING_DECISIONS_WORKSHEET.md](REMAINING_DECISIONS_WORKSHEET.md) | Per-item sign-off worksheet for all pending decisions |
 | `RULE_FREEZE_APPROVAL_CHECKLIST.md` | Owner sign-off checklist |
