@@ -1,9 +1,9 @@
 # Owner Rule Decision Record — 2026-10-21
 
-**Document ID:** DM-OWNER-DECISION-2026-10-21-R002-R003-R008-R009-R010-R013  
+**Document ID:** DM-OWNER-DECISION-2026-10-21-R002-R003-R008-R009-R010-R013-D07-D14  
 **Date:** 2026-10-21  
 **Author:** Product Owner  
-**Status:** PARTIALLY APPROVED (R-002, R-003, R-008, R-009, R-010, R-013) — Phase 2 **NOT AUTHORIZED**
+**Status:** APPROVED (R-002, R-003, R-008, R-009, R-010, R-013) + CONFIRMED (D07–D14) — R-017 OPEN — Phase 2 **NOT AUTHORIZED**
 
 ---
 
@@ -171,6 +171,124 @@ When all remaining active players empty their hands after the same completed rou
 
 ---
 
+## Confirmed Default: D07 — Timeout / Disconnect Policy
+
+**OWNER CONFIRMED 2026-10-21.**
+
+20-second action deadline. 15-second disconnection grace period. Disclosed bot takeover after timeout. Player may reclaim their seat at the next round boundary. These values are tunable post-launch.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D07 | OWNER CONFIRMED |
+| Rules Evidence | HPA-7 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D08 — Bot Fairness
+
+**OWNER CONFIRMED 2026-10-21.**
+
+Bots (offline or online) may **not** inspect hidden opponent hands. Bot decision logic is restricted to information visible to the simulated seat: the bot's own hand and all played cards. This applies to all difficulty levels.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D08 | OWNER CONFIRMED |
+| Rules Evidence | HPA-8 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D09 — MVP Player Count
+
+**OWNER CONFIRMED 2026-10-21.**
+
+4 players only at MVP. No 2-player or 3-player variant until separately specified. Private rooms require 4 human or declared-bot seats.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D09 | OWNER CONFIRMED |
+| Rules Evidence | HPA-9 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D10 — Online Bot Disclosure
+
+**OWNER CONFIRMED 2026-10-21.**
+
+All bot-controlled seats are labeled. Bots are used as queue fallback only after user opt-in or timeout. No silent bot fill.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D10 | OWNER CONFIRMED |
+| Rules Evidence | HPA-10 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D11 — 2.5D Rendering
+
+**OWNER CONFIRMED 2026-10-21.**
+
+Flame 2.5D with authored assets. No Unity or Unreal engine. See ADR-0001 for technical basis.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D11 | OWNER CONFIRMED |
+| Rules Evidence | HPA-11 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D12 — Dart SignalR Client
+
+**OWNER CONFIRMED 2026-10-21.**
+
+Compatibility spike against .NET 10 SignalR in Phase 4 before committing. WebSocket fallback ready if the spike fails. See ADR-0002 for technical basis.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D12 | OWNER CONFIRMED |
+| Rules Evidence | HPA-12 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D13 — Offline Currency Isolation
+
+**OWNER CONFIRMED 2026-10-21.**
+
+Offline coins and progression are fully separate from the online server wallet. No upload or sync of offline earnings. This prevents exploitation via device clock or save manipulation.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D13 | OWNER CONFIRMED |
+
+---
+
+## Confirmed Default: D14 — Regional Compliance
+
+**OWNER CONFIRMED 2026-10-21.**
+
+India-first launch with a non-gambling economy. No wagering, no cash prizes, no transferable currency. Legal review required before international expansion.
+
+### Mapping
+
+| ID Scheme | ID | Status |
+|---|---|---|
+| Decision Register | D14 | OWNER CONFIRMED |
+
+---
+
 ## Confirmed Product Objective: WIN-001
 
 **The first qualifying finisher takes first place and is the game winner. The last player still holding cards is the Donkey.**
@@ -198,24 +316,24 @@ A qualifying finisher is a player whose hand remains empty after full round reso
 | **WIN-001** | First qualifying finisher takes first place; last remaining player is Donkey | **OWNER CONFIRMED — 2026-10-21** |
 | **R-003 / D02** | A♠ holder may lead any card; A♠ not mandatory | **OWNER APPROVED — 2026-10-21** |
 | **R-013 / D06** | All players empty: rank by R-010 clockwise order; last-ranked finisher is Donkey | **OWNER APPROVED — 2026-10-21** |
+| **D07** | Timeout: 20s deadline, 15s grace, disclosed bot takeover, reclaim at round boundary | **OWNER CONFIRMED — 2026-10-21** |
+| **D08** | Bot fairness: no hidden-hand access; bots see only own hand + played cards | **OWNER CONFIRMED — 2026-10-21** |
+| **D09** | MVP: 4 players only; no 2/3-player variant | **OWNER CONFIRMED — 2026-10-21** |
+| **D10** | Online bots: disclosed, queue fallback only, all bot seats labeled | **OWNER CONFIRMED — 2026-10-21** |
+| **D11** | 2.5D rendering: Flame with authored assets (ADR-0001) | **OWNER CONFIRMED — 2026-10-21** |
+| **D12** | Dart SignalR: compatibility spike Phase 4; WebSocket fallback (ADR-0002) | **OWNER CONFIRMED — 2026-10-21** |
+| **D13** | Offline currency fully isolated from online server wallet | **OWNER CONFIRMED — 2026-10-21** |
+| **D14** | India-first launch; no wagering; legal review before international | **OWNER CONFIRMED — 2026-10-21** |
 | R-017 | Match watchdog threshold / void policy | **OPEN** |
-| D07 | Timeout/disconnect/bot takeover timing | **PENDING CONFIRMATION** |
-| D08 | Bot fairness / hidden-hand policy | **PENDING CONFIRMATION** |
-| D09 | Four-seat MVP scope | **PENDING CONFIRMATION** |
-| D10 | Disclosure of online bot participation | **PENDING CONFIRMATION** |
-| D11 | 2.5D rendering | **PENDING CONFIRMATION** |
-| D12 | Flutter SignalR compatibility spike | **PENDING CONFIRMATION / TECHNICAL SPIKE** |
-| D13 | Offline currency isolated from online | **PENDING CONFIRMATION** |
-| D14 | India-first launch / legal review | **PENDING CONFIRMATION** |
 
 ---
 
 ## Documentation and Implementation Guardrails
 
-1. Mark only **R-002, R-003, R-008, R-009, R-010, and R-013** as owner-approved, and WIN-001 as owner-confirmed. Do not silently mark any other OPEN or PROPOSED decision as approved.
-2. Update the canonical draft ruleset, rules evidence, test matrix, risk/decision register, Phase 1 report and owner checklist to reflect these six approvals consistently. Preserve rule version as **DRAFT** until all blocking decisions are signed.
-3. R-017 (watchdog threshold) and all other unapproved decisions remain pending. Phase 2 is not authorized.
-4. No application code, tests, migrations, assets or CI workflows are authorized yet. Phase 2 remains blocked until the complete rules freeze and explicit owner authorization.
+1. Mark **R-002, R-003, R-008, R-009, R-010, and R-013** as owner-approved; **D07, D08, D09, D10, D11, D12, D13, D14** as owner-confirmed (recommended defaults); and **WIN-001** as owner-confirmed objective.
+2. Update the canonical draft ruleset, rules evidence, test matrix, risk/decision register, Phase 1 report and owner checklist to reflect these 14 approvals/confirmations consistently. Preserve rule version as **DRAFT** until all blocking decisions are signed.
+3. R-017 (watchdog threshold) remains the sole OPEN blocking decision. Phase 2 is not authorized.
+4. No application code, tests, migrations, assets or CI workflows are authorized yet. Phase 2 remains blocked until R-017 is resolved and the complete rules freeze is signed.
 
 ---
 
@@ -223,9 +341,9 @@ A qualifying finisher is a player whose hand remains empty after full round reso
 
 - `docs/03-canonical-ruleset-v1-draft.md` §2 Shuffle and Deal, §4 Opening, §8 Hit Round Resolution, §9 Finisher Timing, §10 Simultaneous Finisher Ranking, §12 All Players Empty (updated)
 - `docs/02-verified-rules-and-open-questions.md` HPA-1, HPA-2, HPA-3, HPA-4, HPA-5, HPA-6 (updated)
-- `docs/12-risks-and-decisions.md` D01, D02, D03, D04, D05, D06 rows (updated)
+- `docs/12-risks-and-decisions.md` D01–D06 rows (approved), D07–D14 rows (confirmed) (updated)
 - `docs/04-game-state-machine.md` §1.3 WIN-001, §6.1 finisher determination (updated)
 - `docs/10-qa-test-matrix-and-acceptance.md` FD-004, FD-005, FD-006, FD-008 (updated)
 - `docs/PHASE_1_REVIEW_REPORT.md` §3, §5, §10.1, §11 (updated)
-- `RULE_FREEZE_APPROVAL_CHECKLIST.md` D01, D02, D03, D04, D05, D06 lines (checked)
-- `docs/REMAINING_DECISIONS_WORKSHEET.md` — D06 moved to resolved; sign-off worksheet for remaining pending items
+- `RULE_FREEZE_APPROVAL_CHECKLIST.md` D01–D06 lines (approved), D07–D14 lines (confirmed) (checked)
+- `docs/REMAINING_DECISIONS_WORKSHEET.md` — D07–D14 moved to resolved; R-017 is sole remaining item

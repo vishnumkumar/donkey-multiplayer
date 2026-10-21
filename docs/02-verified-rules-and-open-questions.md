@@ -129,31 +129,36 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | Aspect | Detail |
 |---|---|
 | **Source evidence** | No published timeout or disconnect rules from competitor. |
-| **Our proposal** | 20-second action deadline; 15-second disconnection grace; server bot takeover with disclosure. |
-| **Classification** | **[PROPOSED]** — user experience decision |
-| **Gap** | All values are configurable proposals. Need product decision on: grace duration, bot takeover vs. match void, reclaim timing. |
-| **Options** | **A (Recommended):** 20s/15s with bot takeover — keeps game moving for other players. **B:** Longer grace (30s/30s) — more forgiving for bad connections but frustrating for waiting players. **C:** Match pause/void on disconnect — safest but worst experience for remaining players. |
-| **Risk of guessing** | Medium. Too aggressive = frustrating for users on bad networks. Too lenient = frustrating for waiting players. Should be configurable and tuned. |
-| **Maps to** | D06 |
+| **Our rule** | 20-second action deadline; 15-second disconnection grace; server bot takeover with disclosure; player can reclaim at round boundary. |
+| **Classification** | **[OWNER CONFIRMED 2026-10-21]** — recommended defaults accepted. |
+| **Owner decision** | 20s/15s timers with disclosed bot takeover confirmed. Values are tunable post-launch. |
+| **Gap** | No published source guidance; this is a product choice. |
+| **Options considered** | **A (CONFIRMED):** 20s/15s with bot takeover — keeps game moving for other players. **B (Not selected):** Longer grace (30s/30s). **C (Not selected):** Match pause/void on disconnect. |
+| **Risk of guessing** | N/A — resolved by owner decision. |
+| **Maps to** | D07 |
 
 ### HPA-9: Bot Fairness
 
 | Aspect | Detail |
 |---|---|
 | **Source evidence** | No published bot policy from competitor. |
-| **Our proposal** | Bots may not inspect opponent hidden hands. Bot decision policy restricted to information visible to the simulated seat. Bot seats are always labeled. |
-| **Classification** | **[PROPOSED]** |
-| **Options** | **A (Recommended):** Fair bots — same information as human player. **B:** Omniscient bots with difficulty curve — simpler to implement but unfair and deceptive. |
-| **Maps to** | D10 |
+| **Our rule** | Bots may not inspect opponent hidden hands. Bot decision policy restricted to information visible to the simulated seat. Bot seats are always labeled. |
+| **Classification** | **[OWNER CONFIRMED 2026-10-21]** — recommended default accepted. |
+| **Owner decision** | Fair bots confirmed — same information as human player. No hidden-hand access at any difficulty level. |
+| **Options considered** | **A (CONFIRMED):** Fair bots — same information as human player. **B (Not selected):** Omniscient bots with difficulty curve. |
+| **Risk of guessing** | N/A — resolved by owner decision. |
+| **Maps to** | D08, D10 |
 
 ### HPA-10: Player Count (MVP)
 
 | Aspect | Detail |
 |---|---|
 | **Source evidence** | 4-player confirmed as standard mode. 2/3 player variants exist in competitor app per store listings but rules are not published. |
-| **Our proposal** | 4 players only at MVP. 2/3-player variants require separate rule specification (dealing remainder cards, etc.). |
-| **Classification** | **[PROPOSED]** — MVP scope decision |
-| **Maps to** | D08 (partial) |
+| **Our rule** | 4 players only at MVP. 2/3-player variants require separate rule specification (dealing remainder cards, etc.). |
+| **Classification** | **[OWNER CONFIRMED 2026-10-21]** — MVP scope confirmed. |
+| **Owner decision** | 4-player only at MVP. No 2/3-player variant until separately specified. |
+| **Risk of guessing** | N/A — resolved by owner decision. |
+| **Maps to** | D09 |
 
 ### HPA-11: Round Repetition Watchdog
 
@@ -170,10 +175,12 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | Aspect | Detail |
 |---|---|
 | **Source evidence** | No published economy design from competitor. |
-| **Our proposal** | Offline virtual coins/rewards are completely isolated from online server economy. No upload or sync. |
-| **Classification** | **[PROPOSED]** — security requirement |
-| **Options** | **A (Recommended):** Complete isolation — no tamper vector. **B:** Sync offline earnings on reconnect — complex, tamper-prone. |
-| **Maps to** | D07 |
+| **Our rule** | Offline virtual coins/rewards are completely isolated from online server economy. No upload or sync. |
+| **Classification** | **[OWNER CONFIRMED 2026-10-21]** — recommended default accepted. |
+| **Owner decision** | Complete isolation confirmed. No sync of offline earnings. Prevents exploitation via device clock or save manipulation. |
+| **Options considered** | **A (CONFIRMED):** Complete isolation — no tamper vector. **B (Not selected):** Sync offline earnings on reconnect. |
+| **Risk of guessing** | N/A — resolved by owner decision. |
+| **Maps to** | D13 |
 
 ---
 
@@ -198,9 +205,9 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | **Simultaneous finish** | Not addressed | — | **OPEN** | Clockwise deterministic ranking | See HPA-5 |
 | **All empty** | Not addressed | — | **OPEN** | Draw / no Donkey | See HPA-6 |
 | **Finisher-exits-as-leader** | Not addressed | — | **PROPOSED** | Next active clockwise seat leads | — |
-| **Timeout** | Not addressed | — | **PROPOSED** | 20s deadline, 15s grace, bot takeover | See HPA-8 |
-| **Disconnect** | Not addressed | — | **PROPOSED** | Reconnect with snapshot; bot during grace | See HPA-8 |
-| **Bot behavior** | Not addressed | — | **PROPOSED** | No hidden-hand access; labeled seats | See HPA-9 |
+| **Timeout** | Not addressed | — | **OWNER CONFIRMED** | 20s deadline, 15s grace, bot takeover — **OWNER CONFIRMED 2026-10-21** | See HPA-8 |
+| **Disconnect** | Not addressed | — | **OWNER CONFIRMED** | Reconnect with snapshot; bot during grace — **OWNER CONFIRMED 2026-10-21** | See HPA-8 |
+| **Bot behavior** | Not addressed | — | **OWNER CONFIRMED** | No hidden-hand access; labeled seats — **OWNER CONFIRMED 2026-10-21** | See HPA-9 |
 | **Watchdog** | Not addressed | — | **OPEN** | Void after N rounds; no arbitrary Donkey | See HPA-11 |
 
 ---
