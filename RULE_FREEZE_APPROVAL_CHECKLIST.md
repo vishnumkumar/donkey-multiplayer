@@ -7,7 +7,7 @@ Status: **PENDING OWNER APPROVAL**. Check and sign every blocking point before P
 - [ ] D01 (R-002) — Shuffle policy: uniform CSPRNG, no suit skewing **(recommended)** or intentional suit-distribution policy? **[OPEN]**
 - [ ] D02 (R-003) — A♠ holder may lead any card **(recommended)** or must lead A♠? **[OPEN]**
 - [x] D03 (R-008) — HIT winner: highest leading-suit card only. **[OWNER APPROVED 2026-10-21]** — product owner's choice for our original game, not independent competitor verification.
-- [ ] D04 (R-009) — Finisher timing: after round resolution **(recommended)** or immediate on last card played?
+- [x] D04 (R-009) — Finisher timing: after round resolution. **[OWNER APPROVED 2026-10-21]** — finisher identified only after full round settlement including HIT collection.
 - [ ] D05 (R-010) — Simultaneous finishers: clockwise podium order **(proposed)** or tied ranks? **[OPEN]**
 - [ ] D06 (R-013) — All players empty simultaneously: draw / no Donkey **(recommended)** or replay? **[OPEN]**
 - [ ] D07 — Timeout/disconnect policy: 20s deadline, 15s grace, bot takeover, reclaim at round boundary **(proposed)** or alternative timers?
@@ -16,7 +16,7 @@ Status: **PENDING OWNER APPROVAL**. Check and sign every blocking point before P
 
 ### Confirmed Product Objectives
 
-- [x] **WIN-001** — First player to successfully empty their entire hand = first-place game winner. Last player with cards = Donkey. **[CONFIRMED 2026-10-21]** — Precise mechanics ("successfully") depend on R-009 finisher timing; simultaneous finisher ranking (R-010/D05), all-empty draw (R-013/D06) not automatically approved by this statement.
+- [x] **WIN-001** — First qualifying finisher (empty hand after round settlement per R-009) takes first place = game winner. Last player with cards = Donkey. **[CONFIRMED 2026-10-21]** — "Successfully" now defined by R-009 (APPROVED). Simultaneous finisher ranking (R-010/D05) and all-empty draw (R-013/D06) remain OPEN — not automatically approved.
 
 ### Non-Blocking but Important Decisions
 

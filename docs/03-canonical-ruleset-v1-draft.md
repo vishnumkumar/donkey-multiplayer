@@ -167,6 +167,8 @@ When all active players in the round have played and **at least one** play was f
 
 > **Owner note (2026-10-21):** "This is the product owner's choice for our original game, not independent proof that CodeHound uses it."
 
+**Competitor behavior: NOT VERIFIED.** The competitor's published description says "largest card" without specifying cross-suit comparison. Their actual implementation behavior has not been independently verified. This rule is our product design, not a claim about the competitor.
+
 ### Historical Alternative Considered (Option B): Absolute highest rank wins
 
 1. **Winner determination:** The player who played the **highest-rank card regardless of suit** wins. If tied (same rank, different suits), the leading-suit card wins ties.
@@ -180,18 +182,24 @@ When all active players in the round have played and **at least one** play was f
 
 ## 9. Finisher Timing
 
-**[PROPOSED — R-009]**
+**[OWNER APPROVED — R-009 — 2026-10-21]**
 
-A player is **not** a finisher the moment they play their last card. Finisher evaluation occurs **after** the round is fully resolved:
+A player qualifies as a finisher **only after the entire round has resolved**, including any HIT collection and card transfers. An empty hand immediately after the last card is played does **not** by itself establish a finish.
 
 1. All players play their cards for the round.
 2. Hit/no-hit determination is made.
 3. Cards are moved (to discard or to winner's hand).
 4. **Then** evaluate which players now have zero cards.
+5. If a player's hand remains empty after settlement, they qualify as a finisher and leave subsequent turns.
+6. If they collected the HIT trick and acquired cards, they do **not** finish yet.
 
-**Critical edge case:** A player plays their last card as an off-suit hit. The hit is won by another player who collects all cards. The hitting player now has zero cards → they are a finisher. But if the hitting player were the highest leading-suit card (impossible since they played off-suit, but conceptually), collection would give them cards and they would NOT be a finisher.
+**Acceptance example (owner-provided, scenario 1):** A player holds only J♣, plays it, and a later player with no clubs plays A♥. Under R-008 the J♣ player wins the HIT and receives all trick cards. **They have not finished** under R-009 — their hand now contains collected cards.
 
-**Another edge case:** A player plays their last card of the leading suit. In a no-hit round, all cards go to discard. The player now has zero cards → finisher. But in a hit round, if this player played the highest leading-suit card, they collect all cards → NOT a finisher (cards returned to hand).
+**Acceptance example (scenario 2):** A player plays their last card; the round has no HIT and all played cards are discarded. The player's hand remains empty. **They qualify as a finisher** after round resolution.
+
+**Acceptance example (scenario 3):** A player plays their last card as an off-suit HIT, while another player wins collection with the highest leading-suit card. After resolution, the hitting player's hand remains empty. **They qualify as a finisher**.
+
+> **Owner note (2026-10-21):** R-009 is approved for our original game. If multiple players qualify in the same round, R-010 remains OPEN — do not assign unique first place based on arbitrary seat order until the owner chooses ties versus ranking. If all active players empty in the same resolution, R-013 remains OPEN — do not infer the draw rule from R-009 approval.
 
 ---
 
@@ -252,9 +260,11 @@ The match is voided and restarted. Original results discarded.
 
 ### WIN-001: Game Objective — CONFIRMED PRODUCT OBJECTIVE (2026-10-21)
 
-**The first player who successfully empties their entire hand is the first-place game winner. The last player still holding cards is the Donkey.**
+**The first qualifying finisher takes first place and is the game winner. The last player still holding cards is the Donkey.**
 
-> **Owner note (2026-10-21):** This is a confirmed product objective. However, "successfully" depends on finisher timing (R-009) — a player who plays their last card off-suit in a HIT may receive cards back. Whether play continues to rank other finishers, how to classify simultaneous finishers (R-010/D05), and all-empty draw (R-013/D06) are **not** automatically approved by the first-to-empty statement. Precise mechanics remain pending on those OPEN/PROPOSED decisions.
+A qualifying finisher is a player whose hand remains empty after full round resolution (R-009 APPROVED). A HIT-round trick winner (who collects cards per R-008) is **not** necessarily the game winner — collecting trick cards means they have not finished.
+
+> **Owner note (2026-10-21):** WIN-001 is confirmed. R-009 (finisher timing) is now OWNER APPROVED — "successfully" means empty after round settlement including HIT collection. However, when multiple players qualify in the same round, unique first-place priority versus tied rank is still **OPEN** (R-010/D05). If all active players empty simultaneously, the outcome is still **OPEN** (R-013/D06). Play is expected to continue to rank remaining positions, but R-010 and R-013 are not automatically approved by WIN-001 or R-009.
 
 ### Donkey Declaration
 
@@ -470,7 +480,7 @@ Result: REJECTED — player holds clubs; must follow suit
 State: UNCHANGED — no card removed, no turn advance
 ```
 
-### Fixture 5: Finisher After Round Resolution (Hit Returns Cards)
+### Fixture 5: Finisher After Round Resolution — Off-Suit HIT Qualifies (R-009 APPROVED)
 
 ```
 Setup:
@@ -484,19 +494,49 @@ Plays:
   S2: 10♣ (follows suit)
   S3: 2♥ (no clubs → HIT, last card played)
 
-Resolution:
+Resolution (R-008 + R-009 APPROVED):
   Hit: true
-  Winner (Option A): S1 (J♣ — highest club)
+  Winner: S1 (J♣ — highest club, per R-008)
   Cards → S1's hand
   
-  Post-resolution evaluation:
-    S3 hand size: 0 → S3 is a FINISHER
+  Post-resolution finisher evaluation (R-009):
+    S3 hand size: 0 → S3 is a FINISHER (played off-suit HIT; another player collected)
     S0 hand size: decreased by 1 → still active (if > 0)
-    S1 hand size: increased by 3 → still active
+    S1 hand size: increased by 3 → still active (HIT winner collected cards, NOT a finisher)
     S2 hand size: decreased by 1 → still active (if > 0)
+
+  Owner golden scenario 3: player plays last card as off-suit HIT,
+  another player wins collection → hitting player qualifies as finisher.
 ```
 
-### Fixture 6: No-Hit Winner Runs Out of Cards
+### Fixture 5a: Leading-Suit Winner Plays Last Card but Collects HIT (R-009 APPROVED)
+
+```
+Setup:
+  Active players: [S0, S1, S2, S3]
+  Leader: S0
+  S1's hand: [J♣] (last card)
+
+Plays:
+  S0: 8♣ (leads clubs)
+  S1: J♣ (follows suit — last card played)
+  S2: 10♣ (follows suit)
+  S3: A♥ (no clubs → HIT)
+
+Resolution (R-008 + R-009 APPROVED):
+  Hit: true
+  Winner: S1 (J♣ — highest club, per R-008)
+  Cards → S1's hand (S1 receives all 4 cards)
+
+  Post-resolution finisher evaluation (R-009):
+    S1 hand size: 3 (played 1, received 4) → NOT a finisher
+    S1 played their last card but then received HIT collection → still active.
+
+  Owner golden scenario 1: player plays last card, wins the HIT,
+  collects trick cards → they have NOT finished.
+```
+
+### Fixture 6: No-Hit Round — Player Plays Last Card and Qualifies (R-009 APPROVED)
 
 ```
 Setup:
@@ -515,10 +555,13 @@ Resolution:
   Winner: S2 (Q♣ — highest club)
   Cards → discard
 
-  Post-resolution:
-    S2 hand size: 0 → S2 is FINISHER
+  Post-resolution finisher evaluation (R-009):
+    S2 hand size: 0 → S2 is FINISHER (no HIT, cards discarded, hand remains empty)
     S2 was the winner → would normally lead next
     Leader replacement: next active seat clockwise from S2 → S3 (if active)
+
+  Owner golden scenario 2: player plays last card; no HIT; all cards discarded;
+  hand remains empty → qualifies as finisher after round resolution.
 ```
 
 ### Fixture 7: Two Active Seats
@@ -668,4 +711,6 @@ flowchart TD
 | [07-offline-online-parity-strategy.md](07-offline-online-parity-strategy.md) | Cross-language parity using these fixtures |
 | [10-qa-test-matrix-and-acceptance.md](10-qa-test-matrix-and-acceptance.md) | Full test matrix derived from these rules |
 | [12-risks-and-decisions.md](12-risks-and-decisions.md) | Decision register for OPEN items |
+| [DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md](DONKEY_PHASE1_OWNER_RULE_DECISION_2026-10-21.md) | Formal owner decision record for R-008 and WIN-001 |
+| [REMAINING_DECISIONS_WORKSHEET.md](REMAINING_DECISIONS_WORKSHEET.md) | Per-item sign-off worksheet for all pending decisions |
 | `RULE_FREEZE_APPROVAL_CHECKLIST.md` | Owner sign-off checklist |

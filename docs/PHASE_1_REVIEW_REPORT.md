@@ -74,7 +74,7 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 | R-006 | Rank order: A(14) > K > Q > J > 10 > ... > 2 | **CONFIRMED** | Developer description lists rank order. |
 | R-007 | No hit → highest leading-suit card wins; cards to discard | **PROPOSED** | Developer: "largest card of the round leads next and round cards leave hands" — interpreted as discard. |
 | R-008 | Hit → highest leading-suit card takes all cards; off-suit cannot win | **OWNER APPROVED 2026-10-21** | Owner decision: leading-suit highest wins. Product choice, not competitor verification. |
-| R-009 | Finisher status determined after round resolution, not immediately on play | **PROPOSED** | Not explicitly stated by developer; proposed for correctness (hit can return cards). |
+| R-009 | Finisher status determined after round resolution, not immediately on play | **OWNER APPROVED 2026-10-21** | Owner decision: finisher identified only after full round settlement including HIT collection. |
 | R-010 | Simultaneous finishers ranked clockwise from round leader | **OPEN** | No official rule for simultaneous finish. Alternative: tied ranks. |
 | R-011 | If round winner exits, next leader is first active seat clockwise | **PROPOSED** | Not explicitly addressed by developer; standard trick-taking convention. |
 | R-012 | Last player with cards = Donkey | **CONFIRMED** | Developer: "last card-holder is the Donkey" |
@@ -87,8 +87,8 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 ### Summary
 
 - **CONFIRMED:** 5 rules (R-001, R-005, R-006, R-012, plus R-007 partial)
-- **PROPOSED:** 8 rules (R-002, R-004, R-007, R-009, R-011, R-014, R-015, R-016)
-- **OWNER APPROVED:** 1 rule (R-008 — 2026-10-21)
+- **PROPOSED:** 7 rules (R-002, R-004, R-007, R-011, R-014, R-015, R-016)
+- **OWNER APPROVED:** 2 rules (R-008, R-009 — 2026-10-21)
 - **OPEN (blocking):** 3 rules (R-003, R-010, R-013) + R-017 threshold
 
 ---
@@ -117,7 +117,7 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 | **3** | **D01: Shuffle distribution policy** | Uniform CSPRNG, no suit skewing | Implement disclosed balancing heuristic | **MEDIUM.** Affects game feel but not correctness. Can be patched post-launch. |
 | **4** | **D05: Simultaneous finisher ranking** | Clockwise from round leader | Tied ranks | **MEDIUM.** Affects competitive fairness perception. |
 | **5** | **D06: All players empty simultaneously** | Technical draw / no Donkey | Replay match; last player to act loses | **LOW** (rare edge case) but must be defined for determinism. |
-| **6** | **D04: Finisher timing** | After round resolution | Immediate on last card played | **HIGH** if wrong — changes endgame dynamics. After-resolution is safer default. |
+| **6** | **D04: Finisher timing** | After round resolution | ~~Immediate on last card played~~ | **OWNER APPROVED 2026-10-21.** Finisher identified after full round settlement. |
 | **7** | **D07: Timeout/disconnect policy** | 20s deadline, 15s grace, bot takeover, reclaim at round boundary | Shorter/longer timers; immediate forfeit; match pause | **MEDIUM.** UX sensitive; can be tuned post-launch. |
 | **8** | **D08: Bot fairness — no hidden hand access** | Bots see only own hand + played cards | Allow offline bots to cheat for harder difficulty | **MEDIUM.** Player trust issue if bots cheat. |
 | **9** | **D12: SignalR Dart client compatibility** | Phase 4 spike; WebSocket fallback ready | Assume compatibility; build custom from start | **MEDIUM.** Spike resolves uncertainty; fallback adds ~2 weeks. |
@@ -285,7 +285,7 @@ These have safe recommended defaults but should be confirmed:
 
 | # | Decision | Default | Owner Action |
 |---|---|---|---|
-| 7 | **R-009 / D04:** Finisher timing = after round resolution | After resolution | CONFIRM |
+| ~~7~~ | **R-009 / D04:** Finisher timing = after round resolution | After resolution | **OWNER APPROVED 2026-10-21** |
 | 8 | **D07:** Timeout: 20s deadline, 15s grace, bot takeover disclosed | As proposed | CONFIRM |
 | 9 | **D08:** Bot fairness: no hidden hand access | No-cheat bots | CONFIRM |
 | 10 | **D09:** MVP: 4 players only; no 2/3-player variant | 4-only | CONFIRM |
@@ -307,15 +307,18 @@ Phase 2 (deterministic engine implementation) is blocked until:
 
 ## 11. Status
 
-### `PHASE 1 REVIEWED — AWAITING OWNER RULE APPROVAL`
+### `PHASE 1 — R-008 & R-009 OWNER APPROVED; ALL OTHER UNAPPROVED DECISIONS PENDING; NO CODE IMPLEMENTED`
 
-- 17 documentation files created and reviewed in `docs/`
+- 17 documentation files + 2 new documents (owner decision record, remaining-decision worksheet) in `docs/`
 - Architect review completed: 10 findings corrected, 0 remaining document contradictions
 - No Dart, C#, SQL, YAML, JSON, Docker, CI, or implementation files created
 - No packages installed, no scaffolding generated, no builds run
-- 5 OPEN decisions require explicit owner approval before Phase 2 (D03/R-008 approved 2026-10-21)
-- 1 confirmed product objective: WIN-001 (first to empty = winner; last with cards = Donkey)
-- 6 PROPOSED decisions have safe defaults but should be confirmed
+- **2 OWNER APPROVED:** D03/R-008 (HIT winner: leading-suit highest only), D04/R-009 (finisher timing: after round resolution) — 2026-10-21
+- **1 CONFIRMED OBJECTIVE:** WIN-001 (first qualifying finisher = winner; last with cards = Donkey)
+- **4 OPEN decisions** require explicit owner approval before Phase 2 (D01, D02, D05, D06 + R-017)
+- **7 PROPOSED decisions** have safe defaults but should be confirmed (D07–D14)
+- See `docs/REMAINING_DECISIONS_WORKSHEET.md` for full per-item sign-off worksheet
+- Competitor cross-suit HIT behavior: **NOT VERIFIED** — R-008 is our product choice
 
 ---
 
