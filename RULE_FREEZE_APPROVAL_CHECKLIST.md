@@ -9,7 +9,7 @@ Status: **PENDING OWNER APPROVAL**. Check and sign every blocking point before P
 - [x] D03 (R-008) — HIT winner: highest leading-suit card only. **[OWNER APPROVED 2026-10-21]** — product owner's choice for our original game, not independent competitor verification.
 - [x] D04 (R-009) — Finisher timing: after round resolution. **[OWNER APPROVED 2026-10-21]** — finisher identified only after full round settlement including HIT collection.
 - [x] D05 (R-010) — Simultaneous finishers: distinct clockwise positions from round leader. **[OWNER APPROVED 2026-10-21]** — no tied ranks; deterministic ordering.
-- [ ] D06 (R-013) — All players empty simultaneously: draw / no Donkey **(recommended)** or replay? **[OPEN]**
+- [x] D06 (R-013) — All players empty simultaneously: rank by R-010 clockwise order; last-ranked finisher is Donkey. **[OWNER APPROVED 2026-10-21]** — no draw; deterministic ranking consistent with R-010.
 - [ ] D07 — Timeout/disconnect policy: 20s deadline, 15s grace, bot takeover, reclaim at round boundary **(proposed)** or alternative timers?
 - [ ] D08 — Bot fairness: bots see only own hand + played cards **(recommended)** or allow hidden-hand access for difficulty?
 - [ ] R-017 — Watchdog: void after 200 rounds or 30 minutes **(proposed)** or alternative threshold? **[OPEN]**

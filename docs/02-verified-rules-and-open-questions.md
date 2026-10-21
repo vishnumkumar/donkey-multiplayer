@@ -104,12 +104,13 @@ The following 12 items **must** appear on the owner approval worksheet. They are
 | Aspect | Detail |
 |---|---|
 | **Source evidence** | No published rule for this edge case. |
-| **Our proposal** | Technical draw — no Donkey assigned. |
-| **Classification** | **[OPEN]** |
-| **Gap** | Could also replay the match, assign Donkey to last player who received cards, or other resolution. |
-| **Options** | **A (Recommended):** Draw/no Donkey — no unfair invented loser. **B:** Assign Donkey to last player who collected a hit — has some logic but punishes for an unavoidable game state. **C:** Replay — wastes player time for an extremely rare event. |
-| **Risk of guessing** | Very low — this is an extremely rare edge case. Any consistent decision is acceptable. |
-| **Maps to** | R-013, D05 |
+| **Our rule** | Rank all qualifying finishers by R-010 clockwise order from the round leader; the last-ranked finisher is Donkey. |
+| **Classification** | **[OWNER APPROVED 2026-10-21]** — resolved by product owner decision. |
+| **Owner decision** | When all remaining active players empty their hands after the same completed round, first resolve all card movements under R-008/R-009, then rank qualifying finishers using the approved R-010 clockwise order from the completed round's leader. The last-ranked finisher is Donkey. No draw, no void. All other finishing positions and the WIN-001 first-place winner are preserved. |
+| **Gap** | No published source guidance; this is a product choice. |
+| **Options considered** | **A (APPROVED):** R-010 clockwise ranking; last-ranked is Donkey — deterministic, consistent with existing R-010 mechanic, always produces a Donkey. **B (Rejected):** Draw/no Donkey — no invented loser but avoids assigning the Donkey label. **C (Rejected):** Replay the match — wastes player time for an extremely rare event. |
+| **Risk of guessing** | N/A — resolved by owner decision. |
+| **Maps to** | R-013, D06 |
 
 ### HPA-7: Last Active Seat Declaration
 

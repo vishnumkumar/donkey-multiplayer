@@ -53,9 +53,9 @@ Covers rules engine tests, cross-language parity, client integration, network re
 | FD-003 | Player plays last card; hit; player IS leading-suit winner | Winner collects cards → player now has cards → NOT a finisher | R-009 [OWNER APPROVED 2026-10-21], R-014 |
 | FD-004 | Two players play last cards in same round; no hit | Both become finishers; rank by clockwise order from round leader (distinct consecutive positions, no ties) | R-010 [OWNER APPROVED 2026-10-21] |
 | FD-005 | Two players play last cards; hit; winner is one of them | Winner gets cards back (not finisher); other player finishes | R-009 [OWNER APPROVED 2026-10-21], R-010 [OWNER APPROVED 2026-10-21] |
-| FD-006 | All 4 players play last cards; no hit | **All finish simultaneously → DRAW / no Donkey** | R-013 [OPEN] |
+| FD-006 | All 4 players play last cards; no hit | All qualify as finishers; rank by R-010 clockwise from round leader; last-ranked = Donkey | R-013 [OWNER APPROVED 2026-10-21] |
 | FD-007 | 3 players finished; 1 remains with cards | Remaining player declared Donkey | R-012 |
-| FD-008 | 2 active players; both play last card; no hit | Both finish → DRAW / no Donkey (no one left with cards) | R-013 [OPEN] |
+| FD-008 | 2 active players; both play last card; no hit | Both qualify as finishers; rank by R-010 clockwise from round leader; last-ranked = Donkey | R-013 [OWNER APPROVED 2026-10-21] |
 
 ### 1.4 Turn Order and Leader Fixtures
 
@@ -117,7 +117,7 @@ These invariants must hold **at every state transition** and are tested via prop
 |---|---|
 | Zero invariant violations | 0 out of 100K matches |
 | Zero infinite loops | 0 matches exceeding watchdog threshold |
-| All matches terminate | 100% reach COMPLETED, DRAW, or VOIDED |
+| All matches terminate | 100% reach COMPLETED or VOIDED |
 | Seed reproducibility | Re-running any match with same seed produces identical event sequence |
 | Round count distribution | Record histogram; flag outliers (>100 rounds) for manual review |
 | Finisher distribution | Roughly uniform across seats (±5% at 100K scale) — no systematic bias |
@@ -180,7 +180,7 @@ Shared JSON fixtures consumed by both Dart and C# test harnesses:
 | GOLDEN-005 | Hit winner's last card → collects cards back | R-009/R-014 edge case |
 | GOLDEN-006 | Two players finish same round (if R-010 approved) | Simultaneous finisher |
 | GOLDEN-007 | Winner exits → clockwise leader | R-011 leader replacement |
-| GOLDEN-008 | All players empty simultaneously (if R-013 approved) | Draw scenario |
+| GOLDEN-008 | All players empty simultaneously (R-013 APPROVED) | All-empty ranking: R-010 clockwise, last = Donkey |
 | GOLDEN-009 | Full game to completion with Donkey | Complete end-to-end |
 | GOLDEN-010 | Game with timeout auto-plays | Timeout integration |
 

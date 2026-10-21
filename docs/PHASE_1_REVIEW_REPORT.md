@@ -78,7 +78,7 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 | R-010 | Simultaneous finishers ranked clockwise from round leader | **OWNER APPROVED 2026-10-21** | Owner decision: distinct consecutive positions in clockwise seat order from round leader; no tied ranks. Product choice. |
 | R-011 | If round winner exits, next leader is first active seat clockwise | **PROPOSED** | Not explicitly addressed by developer; standard trick-taking convention. |
 | R-012 | Last player with cards = Donkey | **CONFIRMED** | Developer: "last card-holder is the Donkey" |
-| R-013 | All players empty simultaneously = draw / no Donkey | **OPEN** | No official rule. Proposed to avoid inventing an unfair loser. |
+| R-013 | All players empty simultaneously: rank by R-010 clockwise; last = Donkey | **OWNER APPROVED 2026-10-21** | Owner decision: R-010 clockwise ranking; last-ranked finisher is Donkey. No draw, no void. |
 | R-014 | Hit collection restores hand; player not removed until collection resolves | **PROPOSED** | Logical consequence of R-009 (after-resolution finisher timing). |
 | R-015 | No pass, retract, multi-play, or out-of-turn actions | **PROPOSED** | Standard card game enforcement; not explicitly stated but implied. |
 | R-016 | Offline and online use same ruleset ID and golden fixtures | **PROPOSED** | Product invariant for consistency. |
@@ -88,8 +88,8 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 
 - **CONFIRMED:** 5 rules (R-001, R-005, R-006, R-012, plus R-007 partial)
 - **PROPOSED:** 6 rules (R-004, R-007, R-011, R-014, R-015, R-016)
-- **OWNER APPROVED:** 5 rules (R-002, R-003, R-008, R-009, R-010 — 2026-10-21)
-- **OPEN (blocking):** 1 rule (R-013) + R-017 threshold
+- **OWNER APPROVED:** 6 rules (R-002, R-003, R-008, R-009, R-010, R-013 — 2026-10-21)
+- **OPEN (blocking):** R-017 threshold
 
 ---
 
@@ -116,7 +116,7 @@ Source: https://www.donkeymaster.in/ (How to Play page); https://apps.apple.com/
 | **2** | **D02: Must A♠ be the opening card?** | No, holder may lead any card | ~~A♠ must be first card played~~ | **OWNER APPROVED 2026-10-21.** Product owner's choice; free choice gives strategic freedom. |
 | **3** | **D01: Shuffle distribution policy** | Uniform CSPRNG, no suit skewing | ~~Implement disclosed balancing heuristic~~ | **OWNER APPROVED 2026-10-21.** Product owner's choice for our original game. |
 | **4** | **D05: Simultaneous finisher ranking** | Clockwise from round leader | ~~Tied ranks~~ | **OWNER APPROVED 2026-10-21.** Distinct consecutive positions in clockwise seat order from round leader. |
-| **5** | **D06: All players empty simultaneously** | Technical draw / no Donkey | Replay match; last player to act loses | **LOW** (rare edge case) but must be defined for determinism. |
+| ~~5~~ | **D06: All players empty simultaneously** | ~~Technical draw / no Donkey~~ | ~~Replay match; last player to act loses~~ | **OWNER APPROVED 2026-10-21.** R-010 clockwise ranking; last-ranked finisher is Donkey. |
 | **6** | **D04: Finisher timing** | After round resolution | ~~Immediate on last card played~~ | **OWNER APPROVED 2026-10-21.** Finisher identified after full round settlement. |
 | **7** | **D07: Timeout/disconnect policy** | 20s deadline, 15s grace, bot takeover, reclaim at round boundary | Shorter/longer timers; immediate forfeit; match pause | **MEDIUM.** UX sensitive; can be tuned post-launch. |
 | **8** | **D08: Bot fairness — no hidden hand access** | Bots see only own hand + played cards | Allow offline bots to cheat for harder difficulty | **MEDIUM.** Player trust issue if bots cheat. |
@@ -276,7 +276,7 @@ These decisions **cannot** be resolved by the architect. They require gameplay o
 | ~~2~~ | **R-003 / D02:** A♠ holder may lead any card (A♠ not mandatory) | Free choice | ~~HIGH~~ Resolved | **OWNER APPROVED 2026-10-21** |
 | ~~3~~ | **R-008 / D03:** HIT winner = highest leading-suit card only; off-suit cannot win | Leading-suit only | ~~CRITICAL~~ Resolved | **OWNER APPROVED 2026-10-21** |
 | ~~4~~ | **R-010 / D05:** Simultaneous finishers ranked clockwise from leader | Clockwise podium | ~~MEDIUM~~ Resolved | **OWNER APPROVED 2026-10-21** |
-| 5 | **R-013 / D06:** All empty = technical draw / no Donkey | Draw | LOW (rare) — must be defined for determinism | APPROVE |
+| ~~5~~ | **R-013 / D06:** All empty → rank by R-010 clockwise; last = Donkey | ~~Draw~~ | ~~LOW~~ Resolved | **OWNER APPROVED 2026-10-21** |
 | 6 | **R-017:** Watchdog: void after 200 rounds or 30 min; no arbitrary Donkey | Void with threshold | LOW — protects against pathological games | APPROVE with threshold |
 
 ### 10.2 PROPOSED Decisions (Safe Defaults, Confirm or Override)
@@ -307,15 +307,15 @@ Phase 2 (deterministic engine implementation) is blocked until:
 
 ## 11. Status
 
-### `PHASE 1 — R-002, R-003, R-008, R-009 & R-010 OWNER APPROVED; ALL OTHER UNAPPROVED DECISIONS PENDING; NO CODE IMPLEMENTED`
+### `PHASE 1 — R-002, R-003, R-008, R-009, R-010 & R-013 OWNER APPROVED; ALL OTHER UNAPPROVED DECISIONS PENDING; NO CODE IMPLEMENTED`
 
 - 17 documentation files + 2 new documents (owner decision record, remaining-decision worksheet) in `docs/`
 - Architect review completed: 10 findings corrected, 0 remaining document contradictions
 - No Dart, C#, SQL, YAML, JSON, Docker, CI, or implementation files created
 - No packages installed, no scaffolding generated, no builds run
-- **5 OWNER APPROVED:** D01/R-002 (shuffle: uniform CSPRNG, no suit skewing), D02/R-003 (A♠ opening: free choice, A♠ not mandatory), D03/R-008 (HIT winner: leading-suit highest only), D04/R-009 (finisher timing: after round resolution), D05/R-010 (simultaneous finisher ranking: clockwise from leader) — 2026-10-21
+- **6 OWNER APPROVED:** D01/R-002 (shuffle: uniform CSPRNG, no suit skewing), D02/R-003 (A♠ opening: free choice, A♠ not mandatory), D03/R-008 (HIT winner: leading-suit highest only), D04/R-009 (finisher timing: after round resolution), D05/R-010 (simultaneous finisher ranking: clockwise from leader), D06/R-013 (all-empty: R-010 clockwise ranking; last-ranked = Donkey) — 2026-10-21
 - **1 CONFIRMED OBJECTIVE:** WIN-001 (first qualifying finisher = winner; last with cards = Donkey)
-- **1 OPEN decision** requires explicit owner approval before Phase 2 (D06 + R-017)
+- **1 OPEN decision** requires explicit owner approval before Phase 2 (R-017)
 - **7 PROPOSED decisions** have safe defaults but should be confirmed (D07–D14)
 - See `docs/REMAINING_DECISIONS_WORKSHEET.md` for full per-item sign-off worksheet
 - Competitor cross-suit HIT behavior: **NOT VERIFIED** — R-008 is our product choice
